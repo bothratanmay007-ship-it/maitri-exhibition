@@ -1,0 +1,849 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    body {background-color: #f5f0e5}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Helvetica Neue'; color: #1c4c50; -webkit-text-stroke: #1c4c50; background-color: #000000; background-color: rgba(0, 0, 0, 0)}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Helvetica Neue'; color: #1c4c50; -webkit-text-stroke: #1c4c50; background-color: #000000; background-color: rgba(0, 0, 0, 0); min-height: 18.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;base target="_top"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta charset="utf-8"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</span></p>
+<p class="p1"><span class="s1">&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>:root {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>--teal:#2B7379; --teal-deep:#225E63; --foam:#E8F2F1; --lemon:#DEDE6E;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>--linen:#E8E7D5; --warm:#F7F3EA; --white:#FFFFFF; --border:#E7E8E6;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>--muted:#828282; --slate:#3D3A37; --charcoal:#33271B; --orange:#FF9700;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>--success:#22C55E; --error:#E5484D;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>* { box-sizing:border-box; margin:0; -webkit-tap-highlight-color:transparent; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>html,body { background:var(--warm); color:var(--charcoal); font-family:Inter,Arial,sans-serif; -webkit-font-smoothing:antialiased; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>body { padding-bottom:96px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.appbar { position:sticky; top:0; z-index:40; background:var(--white); border-bottom:1px solid var(--border);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>height:56px; display:flex; align-items:center; padding:0 16px; gap:10px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.wordmark { font-size:15px; font-weight:700; letter-spacing:.11em; color:var(--teal-deep); display:flex; align-items:center; gap:7px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.logo-dot { width:12px; height:12px; border-radius:50%; background:var(--orange); display:inline-block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.appbar .sub { margin-left:auto; font-size:11px; color:var(--muted); text-align:right; line-height:1.3; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sync-chip { font-size:10px; font-weight:600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sync-chip.ok { color:var(--success); } .sync-chip.busy { color:var(--orange); } .sync-chip.err { color:var(--error); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.page { display:none; padding:16px; max-width:560px; margin:0 auto; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.page.active { display:block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>h2 { font-size:14px; font-weight:600; margin-bottom:10px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>label { display:block; font-size:11px; font-weight:600; color:var(--slate); margin:12px 0 5px; text-transform:uppercase; letter-spacing:.04em; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>label .req { color:var(--error); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>input, select { width:100%; height:44px; padding:0 13px; font-size:16px; font-family:Inter;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>border:1px solid #E4E4E4; border-radius:9px; background:var(--white); color:var(--charcoal); appearance:none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23225E63' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background-repeat:no-repeat; background-position:right 13px center; padding-right:34px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>input:focus, select:focus { outline:2px solid var(--teal); border-color:transparent; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.phone-wrap { display:flex; gap:8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.phone-wrap .prefix { width:64px; height:44px; border:1px solid #E4E4E4; border-radius:9px; background:var(--foam);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>color:var(--teal-deep); font-weight:600; font-size:15px; display:flex; align-items:center; justify-content:center; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.btn { width:100%; height:46px; border:none; border-radius:9px; font-family:Inter; font-size:14px; font-weight:600;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background:var(--teal-deep); color:#fff; margin-top:12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.btn:active { opacity:.85; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.btn:disabled { opacity:.45; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.btn.secondary { background:#fff; color:var(--teal-deep); border:1.5px solid var(--teal-deep); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.btn.small { width:auto; height:38px; padding:0 16px; font-size:13px; margin-top:0; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.addnew-row { display:none; gap:8px; margin-top:8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.addnew-row.open { display:flex; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.addnew-row input { flex:1; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.chip { display:inline-flex; align-items:center; height:30px; border-radius:15px; padding:0 13px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background:var(--foam); color:var(--teal-deep); font-size:12px; font-weight:600; gap:7px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.chip .x { font-weight:700; font-size:14px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.pill { display:inline-flex; align-items:center; height:24px; border-radius:12px; padding:0 10px; font-size:11px; font-weight:600;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background:var(--foam); color:var(--teal-deep); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.pill.open { background:#FFF2D8; color:#CE8412; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.pill.new { background:#FBE8E9; color:var(--error); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.badge { min-width:18px; height:18px; border-radius:9px; background:var(--orange); color:#fff; font-size:10px; font-weight:600;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>display:inline-flex; align-items:center; justify-content:center; padding:0 5px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.toast { position:fixed; top:66px; left:50%; transform:translateX(-50%); background:var(--charcoal); color:#fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>padding:10px 18px; border-radius:22px; font-size:13px; z-index:99; display:none; max-width:90%; text-align:center; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.search-results { border:1px solid var(--border); border-radius:9px; margin-top:6px; overflow:hidden; display:none; background:#fff; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.search-results.open { display:block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sr-row { padding:11px 13px; border-bottom:1px solid var(--border); font-size:14px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sr-row:last-child { border-bottom:none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sr-row:active { background:var(--foam); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sr-meta { font-size:11px; color:var(--muted); margin-top:2px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.resume-note { margin-top:8px; font-size:12px; background:var(--foam); color:var(--teal-deep); border-radius:9px; padding:10px 12px; display:none; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#reader { border-radius:12px; overflow:hidden; margin-top:12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.scan-row { display:flex; gap:8px; align-items:flex-end; margin-top:12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.scan-row &gt; div { flex:1; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.hint { font-size:11px; color:var(--muted); margin-top:8px; line-height:1.5; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.total-strip { position:sticky; top:56px; z-index:30; background:var(--teal-deep); color:#fff; border-radius:10px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>padding:9px 14px; font-size:13px; font-weight:600; display:none; justify-content:space-between; margin-bottom:12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.total-strip.show { display:flex; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>table { width:100%; border-collapse:collapse; font-size:14px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>td { padding:9px 2px; border-bottom:1px solid var(--border); vertical-align:middle; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>tr:last-child td { border-bottom:none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.item-code { font-weight:600; font-size:13px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.item-name { font-size:11px; color:var(--muted); margin-top:2px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.item-sales { font-size:10px; color:var(--teal); font-weight:600; margin-top:2px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.qty-btn { width:32px; height:32px; border-radius:8px; border:1px solid #E4E4E4; background:#fff; font-size:17px; color:var(--teal-deep); font-weight:700; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.qty-in { width:46px !important; height:32px !important; padding:0 !important; text-align:center; font-size:15px !important; font-weight:700; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.del { color:var(--error); background:none; border:none; font-size:15px; padding:4px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.empty { text-align:center; color:var(--muted); font-size:13px; padding:26px 10px; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.order-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:10px; position:relative; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.order-title { font-size:14px; font-weight:600; padding-right:80px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.order-meta { font-size:11px; color:var(--muted); margin:4px 0 8px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.order-pill { position:absolute; right:13px; top:13px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.wa { display:inline-flex; align-items:center; gap:6px; margin-top:10px; background:var(--teal-deep); color:#fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size:13px; font-weight:600; height:38px; padding:0 16px; border-radius:9px; text-decoration:none; border:none; font-family:Inter; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.wa.light { background:var(--foam); color:var(--teal-deep); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>nav { position:fixed; bottom:0; left:0; right:0; height:64px; background:#fff; border-top:1px solid var(--border);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>display:grid; grid-template-columns:repeat(5,1fr); align-items:center; z-index:50; padding-bottom:env(safe-area-inset-bottom); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.nav-item { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>color:#6d6d6d; font-size:10px; font-weight:500; border:none; background:none; font-family:Inter; position:relative; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.nav-item.active { color:var(--teal-deep); font-weight:600; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.nav-item svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.nav-notify { position:absolute; top:8px; right:calc(50% - 22px); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.fab { width:52px; height:52px; border-radius:50%; background:var(--teal-deep); color:#fff; border:none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(34,94,99,.4); margin:-26px auto 0; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.fab svg { width:24px; height:24px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet-mask { position:fixed; inset:0; background:rgba(51,39,27,.45); z-index:80; display:none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet-mask.open { display:flex; align-items:flex-end; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet { background:#fff; width:100%; border-radius:18px 18px 0 0; padding:24px 20px calc(24px + env(safe-area-inset-bottom)); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet .tick { width:52px; height:52px; border-radius:50%; background:var(--foam); color:var(--teal-deep);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size:26px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet h3 { text-align:center; font-size:16px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet p { text-align:center; font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.sheet .wa { width:100%; justify-content:center; margin-top:18px; height:46px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.spinner { width:26px; height:26px; border:3px solid var(--foam); border-top-color:var(--teal-deep); border-radius:50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>margin:0 auto 12px; animation:spin .8s linear infinite; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>@keyframes spin { to { transform:rotate(360deg); } }</span></p>
+<p class="p1"><span class="s1">&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;div class="appbar"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;span class="wordmark"&gt;&lt;i class="logo-dot"&gt;&lt;/i&gt;EKUM&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;span class="sub"&gt;Exhibition · Mumbai&lt;br&gt;&lt;span class="sync-chip ok" id="sync-chip" onclick="fullSync(true)" style="cursor:pointer"&gt;✓ synced · tap to sync&lt;/span&gt;&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="toast" id="toast"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- ================= RECEPTION ================= --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="page active" id="pg-reception"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;New Party Registration&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Company / Firm name &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="p-name" autocomplete="off"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Contact person &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="p-contact" autocomplete="off"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Contact number &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="phone-wrap"&gt;&lt;span class="prefix"&gt;+91&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;input id="p-phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="off"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Agent&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="p-agent" onchange="onMasterSelect(this,'agent')"&gt;&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="addnew-row" id="agent-addnew"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;input id="agent-new-name" placeholder="New agent name"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;button class="btn small" onclick="saveMaster('agent')"&gt;Save&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;City &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="p-city" autocomplete="off"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;State&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="p-state"&gt;&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;GSTIN &lt;span style="color:var(--muted);font-weight:400;text-transform:none"&gt;(optional)&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="p-gstin" autocomplete="off" maxlength="15" style="text-transform:uppercase"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Notes&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="p-notes" autocomplete="off"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn" id="p-save" onclick="saveParty()"&gt;Register Party&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Recent Parties &lt;span class="badge" id="party-count" style="display:none"&gt;&lt;/span&gt;&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="party-list" class="empty"&gt;Loading…&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- ================= SALES ================= --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="page" id="pg-sales"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="total-strip" id="total-strip"&gt;&lt;span id="strip-party"&gt;&lt;/span&gt;&lt;span id="strip-count"&gt;&lt;/span&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label style="margin-top:0"&gt;Salesperson (for items you add) &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="s-sales" onchange="onMasterSelect(this,'salesperson')"&gt;&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="addnew-row" id="salesperson-addnew"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;input id="salesperson-new-name" placeholder="New salesperson name"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;button class="btn small" onclick="saveMaster('salesperson')"&gt;Save&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Party &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="party-picked" style="display:none; margin-top:2px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;span class="chip" onclick="clearParty()"&gt;&lt;span id="party-chip-text"&gt;&lt;/span&gt;&lt;span class="x"&gt;✕&lt;/span&gt;&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="party-search" placeholder="Type party name to search…" autocomplete="off" oninput="searchParty()"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="search-results" id="party-results"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="resume-note" id="resume-note"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Add Items&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn secondary" id="scan-toggle" onclick="toggleScanner()" style="margin-top:0"&gt;📷 Start Camera Scan&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="reader"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="scan-row"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div&gt;&lt;label style="margin-top:0"&gt;Barcode (scan or type)&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input id="s-barcode" autocomplete="off" onkeydown="if(event.key==='Enter')addManual()"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div style="max-width:76px"&gt;&lt;label style="margin-top:0"&gt;Qty (pcs)&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input id="s-qty" inputmode="numeric" value="1"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;button class="btn small" style="height:44px" onclick="addManual()"&gt;Add&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="hint"&gt;Every scan adds the design at 1 pc instantly (with a beep). Scan again or use ± to change quantity — or tap the number to type it.&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Order Items &lt;span class="pill" id="cart-count"&gt;0 designs · 0 pcs&lt;/span&gt;&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;table id="cart"&gt;&lt;tbody&gt;&lt;/tbody&gt;&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="empty" id="cart-empty"&gt;Scan a barcode to begin&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn secondary" id="s-savep" onclick="saveProgress(true)" disabled&gt;Save Progress (keep open)&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn" id="s-final" onclick="finalize()" disabled&gt;Finalize &amp;amp; Share ➜&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- ================= ORDERS ================= --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="page" id="pg-orders"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button class="btn secondary" onclick="loadOrders(true)" style="margin-top:0"&gt;↻ Refresh Orders&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="orders-list" class="empty" style="margin-top:14px"&gt;Loading…&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- ================= MAP PRODUCTS ================= --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="page" id="pg-map"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Map QR Tags to Design Numbers</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;span class="pill" id="map-count" style="margin-left:6px"&gt;0 mapped this session&lt;/span&gt;&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="hint" style="margin-top:0"&gt;Scan a tag → type its design number → Save. The camera stays on, so you can map continuously: scan, type, save, next.&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn secondary" id="map-scan-toggle" onclick="toggleMapScanner()"&gt;📷 Start Camera Scan&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="reader-map" style="border-radius:12px;overflow:hidden;margin-top:12px"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;QR Code / Barcode&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="m-code" autocomplete="off" placeholder="Scan or type e.g. EK-0042"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="resume-note" id="map-note"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;label&gt;Design number &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="m-design" autocomplete="off" placeholder="e.g. D-1024" onkeydown="if(event.key==='Enter')saveMapping()"&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn" id="m-save" onclick="saveMapping()"&gt;Save Mapping&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Just mapped&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="map-log" class="empty"&gt;Nothing yet — start scanning&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;nav&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button class="nav-item active" id="nav-reception" onclick="go('reception')"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;svg viewBox="0 0 24 24"&gt;&lt;path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/&gt;&lt;circle cx="9" cy="7" r="4"/&gt;&lt;path d="M19 8v6M22 11h-6"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>Reception</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button class="nav-item" id="nav-sales" onclick="go('sales')"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;svg viewBox="0 0 24 24"&gt;&lt;circle cx="9" cy="21" r="1"/&gt;&lt;circle cx="20" cy="21" r="1"/&gt;&lt;path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>Sales</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="nav-item"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="fab" onclick="fabScan()" aria-label="Scan"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;svg viewBox="0 0 24 24"&gt;&lt;path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button class="nav-item" id="nav-orders" onclick="go('orders')"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;svg viewBox="0 0 24 24"&gt;&lt;path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/&gt;&lt;path d="M14 2v6h6M16 13H8M16 17H8"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>Orders &lt;span class="badge nav-notify" id="orders-badge" style="display:none"&gt;&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button class="nav-item" id="nav-map" onclick="go('map')"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;svg viewBox="0 0 24 24"&gt;&lt;path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/&gt;&lt;path d="M7 7h.01"/&gt;&lt;/svg&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>Map</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/nav&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- ================= SHEETS ================= --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="sheet-mask" id="busy-mask"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="sheet"&gt;&lt;div class="spinner"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h3 id="busy-title"&gt;Working…&lt;/h3&gt;&lt;p id="busy-detail"&gt;&lt;/p&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div class="sheet-mask" id="done-mask"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="sheet"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="tick"&gt;✓&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h3 id="done-title"&gt;&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;p id="done-detail"&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;a class="wa" id="done-wa" target="_blank"&gt;Share on WhatsApp&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;a class="wa light" id="done-pdf" target="_blank" style="width:100%;justify-content:center"&gt;Open PDF&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="btn secondary" onclick="closeDone()"&gt;Next Customer&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1">/* =====================================================================</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>CONFIGURATION — PASTE YOUR APPS SCRIPT WEB APP URL BETWEEN THE QUOTES</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>(the link ending in /exec from Deploy → Manage deployments)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>===================================================================== */</span></p>
+<p class="p1"><span class="s1">const API_URL = 'https://script.google.com/macros/s/AKfycbyEJmCGg9nxcMvW-uUqyRonuyn64Tq2iF-KVk0W1kEGUOPD79xNK9H-Q-VXxbUpmOUM/exec';</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* Transport shim: keeps the same google.script.run interface, but sends</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">   </span>requests to the Apps Script JSON API instead (works from any host). */</span></p>
+<p class="p1"><span class="s1">function makeRunner() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let onOk = function(){}, onFail = function(){};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const target = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>withSuccessHandler(f) { onOk = f; return proxy; },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>withFailureHandler(f) { onFail = f; return proxy; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const proxy = new Proxy(target, {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>get(t, prop) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (prop in t) return t[prop];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return function(...args) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>fetch(API_URL, { method: 'POST', body: JSON.stringify({ fn: prop, args: args }) })</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.then(r =&gt; r.json())</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.then(j =&gt; { if (j.ok) onOk(j.data); else onFail(new Error(j.error || 'Server error')); })</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.catch(e =&gt; onFail(e));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return proxy;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">const google = { script: { get run() { return makeRunner(); } } };</span></p>
+<p class="p1"><span class="s1">if (API_URL.indexOf('PASTE_') === 0) alert('Setup needed: open index.html and paste your Apps Script /exec URL into API_URL.');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ STATE ============ */</span></p>
+<p class="p1"><span class="s1">let parties = [], orders = [], masters = { agents:[], salespersons:[] };</span></p>
+<p class="p1"><span class="s1">let productMap = {}; <span class="Apple-converted-space">                </span>// barcode -&gt; {design,name,category,img}</span></p>
+<p class="p1"><span class="s1">let cart = []; <span class="Apple-converted-space">                      </span>// {barcode,design,name,qty,sales,category}</span></p>
+<p class="p1"><span class="s1">let selectedParty = null, currentOrderId = null;</span></p>
+<p class="p1"><span class="s1">let scanner = null, scanning = false, lastScan = { code:'', t:0 };</span></p>
+<p class="p1"><span class="s1">let saveInFlight = false, saveDirty = false, wakeLock = null, audioCtx = null;</span></p>
+<p class="p1"><span class="s1">let mapScanner = null, mapScanning = false, mapLastScan = { code:'', t:0 }, mapCount = 0, mapSaving = false;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">const STATES = ['Maharashtra','Gujarat','Rajasthan','Delhi','Madhya Pradesh','Uttar Pradesh','Karnataka','Tamil Nadu','Telangana','Andhra Pradesh','West Bengal','Bihar','Punjab','Haryana','Kerala','Odisha','Assam','Jharkhand','Chhattisgarh','Uttarakhand','Himachal Pradesh','Goa','Jammu &amp; Kashmir','Chandigarh','Puducherry','Tripura','Meghalaya','Manipur','Nagaland','Mizoram','Arunachal Pradesh','Sikkim','Andaman &amp; Nicobar','Dadra &amp; Nagar Haveli and Daman &amp; Diu','Ladakh','Lakshadweep'];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function toast(msg) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const t = document.getElementById('toast');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>t.textContent = msg; t.style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>clearTimeout(t._h); t._h = setTimeout(() =&gt; t.style.display = 'none', 2200);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function syncChip(state, text) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const c = document.getElementById('sync-chip');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>c.className = 'sync-chip ' + state; c.textContent = text;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function beep() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const o = audioCtx.createOscillator(), g = audioCtx.createGain();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>o.connect(g); g.connect(audioCtx.destination);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>o.frequency.value = 1150; g.gain.value = 0.15;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>o.start(); o.stop(audioCtx.currentTime + 0.09);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} catch(e) {}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (navigator.vibrate) navigator.vibrate(60);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ NAV ============ */</span></p>
+<p class="p1"><span class="s1">function go(name) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.page').forEach(p =&gt; p.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('pg-' + name).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>['reception','sales','orders','map'].forEach(n =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const el = document.getElementById('nav-' + n);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (el) el.classList.toggle('active', n === name);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (name === 'orders') loadOrders();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (name !== 'sales' &amp;&amp; scanning) toggleScanner();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (name !== 'map' &amp;&amp; mapScanning) toggleMapScanner();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>window.scrollTo(0, 0);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function fabScan() { go('sales'); if (!scanning) toggleScanner(); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ MASTERS ============ */</span></p>
+<p class="p1"><span class="s1">function renderMasters() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>fillMasterSelect('p-agent', masters.agents, 'Select agent', true);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>fillMasterSelect('s-sales', masters.salespersons, 'Select salesperson', false);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const saved = localStorage.getItem('ekum_sales');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (saved &amp;&amp; masters.salespersons.includes(saved)) document.getElementById('s-sales').value = saved;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} catch(e) {}</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function fillMasterSelect(id, list, placeholder, withDirect) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const sel = document.getElementById(id);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const cur = sel.value;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let html = '&lt;option value=""&gt;' + placeholder + '&lt;/option&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (withDirect) html += '&lt;option value="Direct"&gt;Direct / No agent&lt;/option&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>html += list.map(n =&gt; `&lt;option value="${n}"&gt;${n}&lt;/option&gt;`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>html += '&lt;option value="__add__"&gt;＋ Add new…&lt;/option&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>sel.innerHTML = html;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (cur &amp;&amp; cur !== '__add__') sel.value = cur;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function onMasterSelect(sel, kind) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const row = document.getElementById(kind + '-addnew');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (sel.value === '__add__') { row.classList.add('open'); document.getElementById(kind + '-new-name').focus(); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>row.classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (kind === 'salesperson' &amp;&amp; sel.value) { try { localStorage.setItem('ekum_sales', sel.value); } catch(e) {} }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">let masterSaving = false;</span></p>
+<p class="p1"><span class="s1">function saveMaster(kind) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (masterSaving) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const input = document.getElementById(kind + '-new-name');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const name = input.value.trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!name) return toast('Enter a name first');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>masterSaving = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const fn = kind === 'agent' ? 'addAgent' : 'addSalesperson';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const listKey = kind === 'agent' ? 'agents' : 'salespersons';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const selId = kind === 'agent' ? 'p-agent' : 's-sales';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>masterSaving = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (!masters[listKey].includes(res.name)) masters[listKey].push(res.name);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>masters[listKey].sort((a,b) =&gt; a.localeCompare(b));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>renderMasters();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById(selId).value = res.name;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (kind === 'salesperson') { try { localStorage.setItem('ekum_sales', res.name); } catch(e) {} }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById(kind + '-addnew').classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>input.value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>toast(res.existed ? res.name + ' already exists — selected' : '✓ ' + res.name + ' added');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withFailureHandler(e =&gt; { masterSaving = false; toast('Error: ' + e.message); })[fn](name);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ RECEPTION ============ */</span></p>
+<p class="p1"><span class="s1">function val(id) { return document.getElementById(id).value.trim(); }</span></p>
+<p class="p1"><span class="s1">let partySaving = false;</span></p>
+<p class="p1"><span class="s1">function saveParty() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (partySaving) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const name = val('p-name'), contact = val('p-contact'), phone = val('p-phone'), city = val('p-city');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!name) return toast('Company / Firm name is required');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!contact) return toast('Contact person is required');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!/^\d{10}$/.test(phone)) return toast('Enter a valid 10-digit mobile number');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!city) return toast('City is required');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const agent = document.getElementById('p-agent').value;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (agent === '__add__') return toast('Finish adding the agent first');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>partySaving = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('p-save');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>btn.disabled = true; btn.textContent = 'Saving…';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>partySaving = false; btn.disabled = false; btn.textContent = 'Register Party';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(id =&gt; document.getElementById(id).value = '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('p-agent').value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>toast('✓ ' + res.name + ' registered (' + res.id + ')');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>lightSync();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withFailureHandler(e =&gt; { partySaving = false; btn.disabled = false; btn.textContent = 'Register Party'; toast('Error: ' + e.message); })</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.addParty({ name, contact, phone: '91' + phone, agent, city,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>state: document.getElementById('p-state').value, gstin: val('p-gstin').toUpperCase(), notes: val('p-notes') });</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function renderParties() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const el = document.getElementById('party-list');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const cnt = document.getElementById('party-count');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>cnt.style.display = parties.length ? 'inline-flex' : 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>cnt.textContent = parties.length;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>el.className = parties.length ? '' : 'empty';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>el.innerHTML = parties.length</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>? '&lt;table&gt;&lt;tbody&gt;' + parties.slice(0, 12).map((p, i) =&gt; `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="item-code"&gt;${p.name} ${i === 0 ? '&lt;span class="pill new" style="margin-left:6px"&gt;NEW&lt;/span&gt;' : ''}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="item-name"&gt;${p.id} · ${p.city}${p.agent &amp;&amp; p.agent !== 'Direct' ? ' · via ' + p.agent : ''}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/td&gt;&lt;/tr&gt;`).join('') + '&lt;/tbody&gt;&lt;/table&gt;'</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>: 'No parties registered yet';</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ SALES: party pick + resume ============ */</span></p>
+<p class="p1"><span class="s1">function searchParty() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const q = val('party-search').toLowerCase();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const box = document.getElementById('party-results');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (q.length &lt; 2) { box.classList.remove('open'); return; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const hits = parties.filter(p =&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>p.name.toLowerCase().includes(q) || p.city.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>).slice(0, 6);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>box.innerHTML = hits.length</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>? hits.map(p =&gt; `&lt;div class="sr-row" onclick='pickParty(${JSON.stringify(p.id)})'&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;${p.name}&lt;/div&gt;&lt;div class="sr-meta"&gt;${p.id} · ${p.city}${p.agent &amp;&amp; p.agent !== 'Direct' ? ' · via ' + p.agent : ''}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`).join('')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>: '&lt;div class="sr-row" style="color:var(--muted)"&gt;No match — register at Reception first&lt;/div&gt;';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>box.classList.add('open');</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function pickParty(id) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>selectedParty = parties.find(p =&gt; p.id === id);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>currentOrderId = null; cart = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-chip-text').textContent = selectedParty.name + ' · ' + selectedParty.id;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-picked').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-search').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-results').classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-search').value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderCart();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// fetch this party's open order (previous departments' items)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const note = document.getElementById('resume-note');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>note.style.display = 'block'; note.textContent = 'Checking for existing order…';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (!selectedParty || selectedParty.id !== id) return; // party changed meanwhile</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (res) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>currentOrderId = res.orderId;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>cart = res.items;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>note.textContent = '↺ Continuing ' + res.orderId + ' — ' + res.items.length + ' designs already added by earlier departments.';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>renderCart();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>note.style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).withFailureHandler(() =&gt; { note.style.display = 'none'; }).getOpenOrder(id);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function clearParty() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (cart.length &amp;&amp; !confirm('Leave this party? Unsaved changes will be lost.')) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>selectedParty = null; currentOrderId = null; cart = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-picked').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-search').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('resume-note').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderCart();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ SCANNER (offline-fast: memory lookup only) ============ */</span></p>
+<p class="p1"><span class="s1">function toggleScanner() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('scan-toggle');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (scanning) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>scanner.stop().then(() =&gt; scanner.clear()).catch(() =&gt; {});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>scanning = false; btn.textContent = '📷 Start Camera Scan';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (wakeLock) { wakeLock.release().catch(()=&gt;{}); wakeLock = null; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>scanner = new Html5Qrcode('reader');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>scanner.start(</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>{ facingMode: 'environment' },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>{ fps: 12, qrbox: { width: 250, height: 140 } },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>code =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const now = Date.now();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (code === lastScan.code &amp;&amp; now - lastScan.t &lt; 1500) return; // same-code cooldown only</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>lastScan = { code, t: now };</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>addToCart(code, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>).then(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>scanning = true; btn.textContent = '⏹ Stop Camera';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(w =&gt; wakeLock = w).catch(()=&gt;{});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).catch(e =&gt; toast('Camera error: open directly in Chrome/Safari (not inside another app).'));</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function addManual() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const code = val('s-barcode');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const qty = Math.max(1, parseInt(document.getElementById('s-qty').value) || 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!code) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>addToCart(code, qty);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('s-barcode').value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('s-qty').value = '1';</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function addToCart(code, qty) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>beep();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const existing = cart.find(i =&gt; i.barcode === code);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (existing) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>existing.qty += qty;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toast((existing.design || code) + ' · ' + existing.qty + ' pcs');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const p = productMap[code];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>cart.push({ barcode: code, design: p ? p.design : '', name: p ? p.name : 'Not in product master',</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>qty: qty, sales: document.getElementById('s-sales').value || '', category: p ? p.category : '' });</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toast('✓ ' + (p &amp;&amp; p.design ? p.design : code));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderCart(); markDirty();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function changeQty(i, d) { cart[i].qty = Math.max(1, cart[i].qty + d); renderCart(); markDirty(); }</span></p>
+<p class="p1"><span class="s1">function setQty(i, v) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const n = Math.max(1, parseInt(v) || 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>cart[i].qty = n; renderCart(); markDirty();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function removeItem(i) { cart.splice(i, 1); renderCart(); markDirty(); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function renderCart() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.querySelector('#cart tbody').innerHTML = cart.map((it, i) =&gt; `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;tr&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="item-code"&gt;${it.design || it.barcode}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="item-name"&gt;${it.design ? it.barcode + (it.name &amp;&amp; it.name !== 'Not in product master' ? ' · ' + it.name : '') : it.name}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>${it.sales ? '&lt;div class="item-sales"&gt;' + it.sales + '&lt;/div&gt;' : ''}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;td style="white-space:nowrap; text-align:right"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;button class="qty-btn" onclick="changeQty(${i},-1)"&gt;−&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input class="qty-in" inputmode="numeric" value="${it.qty}" onchange="setQty(${i},this.value)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;button class="qty-btn" onclick="changeQty(${i},1)"&gt;+&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;button class="del" onclick="removeItem(${i})"&gt;✕&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/tr&gt;`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const total = cart.reduce((s, i) =&gt; s + i.qty, 0);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const label = cart.length + ' designs · ' + total + ' pcs';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('cart-count').textContent = label;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('cart-empty').style.display = cart.length ? 'none' : 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('s-savep').disabled = !cart.length || !selectedParty;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('s-final').disabled = !cart.length || !selectedParty;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const strip = document.getElementById('total-strip');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>strip.classList.toggle('show', !!selectedParty &amp;&amp; cart.length &gt; 0);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('strip-party').textContent = selectedParty ? selectedParty.name : '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('strip-count').textContent = label;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ SAVE PROGRESS (background, retry) ============ */</span></p>
+<p class="p1"><span class="s1">function markDirty() { saveDirty = true; }</span></p>
+<p class="p1"><span class="s1">function payload() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return { orderId: currentOrderId, partyId: selectedParty.id, partyName: selectedParty.name, items: cart.slice() };</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function saveProgress(manual) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!selectedParty || !cart.length) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!document.getElementById('s-sales').value || document.getElementById('s-sales').value === '__add__')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return toast('Select salesperson first');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (saveInFlight) { saveDirty = true; return; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>saveInFlight = true; saveDirty = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>syncChip('busy', '● saving…');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('s-savep');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (manual) { btn.disabled = true; btn.textContent = 'Saving…'; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>attemptSave(payload(), 0, manual);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function attemptSave(pl, tries, manual) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>currentOrderId = res.orderId;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>saveInFlight = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>syncChip('ok', '✓ synced');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const btn = document.getElementById('s-savep');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>btn.textContent = 'Save Progress (keep open)'; btn.disabled = !cart.length;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (manual) toast('✓ Saved as ' + res.orderId + ' (still open for next department)');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (saveDirty) saveProgress(false); // newer changes arrived meanwhile</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withFailureHandler(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (tries &lt; 3) { setTimeout(() =&gt; attemptSave(pl, tries + 1, manual), 2000 * (tries + 1)); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>saveInFlight = false; saveDirty = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>syncChip('err', '⚠ retry pending');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const btn = document.getElementById('s-savep');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>btn.textContent = 'Save Progress (keep open)'; btn.disabled = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>toast('Network issue — your items are safe on this phone. Tap Save again.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}).saveOrderProgress(pl);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ FINALIZE &amp; SHARE ============ */</span></p>
+<p class="p1"><span class="s1">let finalizing = false;</span></p>
+<p class="p1"><span class="s1">function finalize() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (finalizing || !selectedParty || !cart.length) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!document.getElementById('s-sales').value || document.getElementById('s-sales').value === '__add__')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return toast('Select salesperson first');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!confirm('Finalize this order? It will be closed for all departments and the order form will be generated.')) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>finalizing = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('busy-title').textContent = 'Generating Order Form…';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('busy-detail').textContent = 'Creating PDF with product images. This takes a few seconds.';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('busy-mask').classList.add('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const pl = payload(), party = selectedParty;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>finalizing = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('busy-mask').classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const msg = encodeURIComponent(</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>'Order ' + res.orderId + ' — ' + pl.partyName + '\n' +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>pl.items.length + ' designs · ' + res.totalPcs + ' pcs\n\n' +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>(res.pdfUrl ? 'Order form (PDF): ' + res.pdfUrl + '\n\n' : '') +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>'Thank you for visiting Ekum!');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const digits = String(party.phone || '').replace(/\D/g, '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('done-title').textContent = 'Order ' + res.orderId + ' Finalized';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('done-detail').textContent =</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>pl.partyName + ' · ' + pl.items.length + ' designs · ' + res.totalPcs + ' pcs' +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>(res.pdfUrl ? '' : ' — PDF could not be generated; order is saved, share text summary.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('done-wa').href = digits ? 'https://wa.me/' + digits + '?text=' + msg : 'https://wa.me/?text=' + msg;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const pdfBtn = document.getElementById('done-pdf');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (res.pdfUrl) { pdfBtn.style.display = 'inline-flex'; pdfBtn.href = res.pdfUrl; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>else pdfBtn.style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('done-mask').classList.add('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>cart = []; currentOrderId = null; renderCart();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (scanning) toggleScanner();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withFailureHandler(e =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>finalizing = false;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('busy-mask').classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>toast('Could not finalize: ' + e.message + ' — try again.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}).finalizeOrder(pl);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function closeDone() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('done-mask').classList.remove('open');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>clearPartySilent();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function clearPartySilent() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>selectedParty = null; currentOrderId = null; cart = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-picked').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('party-search').style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('resume-note').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>renderCart();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ MAP PRODUCTS ============ */</span></p>
+<p class="p1"><span class="s1">function toggleMapScanner() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('map-scan-toggle');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (mapScanning) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>mapScanner.stop().then(() =&gt; mapScanner.clear()).catch(() =&gt; {});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>mapScanning = false; btn.textContent = '📷 Start Camera Scan';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (wakeLock) { wakeLock.release().catch(()=&gt;{}); wakeLock = null; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>mapScanner = new Html5Qrcode('reader-map');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>mapScanner.start(</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>{ facingMode: 'environment' },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>{ fps: 12, qrbox: { width: 220, height: 220 } },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>code =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const now = Date.now();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (code === mapLastScan.code &amp;&amp; now - mapLastScan.t &lt; 2000) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>mapLastScan = { code, t: now };</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>onMapScan(code);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>).then(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>mapScanning = true; btn.textContent = '⏹ Stop Camera';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(w =&gt; wakeLock = w).catch(()=&gt;{});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).catch(() =&gt; toast('Camera error: open directly in Chrome/Safari (not inside another app).'));</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function onMapScan(code) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>beep();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('m-code').value = code;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const note = document.getElementById('map-note');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const existing = productMap[code];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (existing &amp;&amp; existing.design) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>note.style.display = 'block';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>note.textContent = '⚠ ' + code + ' is already mapped to ' + existing.design + '. Saving will overwrite it.';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>note.style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('m-design').focus();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function saveMapping() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (mapSaving) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const code = val('m-code');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const design = val('m-design');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!code) return toast('Scan or type the QR code first');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!design) return toast('Enter the design number');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const overwrite = !!(productMap[code] &amp;&amp; productMap[code].design);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>mapSaving = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('m-save');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>btn.disabled = true; btn.textContent = 'Saving…';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withSuccessHandler(res =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>mapSaving = false; btn.disabled = false; btn.textContent = 'Save Mapping';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// update local product map + device cache instantly</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>productMap[code] = Object.assign(productMap[code] || {}, { design: design, name: productMap[code] ? productMap[code].name : '', category: productMap[code] ? productMap[code].category : '', img: productMap[code] ? productMap[code].img : '' });</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const c = JSON.parse(localStorage.getItem('ekum_products') || '[]');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const i = c.findIndex(r =&gt; r[0] === code);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (i &gt;= 0) c[i][1] = design; else c.push([code, design, '', '', '']);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>localStorage.setItem('ekum_products', JSON.stringify(c));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} catch(e) {}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>mapCount++;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('map-count').textContent = mapCount + ' mapped this session';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const log = document.getElementById('map-log');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>log.className = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>log.innerHTML = '&lt;div style="font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)"&gt;&lt;b&gt;' + code + '&lt;/b&gt; → ' + design +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>(res.updated ? ' &lt;span class="pill open" style="margin-left:6px"&gt;updated&lt;/span&gt;' : '') + '&lt;/div&gt;' + (log.innerHTML.startsWith('&lt;div') ? log.innerHTML : '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('m-code').value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('m-design').value = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.getElementById('map-note').style.display = 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>toast('✓ ' + code + ' → ' + design);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.withFailureHandler(e =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>mapSaving = false; btn.disabled = false; btn.textContent = 'Save Mapping';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>toast('Error: ' + e.message + ' — not saved, try again.');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}).addProductMapping(code, design, overwrite);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ ORDERS TAB ============ */</span></p>
+<p class="p1"><span class="s1">function loadOrders(showToast) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run.withSuccessHandler(list =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>orders = list; renderOrders();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (showToast) toast('Orders refreshed');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).getOrders();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function renderOrders() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const el = document.getElementById('orders-list');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const badge = document.getElementById('orders-badge');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>badge.style.display = orders.length ? 'inline-flex' : 'none';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>badge.textContent = orders.length;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>el.className = orders.length ? '' : 'empty';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>el.innerHTML = orders.length ? orders.map(o =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const party = parties.find(p =&gt; p.id === o.partyId) || {};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const digits = String(party.phone || '').replace(/\D/g, '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const msg = encodeURIComponent('Order ' + o.id + ' — ' + o.partyName + '\n' + o.items.length + ' designs · ' + o.totalPcs +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>' pcs\n\n' + (o.pdfUrl ? 'Order form (PDF): ' + o.pdfUrl + '\n\n' : '') + 'Thank you for visiting Ekum!');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return `&lt;div class="order-card"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="order-title"&gt;${o.partyName}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;span class="pill order-pill ${o.status === 'Open' ? 'open' : ''}"&gt;${o.status} · ${o.totalPcs} pcs&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="order-meta"&gt;${o.id} · ${o.time}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;table&gt;&lt;tbody&gt;${o.items.map(it =&gt; `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;&lt;div class="item-code"&gt;${it.design || it.barcode}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="item-name"&gt;${it.barcode}${it.sales ? ' · ' + it.sales : ''}&lt;/div&gt;&lt;/td&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;td style="text-align:right"&gt;&lt;b&gt;${it.qty} pcs&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;`).join('')}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/tbody&gt;&lt;/table&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>${o.status === 'Closed'</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>? `&lt;a class="wa" href="https://wa.me/${digits ? digits : ''}?text=${msg}" target="_blank"&gt;Share on WhatsApp&lt;/a&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">           </span>${o.pdfUrl ? `&lt;a class="wa light" href="${o.pdfUrl}" target="_blank"&gt;PDF&lt;/a&gt;` : ''}`</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>: `&lt;button class="wa light" onclick='resumeOrder(${JSON.stringify(o.partyId)})'&gt;Continue this order ➜&lt;/button&gt;`}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).join('') : 'No orders yet';</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function resumeOrder(partyId) { go('sales'); pickParty(partyId); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">/* ============ BOOT / SYNC / AUTO-REFRESH ============ */</span></p>
+<p class="p1"><span class="s1">function loadProducts() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// serve cached copy instantly, refresh in background</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const c = localStorage.getItem('ekum_products');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (c) buildProductMap(JSON.parse(c));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} catch(e) {}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run.withSuccessHandler(rows =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>buildProductMap(rows);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>try { localStorage.setItem('ekum_products', JSON.stringify(rows)); } catch(e) {}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toast('Product master loaded: ' + rows.length + ' items');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).getProducts();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function buildProductMap(rows) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>productMap = {};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>rows.forEach(r =&gt; productMap[r[0]] = { design: r[1], name: r[2], category: r[3], img: r[4] });</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function fullSync(showToast) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>syncChip('busy', '● syncing…');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run.withSuccessHandler(d =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>parties = d.parties; orders = d.orders; masters = d.masters;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>sortMasters(); renderMasters(); renderParties(); renderOrders();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>syncChip('ok', '✓ synced');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (showToast) toast('Synced');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).withFailureHandler(() =&gt; syncChip('err', '⚠ offline')).getBootData();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>loadProducts();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function lightSync() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>google.script.run.withSuccessHandler(d =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>parties = d.parties; masters = d.masters;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>sortMasters(); renderMasters(); renderParties();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>syncChip('ok', '✓ synced');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).withFailureHandler(() =&gt; syncChip('err', '⚠ offline')).getLightSync();</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">function sortMasters() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>masters.agents.sort((a,b) =&gt; a.localeCompare(b));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>masters.salespersons.sort((a,b) =&gt; a.localeCompare(b));</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">(function init() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const st = document.getElementById('p-state');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>st.innerHTML = '&lt;option value=""&gt;Select state&lt;/option&gt;' + STATES.map(s =&gt; `&lt;option&gt;${s}&lt;/option&gt;`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>st.value = 'Maharashtra';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>fullSync();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>setInterval(lightSync, 45000); // auto-refresh parties &amp; masters every 45s</span></p>
+<p class="p1"><span class="s1">})();</span></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
