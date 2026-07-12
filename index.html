@@ -1110,7 +1110,9 @@
   }
 
   function jsString(value) {
-    return JSON.stringify(String(value == null ? '' : value));
+    return "'" + String(value == null ? '' : value)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'") + "'";
   }
 
   function toast(message, type) {
