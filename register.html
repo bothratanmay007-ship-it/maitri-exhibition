@@ -586,6 +586,27 @@
         transform:translateY(0) scale(1);
       }
     }
+  
+    .find-mode-block {
+      margin-top:8px;
+    }
+
+    .find-mode-block.hidden {
+      display:none;
+    }
+
+    .find-mode-note {
+      margin-top:7px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.45;
+    }
+
+    .status-message.rejected {
+      background:#FEF2F2;
+      color:#991B1B;
+    }
+
   </style>
 </head>
 
@@ -652,15 +673,30 @@
 
       <details class="card find-card" id="find-card">
         <summary>Already registered? Find my place</summary>
-        <div class="card-copy">Use the exact firm name and mobile number entered during registration.</div>
+        <div class="card-copy">Your queue position remains private. Use either your full mobile number, or your exact company name with the last four mobile digits.</div>
 
-        <label>Company / Firm name</label>
-        <input id="f-name" autocomplete="organization">
+        <label>Find using</label>
+        <select id="f-mode" onchange="updateFindMode()">
+          <option value="mobile">Mobile number</option>
+          <option value="company">Company name</option>
+        </select>
 
-        <label>Mobile number</label>
-        <div class="phone-row">
-          <span class="prefix">+91</span>
-          <input id="f-phone" inputmode="numeric" maxlength="10" autocomplete="tel">
+        <div class="find-mode-block" id="find-mobile-mode">
+          <label>Registered mobile number</label>
+          <div class="phone-row">
+            <span class="prefix">+91</span>
+            <input id="f-phone" inputmode="numeric" maxlength="10" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="find-mode-block hidden" id="find-company-mode">
+          <label>Exact Company / Firm name</label>
+          <input id="f-name" autocomplete="organization">
+
+          <label>Last 4 digits of registered mobile</label>
+          <input id="f-last4" inputmode="numeric" maxlength="4" autocomplete="off">
+
+          <div class="find-mode-note">Company names are never shown as suggestions. The last four mobile digits are required to protect customer privacy.</div>
         </div>
 
         <button class="btn secondary" onclick="findMyRegistration()">Find My Queue Position</button>
@@ -976,7 +1012,7 @@
       el('status-party').textContent = status.partyName || '';
       el('status-position').textContent = status.position || '—';
       el('status-ahead').textContent =
-        status.status === 'Waiting' ? Number(status.ahead || 0) : '—';
+        status.status === 'Pending' ? Number(status.ahead || 0) : '—';
       el('status-message').textContent = status.message || '';
       el('status-message').className =
         'status-message ' + String(status.status || '').toLowerCase();
@@ -992,7 +1028,7 @@
         el('status-icon').style.color = '#166534';
         el('position-grid').style.display = 'none';
         haptic([60,40,60]);
-      } else if (status.status === 'Removed') {
+      } else if (status.status === 'Rejected') {
         el('status-icon').textContent = '!';
         el('status-icon').style.background = '#FEE2E2';
         el('status-icon').style.color = '#991B1B';
@@ -1005,7 +1041,7 @@
       }
 
       if (statusTimer) clearInterval(statusTimer);
-      if (status.status === 'Waiting') {
+      if (status.status === 'Pending') {
         statusTimer = setInterval(() => refreshMyStatus(false), 15000);
       }
     }
@@ -1043,26 +1079,62 @@
         });
     }
 
-    function findMyRegistration() {
-      const name = value('f-name');
-      const phone = value('f-phone');
 
-      if (name.length < 3 || !/^\d{10}$/.test(phone)) {
-        openModal({
-          type:'error',
-          title:'Enter the same registration details',
-          message:'Enter the full firm name and the exact 10-digit mobile number used during registration.',
-          confirmText:'Dismiss'
-        });
-        return;
+    function updateFindMode() {
+      const mode = el('f-mode').value;
+      el('find-mobile-mode').classList.toggle('hidden', mode !== 'mobile');
+      el('find-company-mode').classList.toggle('hidden', mode !== 'company');
+    }
+
+    function findMyRegistration() {
+      const mode = el('f-mode').value;
+
+      let payload;
+      if (mode === 'mobile') {
+        const phone = value('f-phone');
+        if (!/^\d{10}$/.test(phone)) {
+          openModal({
+            type:'error',
+            title:'Enter your registered mobile number',
+            message:'Enter the exact 10-digit mobile number used for the queue registration.',
+            confirmText:'Dismiss'
+          });
+          return;
+        }
+
+        payload = {
+          mode:'mobile',
+          phone
+        };
+      } else {
+        const name = value('f-name');
+        const last4 = value('f-last4');
+
+        if (name.length < 3 || !/^\d{4}$/.test(last4)) {
+          openModal({
+            type:'error',
+            title:'Enter the verification details',
+            message:'Enter the exact company name and the last four digits of the registered mobile number.',
+            confirmText:'Dismiss'
+          });
+          return;
+        }
+
+        payload = {
+          mode:'company',
+          partyName:name,
+          phoneLast4:last4
+        };
       }
 
-      showLoading('Finding Registration…', 'Only an exact firm name and mobile match can be opened.');
+      showLoading(
+        'Finding Registration…',
+        mode === 'mobile'
+          ? 'Checking the exact registered mobile number.'
+          : 'Checking the exact firm name and last four mobile digits.'
+      );
 
-      api('findMyQueueRegistration', [{
-        partyName:name,
-        phone
-      }])
+      api('findMyQueueRegistration', [payload])
       .then(status => {
         hideLoading();
         saveQueueSession(status);
@@ -1073,7 +1145,8 @@
         await openModal({
           type:'error',
           title:'Registration not found',
-          message:error.message + '. Check the spelling and mobile number, or contact reception.',
+          message:error.message +
+            '. Check the details or contact reception.',
           confirmText:'Dismiss'
         });
       });
@@ -1116,6 +1189,7 @@
       el('c-agent').addEventListener('focus', searchAgents);
 
       updateJoinState();
+      updateFindMode();
 
       const session = loadQueueSession();
       if (session && session.queueId && session.accessToken) {
