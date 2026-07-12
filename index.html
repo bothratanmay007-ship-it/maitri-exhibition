@@ -3,830 +3,114 @@
 <head>
 <base target="_top">
 <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 <style>
-  :root {
-    --teal:#2B7379; --teal-deep:#225E63; --foam:#E8F2F1; --lemon:#DEDE6E;
-    --linen:#E8E7D5; --warm:#F7F3EA; --white:#FFFFFF; --border:#E7E8E6;
-    --muted:#828282; --slate:#3D3A37; --charcoal:#33271B; --orange:#FF9700;
-    --success:#22C55E; --error:#E5484D;
-  }
-  * { box-sizing:border-box; margin:0; -webkit-tap-highlight-color:transparent; }
-  html,body { background:var(--warm); color:var(--charcoal); font-family:Inter,Arial,sans-serif; -webkit-font-smoothing:antialiased; }
-  body { padding-bottom:96px; }
-
-  .appbar { position:sticky; top:0; z-index:40; background:var(--white); border-bottom:1px solid var(--border);
-    height:56px; display:flex; align-items:center; padding:0 16px; gap:10px; }
-  .wordmark { font-size:15px; font-weight:700; letter-spacing:.11em; color:var(--teal-deep); display:flex; align-items:center; gap:7px; }
-  .logo-dot { width:12px; height:12px; border-radius:50%; background:var(--orange); display:inline-block; }
-  .appbar .sub { margin-left:auto; font-size:11px; color:var(--muted); text-align:right; line-height:1.3; }
-  .sync-chip { font-size:10px; font-weight:600; }
-  .sync-chip.ok { color:var(--success); } .sync-chip.busy { color:var(--orange); } .sync-chip.err { color:var(--error); }
-
-  .page { display:none; padding:16px; max-width:560px; margin:0 auto; }
-  .page.active { display:block; }
-  .card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; }
-  h2 { font-size:14px; font-weight:600; margin-bottom:10px; }
-
-  label { display:block; font-size:11px; font-weight:600; color:var(--slate); margin:12px 0 5px; text-transform:uppercase; letter-spacing:.04em; }
-  label .req { color:var(--error); }
-  input, select { width:100%; height:44px; padding:0 13px; font-size:16px; font-family:Inter;
-    border:1px solid #E4E4E4; border-radius:9px; background:var(--white); color:var(--charcoal); appearance:none; }
-  select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23225E63' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat; background-position:right 13px center; padding-right:34px; }
-  input:focus, select:focus { outline:2px solid var(--teal); border-color:transparent; }
-  .phone-wrap { display:flex; gap:8px; }
-  .phone-wrap .prefix { width:64px; height:44px; border:1px solid #E4E4E4; border-radius:9px; background:var(--foam);
-    color:var(--teal-deep); font-weight:600; font-size:15px; display:flex; align-items:center; justify-content:center; }
-
-  .btn { width:100%; height:46px; border:none; border-radius:9px; font-family:Inter; font-size:14px; font-weight:600;
-    background:var(--teal-deep); color:#fff; margin-top:12px; }
-  .btn:active { opacity:.85; }
-  .btn:disabled { opacity:.45; }
-  .btn.secondary { background:#fff; color:var(--teal-deep); border:1.5px solid var(--teal-deep); }
-  .btn.small { width:auto; height:38px; padding:0 16px; font-size:13px; margin-top:0; }
-
-  .addnew-row { display:none; gap:8px; margin-top:8px; }
-  .addnew-row.open { display:flex; }
-  .addnew-row input { flex:1; }
-
-  .chip { display:inline-flex; align-items:center; height:30px; border-radius:15px; padding:0 13px;
-    background:var(--foam); color:var(--teal-deep); font-size:12px; font-weight:600; gap:7px; }
-  .chip .x { font-weight:700; font-size:14px; }
-  .pill { display:inline-flex; align-items:center; height:24px; border-radius:12px; padding:0 10px; font-size:11px; font-weight:600;
-    background:var(--foam); color:var(--teal-deep); }
-  .pill.open { background:#FFF2D8; color:#CE8412; }
-  .pill.new { background:#FBE8E9; color:var(--error); }
-  .badge { min-width:18px; height:18px; border-radius:9px; background:var(--orange); color:#fff; font-size:10px; font-weight:600;
-    display:inline-flex; align-items:center; justify-content:center; padding:0 5px; }
-
-  .toast { position:fixed; top:66px; left:50%; transform:translateX(-50%); background:var(--charcoal); color:#fff;
-    padding:10px 18px; border-radius:22px; font-size:13px; z-index:99; display:none; max-width:90%; text-align:center; }
-
-  .search-results { border:1px solid var(--border); border-radius:9px; margin-top:6px; overflow:hidden; display:none; background:#fff; }
-  .search-results.open { display:block; }
-  .sr-row { padding:11px 13px; border-bottom:1px solid var(--border); font-size:14px; }
-  .sr-row:last-child { border-bottom:none; }
-  .sr-row:active { background:var(--foam); }
-  .sr-meta { font-size:11px; color:var(--muted); margin-top:2px; }
-  .resume-note { margin-top:8px; font-size:12px; background:var(--foam); color:var(--teal-deep); border-radius:9px; padding:10px 12px; display:none; }
-
-  #reader { border-radius:12px; overflow:hidden; margin-top:12px; }
-  .scan-row { display:flex; gap:8px; align-items:flex-end; margin-top:12px; }
-  .scan-row > div { flex:1; }
-  .hint { font-size:11px; color:var(--muted); margin-top:8px; line-height:1.5; }
-  .total-strip { position:sticky; top:56px; z-index:30; background:var(--teal-deep); color:#fff; border-radius:10px;
-    padding:9px 14px; font-size:13px; font-weight:600; display:none; justify-content:space-between; margin-bottom:12px; }
-  .total-strip.show { display:flex; }
-
-  table { width:100%; border-collapse:collapse; font-size:14px; }
-  td { padding:9px 2px; border-bottom:1px solid var(--border); vertical-align:middle; }
-  tr:last-child td { border-bottom:none; }
-  .item-code { font-weight:600; font-size:13px; }
-  .item-name { font-size:11px; color:var(--muted); margin-top:2px; }
-  .item-sales { font-size:10px; color:var(--teal); font-weight:600; margin-top:2px; }
-  .qty-btn { width:32px; height:32px; border-radius:8px; border:1px solid #E4E4E4; background:#fff; font-size:17px; color:var(--teal-deep); font-weight:700; }
-  .qty-in { width:46px !important; height:32px !important; padding:0 !important; text-align:center; font-size:15px !important; font-weight:700; }
-  .del { color:var(--error); background:none; border:none; font-size:15px; padding:4px; }
-  .empty { text-align:center; color:var(--muted); font-size:13px; padding:26px 10px; }
-
-  .order-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:10px; position:relative; }
-  .order-title { font-size:14px; font-weight:600; padding-right:80px; }
-  .order-meta { font-size:11px; color:var(--muted); margin:4px 0 8px; }
-  .order-pill { position:absolute; right:13px; top:13px; }
-  .wa { display:inline-flex; align-items:center; gap:6px; margin-top:10px; background:var(--teal-deep); color:#fff;
-    font-size:13px; font-weight:600; height:38px; padding:0 16px; border-radius:9px; text-decoration:none; border:none; font-family:Inter; }
-  .wa.light { background:var(--foam); color:var(--teal-deep); }
-
-  nav { position:fixed; bottom:0; left:0; right:0; height:64px; background:#fff; border-top:1px solid var(--border);
-    display:grid; grid-template-columns:repeat(5,1fr); align-items:center; z-index:50; padding-bottom:env(safe-area-inset-bottom); }
-  .nav-item { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-    color:#6d6d6d; font-size:10px; font-weight:500; border:none; background:none; font-family:Inter; position:relative; }
-  .nav-item.active { color:var(--teal-deep); font-weight:600; }
-  .nav-item svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
-  .nav-notify { position:absolute; top:8px; right:calc(50% - 22px); }
-  .fab { width:52px; height:52px; border-radius:50%; background:var(--teal-deep); color:#fff; border:none;
-    display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(34,94,99,.4); margin:-26px auto 0; }
-  .fab svg { width:24px; height:24px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; }
-
-  .sheet-mask { position:fixed; inset:0; background:rgba(51,39,27,.45); z-index:80; display:none; }
-  .sheet-mask.open { display:flex; align-items:flex-end; }
-  .sheet { background:#fff; width:100%; border-radius:18px 18px 0 0; padding:24px 20px calc(24px + env(safe-area-inset-bottom)); }
-  .sheet .tick { width:52px; height:52px; border-radius:50%; background:var(--foam); color:var(--teal-deep);
-    font-size:26px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
-  .sheet h3 { text-align:center; font-size:16px; }
-  .sheet p { text-align:center; font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5; }
-  .sheet .wa { width:100%; justify-content:center; margin-top:18px; height:46px; }
-  .spinner { width:26px; height:26px; border:3px solid var(--foam); border-top-color:var(--teal-deep); border-radius:50%;
-    margin:0 auto 12px; animation:spin .8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+:root{--teal:#2B7379;--deep:#225E63;--foam:#E8F2F1;--warm:#F7F3EA;--white:#fff;--border:#E7E8E6;--muted:#828282;--slate:#3D3A37;--charcoal:#33271B;--orange:#FF9700;--success:#22C55E;--error:#E5484D;--pending:#FFF3D1}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}html,body{background:var(--warm);color:var(--charcoal);font-family:Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}body{padding-bottom:96px}
+.appbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 16px;gap:10px}.wordmark{font-size:15px;font-weight:700;letter-spacing:.11em;color:var(--deep);display:flex;align-items:center;gap:7px}.logo-dot{width:12px;height:12px;border-radius:50%;background:var(--orange)}.appbar .sub{margin-left:auto;font-size:11px;color:var(--muted);text-align:right;line-height:1.3}.sync-chip{font-size:10px;font-weight:600}.sync-chip.ok{color:var(--success)}.sync-chip.busy{color:var(--orange)}.sync-chip.err{color:var(--error)}
+.page{display:none;padding:16px;max-width:600px;margin:0 auto}.page.active{display:block}.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}h2{font-size:14px;font-weight:600;margin-bottom:10px}
+label{display:block;font-size:11px;font-weight:600;color:var(--slate);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.04em}.req{color:var(--error)}input,select,textarea{width:100%;min-height:44px;padding:10px 13px;font-size:16px;font-family:Inter;border:1px solid #E4E4E4;border-radius:9px;background:#fff;color:var(--charcoal)}textarea{resize:vertical;min-height:82px}select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23225E63' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:transparent}.phone-wrap{display:flex;gap:8px}.prefix{width:64px;height:44px;border:1px solid #E4E4E4;border-radius:9px;background:var(--foam);color:var(--deep);font-weight:600;display:flex;align-items:center;justify-content:center}
+.btn{width:100%;height:46px;border:none;border-radius:9px;font-family:Inter;font-size:14px;font-weight:600;background:var(--deep);color:#fff;margin-top:12px}.btn:disabled{opacity:.45}.btn.secondary{background:#fff;color:var(--deep);border:1.5px solid var(--deep)}.btn.small{width:auto;height:38px;padding:0 16px;margin-top:0}.addnew-row{display:none;gap:8px;margin-top:8px}.addnew-row.open{display:flex}.addnew-row input{flex:1}
+.chip{display:inline-flex;align-items:center;min-height:30px;border-radius:15px;padding:6px 13px;background:var(--foam);color:var(--deep);font-size:12px;font-weight:600;gap:7px}.pill{display:inline-flex;align-items:center;min-height:24px;border-radius:12px;padding:4px 10px;font-size:11px;font-weight:600;background:var(--foam);color:var(--deep)}.badge{min-width:18px;height:18px;border-radius:9px;background:var(--orange);color:#fff;font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}.toast{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:#fff;padding:10px 18px;border-radius:22px;font-size:13px;z-index:99;display:none;max-width:90%;text-align:center}
+.search-results{border:1px solid var(--border);border-radius:9px;margin-top:6px;overflow:hidden;display:none;background:#fff}.search-results.open{display:block}.sr-row{padding:11px 13px;border-bottom:1px solid var(--border);font-size:14px}.sr-row:last-child{border-bottom:none}.sr-meta{font-size:11px;color:var(--muted);margin-top:3px}.resume-note{margin-top:8px;font-size:12px;background:var(--foam);color:var(--deep);border-radius:9px;padding:10px 12px;display:none}.hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}.total-strip{position:sticky;top:56px;z-index:30;background:var(--deep);color:#fff;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;display:none;justify-content:space-between;margin-bottom:12px}.total-strip.show{display:flex}.scan-row{display:flex;gap:8px;align-items:flex-end;margin-top:12px}.scan-row>div{flex:1}
+.item-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.item-row:last-child{border-bottom:none}.item-code{font-weight:600;font-size:13px}.item-meta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}.item-sales{font-size:10px;color:var(--teal);font-weight:600;margin-top:3px}.locked{background:#FAFAF8;margin:0 -8px;padding:11px 8px}.qty-wrap{display:flex;align-items:center;gap:5px}.qty-btn{width:32px;height:32px;border-radius:8px;border:1px solid #E4E4E4;background:#fff;font-size:17px;color:var(--deep);font-weight:700}.qty-in{width:46px!important;min-height:32px!important;height:32px!important;padding:0!important;text-align:center;font-size:15px!important;font-weight:700}.del{color:var(--error);background:none;border:none;font-size:15px;padding:4px}.empty{text-align:center;color:var(--muted);font-size:13px;padding:26px 10px}
+.order-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}.order-head{display:flex;justify-content:space-between;gap:10px}.order-title{font-size:14px;font-weight:600}.order-meta{font-size:11px;color:var(--muted);margin:4px 0 8px}
+nav{position:fixed;bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:50}.nav-item{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#6d6d6d;font-size:10px;font-weight:500;border:none;background:none;font-family:Inter}.nav-item.active{color:var(--deep);font-weight:600}.nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.sheet-mask{position:fixed;inset:0;background:rgba(51,39,27,.45);z-index:80;display:none}.sheet-mask.open{display:flex;align-items:flex-end}.sheet{background:#fff;width:100%;border-radius:18px 18px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}.tick{width:52px;height:52px;border-radius:50%;background:var(--foam);color:var(--deep);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}.sheet h3{text-align:center;font-size:16px}.sheet p{text-align:center;font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}.spinner{width:26px;height:26px;border:3px solid var(--foam);border-top-color:var(--deep);border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-
-<div class="appbar">
-  <span class="wordmark"><i class="logo-dot"></i>EKUM</span>
-  <span class="sub">Exhibition · Mumbai<br><span class="sync-chip ok" id="sync-chip" onclick="fullSync(true)" style="cursor:pointer">✓ synced · tap to sync</span></span>
-</div>
+<div class="appbar"><span class="wordmark"><i class="logo-dot"></i>CMAI</span><span class="sub">Exhibition Orders<br><span class="sync-chip ok" id="sync-chip" onclick="fullSync(true)" style="cursor:pointer">✓ synced · tap to sync</span></span></div>
 <div class="toast" id="toast"></div>
 
-<!-- ================= RECEPTION ================= -->
 <div class="page active" id="pg-reception">
-  <div class="card">
-    <h2>New Party Registration</h2>
-    <label>Company / Firm name <span class="req">*</span></label>
-    <input id="p-name" autocomplete="off">
-    <label>Contact person <span class="req">*</span></label>
-    <input id="p-contact" autocomplete="off">
-    <label>Contact number <span class="req">*</span></label>
-    <div class="phone-wrap"><span class="prefix">+91</span>
-      <input id="p-phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="off"></div>
-    <label>Agent</label>
-    <select id="p-agent" onchange="onMasterSelect(this,'agent')"></select>
-    <div class="addnew-row" id="agent-addnew">
-      <input id="agent-new-name" placeholder="New agent name">
-      <button class="btn small" onclick="saveMaster('agent')">Save</button>
-    </div>
-    <label>City <span class="req">*</span></label>
-    <input id="p-city" autocomplete="off">
-    <label>State</label>
-    <select id="p-state"></select>
-    <label>GSTIN <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label>
-    <input id="p-gstin" autocomplete="off" maxlength="15" style="text-transform:uppercase">
-    <label>Notes</label>
-    <input id="p-notes" autocomplete="off">
+  <div class="card"><h2>New Party Registration</h2>
+    <label>Company / Firm name <span class="req">*</span></label><input id="p-name" autocomplete="off">
+    <label>Contact person <span class="req">*</span></label><input id="p-contact" autocomplete="off">
+    <label>Contact number <span class="req">*</span></label><div class="phone-wrap"><span class="prefix">+91</span><input id="p-phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile"></div>
+    <label>Agent</label><select id="p-agent" onchange="onMasterSelect(this,'agent')"></select><div class="addnew-row" id="agent-addnew"><input id="agent-new-name" placeholder="New agent name"><button class="btn small" onclick="saveMaster('agent')">Save</button></div>
+    <label>City <span class="req">*</span></label><input id="p-city" autocomplete="off">
+    <label>State <span class="req">*</span></label><select id="p-state"></select>
+    <label>GSTIN <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label><input id="p-gstin" maxlength="15" style="text-transform:uppercase">
+    <label>Notes</label><textarea id="p-notes"></textarea>
     <button class="btn" id="p-save" onclick="saveParty()">Register Party</button>
   </div>
-  <div class="card">
-    <h2>Recent Parties <span class="badge" id="party-count" style="display:none"></span></h2>
-    <div id="party-list" class="empty">Loading…</div>
-  </div>
+  <div class="card"><h2>Recent Parties <span class="badge" id="party-count" style="display:none"></span></h2><div id="party-list" class="empty">Loading…</div></div>
 </div>
 
-<!-- ================= SALES ================= -->
 <div class="page" id="pg-sales">
   <div class="total-strip" id="total-strip"><span id="strip-party"></span><span id="strip-count"></span></div>
-
   <div class="card">
-    <label style="margin-top:0">Salesperson (for items you add) <span class="req">*</span></label>
-    <select id="s-sales" onchange="onMasterSelect(this,'salesperson')"></select>
-    <div class="addnew-row" id="salesperson-addnew">
-      <input id="salesperson-new-name" placeholder="New salesperson name">
-      <button class="btn small" onclick="saveMaster('salesperson')">Save</button>
-    </div>
-
-    <label>Party <span class="req">*</span></label>
-    <div id="party-picked" style="display:none; margin-top:2px;">
-      <span class="chip" onclick="clearParty()"><span id="party-chip-text"></span><span class="x">✕</span></span>
-    </div>
-    <input id="party-search" placeholder="Type party name to search…" autocomplete="off" oninput="searchParty()">
-    <div class="search-results" id="party-results"></div>
-    <div class="resume-note" id="resume-note"></div>
+    <label style="margin-top:0">Salesperson <span class="req">*</span></label><select id="s-sales" onchange="onMasterSelect(this,'salesperson')"></select><div class="addnew-row" id="salesperson-addnew"><input id="salesperson-new-name" placeholder="New salesperson name"><button class="btn small" onclick="saveMaster('salesperson')">Save</button></div>
+    <label>Party <span class="req">*</span></label><div id="party-picked" style="display:none"><span class="chip" onclick="clearParty()"><span id="party-chip-text"></span><span>✕</span></span></div><input id="party-search" placeholder="Type party name, city or state…" oninput="searchParty()"><div class="search-results" id="party-results"></div><div class="resume-note" id="resume-note"></div>
   </div>
-
-  <div class="card">
-    <h2>Add Items</h2>
-    <button class="btn secondary" id="scan-toggle" onclick="toggleScanner()" style="margin-top:0">📷 Start Camera Scan</button>
-    <div id="reader"></div>
-    <div class="scan-row">
-      <div><label style="margin-top:0">Barcode (scan or type)</label>
-        <input id="s-barcode" autocomplete="off" onkeydown="if(event.key==='Enter')addManual()"></div>
-      <div style="max-width:76px"><label style="margin-top:0">Qty (pcs)</label>
-        <input id="s-qty" inputmode="numeric" value="1"></div>
-      <button class="btn small" style="height:44px" onclick="addManual()">Add</button>
-    </div>
-    <div class="hint">Every scan adds the design at 1 pc instantly (with a beep). Scan again or use ± to change quantity — or tap the number to type it.</div>
+  <div class="card"><h2>Add Designs</h2><button class="btn secondary" id="scan-toggle" onclick="toggleScanner()" style="margin-top:0">📷 Start Camera Scan</button><div id="reader" style="border-radius:12px;overflow:hidden;margin-top:12px"></div>
+    <div class="scan-row"><div><label style="margin-top:0">Barcode</label><input id="s-barcode" onkeydown="if(event.key==='Enter')addManual()"></div><div style="max-width:76px"><label style="margin-top:0">Qty</label><input id="s-qty" inputmode="numeric" value="1"></div><button class="btn small" style="height:44px" onclick="addManual()">Add</button></div>
+    <div class="hint">New designs are linked automatically to the selected salesperson. Earlier salespersons’ saved lines remain visible but locked.</div>
   </div>
-
-  <div class="card">
-    <h2>Order Items <span class="pill" id="cart-count">0 designs · 0 pcs</span></h2>
-    <table id="cart"><tbody></tbody></table>
-    <div class="empty" id="cart-empty">Scan a barcode to begin</div>
-    <button class="btn secondary" id="s-savep" onclick="saveProgress(true)" disabled>Save Progress (keep open)</button>
-    <button class="btn" id="s-final" onclick="finalize()" disabled>Finalize &amp; Share ➜</button>
-  </div>
+  <div class="card"><h2>Order Items <span class="pill" id="cart-count">0 designs · 0 pcs</span></h2><div id="existing-items"></div><div id="new-items"></div><div class="empty" id="cart-empty">Scan a barcode to begin</div><button class="btn" id="s-save" onclick="saveOrder()" disabled>Save Order</button></div>
 </div>
 
-<!-- ================= ORDERS ================= -->
-<div class="page" id="pg-orders">
-  <button class="btn secondary" onclick="loadOrders(true)" style="margin-top:0">↻ Refresh Orders</button>
-  <div id="orders-list" class="empty" style="margin-top:14px">Loading…</div>
-</div>
+<div class="page" id="pg-orders"><button class="btn secondary" onclick="loadOrders(true)" style="margin-top:0">↻ Refresh Orders</button><div id="orders-list" class="empty" style="margin-top:14px">Loading…</div></div>
 
-<!-- ================= MAP PRODUCTS ================= -->
 <div class="page" id="pg-map">
-  <div class="card">
-    <h2>Map QR Tags to Design Numbers
-      <span class="pill" id="map-count" style="margin-left:6px">0 mapped this session</span></h2>
-    <div class="hint" style="margin-top:0">Scan a tag → type its design number → Save. The camera stays on, so you can map continuously: scan, type, save, next.</div>
-    <button class="btn secondary" id="map-scan-toggle" onclick="toggleMapScanner()">📷 Start Camera Scan</button>
-    <div id="reader-map" style="border-radius:12px;overflow:hidden;margin-top:12px"></div>
-
-    <label>QR Code / Barcode</label>
-    <input id="m-code" autocomplete="off" placeholder="Scan or type e.g. EK-0042">
-    <div class="resume-note" id="map-note"></div>
-
-    <label>Design number <span class="req">*</span></label>
-    <input id="m-design" autocomplete="off" placeholder="e.g. D-1024" onkeydown="if(event.key==='Enter')saveMapping()">
-
+  <div class="card"><h2>Map Product Details <span class="pill" id="map-count">0 mapped</span></h2><div class="hint" style="margin-top:0">Scan a tag, complete the design details and save. Every field is stored visibly in the Products sheet.</div>
+    <button class="btn secondary" id="map-scan-toggle" onclick="toggleMapScanner()">📷 Start Camera Scan</button><div id="reader-map" style="border-radius:12px;overflow:hidden;margin-top:12px"></div>
+    <label>Barcode <span class="req">*</span></label><input id="m-code" placeholder="Scan or type barcode">
+    <label>Design number <span class="req">*</span></label><input id="m-design" placeholder="e.g. D-1024">
+    <label>Category</label><select id="m-category" onchange="onMasterSelect(this,'category')"></select><div class="addnew-row" id="category-addnew"><input id="category-new-name" placeholder="New category"><button class="btn small" onclick="saveMaster('category')">Save</button></div>
+    <label>Fabric</label><select id="m-fabric" onchange="onMasterSelect(this,'fabric')"></select><div class="addnew-row" id="fabric-addnew"><input id="fabric-new-name" placeholder="New fabric"><button class="btn small" onclick="saveMaster('fabric')">Save</button></div>
+    <label>Style</label><select id="m-style" onchange="onMasterSelect(this,'style')"></select><div class="addnew-row" id="style-addnew"><input id="style-new-name" placeholder="New style"><button class="btn small" onclick="saveMaster('style')">Save</button></div>
+    <label>Notes</label><textarea id="m-notes" placeholder="Any product or order-taking note"></textarea>
     <button class="btn" id="m-save" onclick="saveMapping()">Save Mapping</button>
   </div>
-  <div class="card">
-    <h2>Just mapped</h2>
-    <div id="map-log" class="empty">Nothing yet — start scanning</div>
-  </div>
+  <div class="card"><h2>Just mapped</h2><div id="map-log" class="empty">Nothing mapped in this session</div></div>
 </div>
 
 <nav>
-  <button class="nav-item active" id="nav-reception" onclick="go('reception')">
-    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
-    Reception
-  </button>
-  <button class="nav-item" id="nav-sales" onclick="go('sales')">
-    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    Sales
-  </button>
-  <div class="nav-item">
-    <button class="fab" onclick="fabScan()" aria-label="Scan">
-      <svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg>
-    </button>
-  </div>
-  <button class="nav-item" id="nav-orders" onclick="go('orders')">
-    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
-    Orders <span class="badge nav-notify" id="orders-badge" style="display:none"></span>
-  </button>
-  <button class="nav-item" id="nav-map" onclick="go('map')">
-    <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>
-    Map
-  </button>
+<button class="nav-item active" id="nav-reception" onclick="go('reception')"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>Reception</button>
+<button class="nav-item" id="nav-sales" onclick="go('sales')"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Sales</button>
+<button class="nav-item" id="nav-orders" onclick="go('orders')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Orders</button>
+<button class="nav-item" id="nav-map" onclick="go('map')"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>Map</button>
 </nav>
-
-<!-- ================= SHEETS ================= -->
-<div class="sheet-mask" id="busy-mask">
-  <div class="sheet"><div class="spinner"></div>
-    <h3 id="busy-title">Working…</h3><p id="busy-detail"></p></div>
-</div>
-<div class="sheet-mask" id="done-mask">
-  <div class="sheet">
-    <div class="tick">✓</div>
-    <h3 id="done-title"></h3>
-    <p id="done-detail"></p>
-    <a class="wa" id="done-wa" target="_blank">Share on WhatsApp</a>
-    <a class="wa light" id="done-pdf" target="_blank" style="width:100%;justify-content:center">Open PDF</a>
-    <button class="btn secondary" onclick="closeDone()">Next Customer</button>
-  </div>
-</div>
+<div class="sheet-mask" id="busy-mask"><div class="sheet"><div class="spinner"></div><h3>Saving Order…</h3><p>Please wait while the shared party order is updated.</p></div></div>
+<div class="sheet-mask" id="done-mask"><div class="sheet"><div class="tick">✓</div><h3 id="done-title">Order saved</h3><p id="done-detail"></p><button class="btn" onclick="closeDone()">Start New Form</button></div></div>
 
 <script>
-/* =====================================================================
-   CONFIGURATION — PASTE YOUR APPS SCRIPT WEB APP URL BETWEEN THE QUOTES
-   (the link ending in /exec from Deploy → Manage deployments)
-   ===================================================================== */
-const API_URL = 'https://script.google.com/macros/s/AKfycbylfA7EoANdu_99zFWr2NsrX-EjvLmpKk5_Ws5qXhJ6KK-KAiu_1BZbPLe5x95u-gkR/exec';
-
-/* Transport shim: keeps the same google.script.run interface, but sends
-   requests to the Apps Script JSON API instead (works from any host). */
-function makeRunner() {
-  let onOk = function(){}, onFail = function(){};
-  const target = {
-    withSuccessHandler(f) { onOk = f; return proxy; },
-    withFailureHandler(f) { onFail = f; return proxy; }
-  };
-  const proxy = new Proxy(target, {
-    get(t, prop) {
-      if (prop in t) return t[prop];
-      return function(...args) {
-        fetch(API_URL, { method: 'POST', body: JSON.stringify({ fn: prop, args: args }) })
-          .then(r => r.json())
-          .then(j => { if (j.ok) onOk(j.data); else onFail(new Error(j.error || 'Server error')); })
-          .catch(e => onFail(e));
-      };
-    }
-  });
-  return proxy;
-}
-const google = { script: { get run() { return makeRunner(); } } };
-if (API_URL.indexOf('PASTE_') === 0) alert('Setup needed: open index.html and paste your Apps Script /exec URL into API_URL.');
-
-/* ============ STATE ============ */
-let parties = [], orders = [], masters = { agents:[], salespersons:[] };
-let productMap = {};                 // barcode -> {design,name,category,img}
-let cart = [];                       // {barcode,design,name,qty,sales,category}
-let selectedParty = null, currentOrderId = null;
-let scanner = null, scanning = false, lastScan = { code:'', t:0 };
-let saveInFlight = false, saveDirty = false, wakeLock = null, audioCtx = null;
-let mapScanner = null, mapScanning = false, mapLastScan = { code:'', t:0 }, mapCount = 0, mapSaving = false;
-
-const STATES = ['Maharashtra','Gujarat','Rajasthan','Delhi','Madhya Pradesh','Uttar Pradesh','Karnataka','Tamil Nadu','Telangana','Andhra Pradesh','West Bengal','Bihar','Punjab','Haryana','Kerala','Odisha','Assam','Jharkhand','Chhattisgarh','Uttarakhand','Himachal Pradesh','Goa','Jammu & Kashmir','Chandigarh','Puducherry','Tripura','Meghalaya','Manipur','Nagaland','Mizoram','Arunachal Pradesh','Sikkim','Andaman & Nicobar','Dadra & Nagar Haveli and Daman & Diu','Ladakh','Lakshadweep'];
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', 2200);
-}
-function syncChip(state, text) {
-  const c = document.getElementById('sync-chip');
-  c.className = 'sync-chip ' + state; c.textContent = text;
-}
-function beep() {
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value = 1150; g.gain.value = 0.15;
-    o.start(); o.stop(audioCtx.currentTime + 0.09);
-  } catch(e) {}
-  if (navigator.vibrate) navigator.vibrate(60);
-}
-
-/* ============ NAV ============ */
-function go(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('pg-' + name).classList.add('active');
-  ['reception','sales','orders','map'].forEach(n => {
-    const el = document.getElementById('nav-' + n);
-    if (el) el.classList.toggle('active', n === name);
-  });
-  if (name === 'orders') loadOrders();
-  if (name !== 'sales' && scanning) toggleScanner();
-  if (name !== 'map' && mapScanning) toggleMapScanner();
-  window.scrollTo(0, 0);
-}
-function fabScan() { go('sales'); if (!scanning) toggleScanner(); }
-
-/* ============ MASTERS ============ */
-function renderMasters() {
-  fillMasterSelect('p-agent', masters.agents, 'Select agent', true);
-  fillMasterSelect('s-sales', masters.salespersons, 'Select salesperson', false);
-  try {
-    const saved = localStorage.getItem('ekum_sales');
-    if (saved && masters.salespersons.includes(saved)) document.getElementById('s-sales').value = saved;
-  } catch(e) {}
-}
-function fillMasterSelect(id, list, placeholder, withDirect) {
-  const sel = document.getElementById(id);
-  const cur = sel.value;
-  let html = '<option value="">' + placeholder + '</option>';
-  if (withDirect) html += '<option value="Direct">Direct / No agent</option>';
-  html += list.map(n => `<option value="${n}">${n}</option>`).join('');
-  html += '<option value="__add__">＋ Add new…</option>';
-  sel.innerHTML = html;
-  if (cur && cur !== '__add__') sel.value = cur;
-}
-function onMasterSelect(sel, kind) {
-  const row = document.getElementById(kind + '-addnew');
-  if (sel.value === '__add__') { row.classList.add('open'); document.getElementById(kind + '-new-name').focus(); }
-  else {
-    row.classList.remove('open');
-    if (kind === 'salesperson' && sel.value) { try { localStorage.setItem('ekum_sales', sel.value); } catch(e) {} }
-  }
-}
-let masterSaving = false;
-function saveMaster(kind) {
-  if (masterSaving) return;
-  const input = document.getElementById(kind + '-new-name');
-  const name = input.value.trim();
-  if (!name) return toast('Enter a name first');
-  masterSaving = true;
-  const fn = kind === 'agent' ? 'addAgent' : 'addSalesperson';
-  const listKey = kind === 'agent' ? 'agents' : 'salespersons';
-  const selId = kind === 'agent' ? 'p-agent' : 's-sales';
-  google.script.run
-    .withSuccessHandler(res => {
-      masterSaving = false;
-      if (!masters[listKey].includes(res.name)) masters[listKey].push(res.name);
-      masters[listKey].sort((a,b) => a.localeCompare(b));
-      renderMasters();
-      document.getElementById(selId).value = res.name;
-      if (kind === 'salesperson') { try { localStorage.setItem('ekum_sales', res.name); } catch(e) {} }
-      document.getElementById(kind + '-addnew').classList.remove('open');
-      input.value = '';
-      toast(res.existed ? res.name + ' already exists — selected' : '✓ ' + res.name + ' added');
-    })
-    .withFailureHandler(e => { masterSaving = false; toast('Error: ' + e.message); })[fn](name);
-}
-
-/* ============ RECEPTION ============ */
-function val(id) { return document.getElementById(id).value.trim(); }
-let partySaving = false;
-function saveParty() {
-  if (partySaving) return;
-  const name = val('p-name'), contact = val('p-contact'), phone = val('p-phone'), city = val('p-city');
-  if (!name) return toast('Company / Firm name is required');
-  if (!contact) return toast('Contact person is required');
-  if (!/^\d{10}$/.test(phone)) return toast('Enter a valid 10-digit mobile number');
-  if (!city) return toast('City is required');
-  const agent = document.getElementById('p-agent').value;
-  if (agent === '__add__') return toast('Finish adding the agent first');
-  partySaving = true;
-  const btn = document.getElementById('p-save');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  google.script.run
-    .withSuccessHandler(res => {
-      partySaving = false; btn.disabled = false; btn.textContent = 'Register Party';
-      ['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('p-agent').value = '';
-      toast('✓ ' + res.name + ' registered (' + res.id + ')');
-      lightSync();
-    })
-    .withFailureHandler(e => { partySaving = false; btn.disabled = false; btn.textContent = 'Register Party'; toast('Error: ' + e.message); })
-    .addParty({ name, contact, phone: '91' + phone, agent, city,
-      state: document.getElementById('p-state').value, gstin: val('p-gstin').toUpperCase(), notes: val('p-notes') });
-}
-function renderParties() {
-  const el = document.getElementById('party-list');
-  const cnt = document.getElementById('party-count');
-  cnt.style.display = parties.length ? 'inline-flex' : 'none';
-  cnt.textContent = parties.length;
-  el.className = parties.length ? '' : 'empty';
-  el.innerHTML = parties.length
-    ? '<table><tbody>' + parties.slice(0, 12).map((p, i) => `
-        <tr><td>
-          <div class="item-code">${p.name} ${i === 0 ? '<span class="pill new" style="margin-left:6px">NEW</span>' : ''}</div>
-          <div class="item-name">${p.id} · ${p.city}${p.agent && p.agent !== 'Direct' ? ' · via ' + p.agent : ''}</div>
-        </td></tr>`).join('') + '</tbody></table>'
-    : 'No parties registered yet';
-}
-
-/* ============ SALES: party pick + resume ============ */
-function searchParty() {
-  const q = val('party-search').toLowerCase();
-  const box = document.getElementById('party-results');
-  if (q.length < 2) { box.classList.remove('open'); return; }
-  const hits = parties.filter(p =>
-    p.name.toLowerCase().includes(q) || p.city.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)
-  ).slice(0, 6);
-  box.innerHTML = hits.length
-    ? hits.map(p => `<div class="sr-row" onclick='pickParty(${JSON.stringify(p.id)})'>
-        <div>${p.name}</div><div class="sr-meta">${p.id} · ${p.city}${p.agent && p.agent !== 'Direct' ? ' · via ' + p.agent : ''}</div>
-      </div>`).join('')
-    : '<div class="sr-row" style="color:var(--muted)">No match — register at Reception first</div>';
-  box.classList.add('open');
-}
-function pickParty(id) {
-  selectedParty = parties.find(p => p.id === id);
-  currentOrderId = null; cart = [];
-  document.getElementById('party-chip-text').textContent = selectedParty.name + ' · ' + selectedParty.id;
-  document.getElementById('party-picked').style.display = 'block';
-  document.getElementById('party-search').style.display = 'none';
-  document.getElementById('party-results').classList.remove('open');
-  document.getElementById('party-search').value = '';
-  renderCart();
-  // fetch this party's open order (previous departments' items)
-  const note = document.getElementById('resume-note');
-  note.style.display = 'block'; note.textContent = 'Checking for existing order…';
-  google.script.run.withSuccessHandler(res => {
-    if (!selectedParty || selectedParty.id !== id) return; // party changed meanwhile
-    if (res) {
-      currentOrderId = res.orderId;
-      cart = res.items;
-      note.textContent = '↺ Continuing ' + res.orderId + ' — ' + res.items.length + ' designs already added by earlier departments.';
-      renderCart();
-    } else {
-      note.style.display = 'none';
-    }
-  }).withFailureHandler(() => { note.style.display = 'none'; }).getOpenOrder(id);
-}
-function clearParty() {
-  if (cart.length && !confirm('Leave this party? Unsaved changes will be lost.')) return;
-  selectedParty = null; currentOrderId = null; cart = [];
-  document.getElementById('party-picked').style.display = 'none';
-  document.getElementById('party-search').style.display = 'block';
-  document.getElementById('resume-note').style.display = 'none';
-  renderCart();
-}
-
-/* ============ SCANNER (offline-fast: memory lookup only) ============ */
-function toggleScanner() {
-  const btn = document.getElementById('scan-toggle');
-  if (scanning) {
-    scanner.stop().then(() => scanner.clear()).catch(() => {});
-    scanning = false; btn.textContent = '📷 Start Camera Scan';
-    if (wakeLock) { wakeLock.release().catch(()=>{}); wakeLock = null; }
-    return;
-  }
-  scanner = new Html5Qrcode('reader');
-  scanner.start(
-    { facingMode: 'environment' },
-    { fps: 12, qrbox: { width: 250, height: 140 } },
-    code => {
-      const now = Date.now();
-      if (code === lastScan.code && now - lastScan.t < 1500) return; // same-code cooldown only
-      lastScan = { code, t: now };
-      addToCart(code, 1);
-    }
-  ).then(() => {
-    scanning = true; btn.textContent = '⏹ Stop Camera';
-    if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(w => wakeLock = w).catch(()=>{});
-  }).catch(e => toast('Camera error: open directly in Chrome/Safari (not inside another app).'));
-}
-function addManual() {
-  const code = val('s-barcode');
-  const qty = Math.max(1, parseInt(document.getElementById('s-qty').value) || 1);
-  if (!code) return;
-  addToCart(code, qty);
-  document.getElementById('s-barcode').value = '';
-  document.getElementById('s-qty').value = '1';
-}
-function addToCart(code, qty) {
-  beep();
-  const existing = cart.find(i => i.barcode === code);
-  if (existing) {
-    existing.qty += qty;
-    toast((existing.design || code) + ' · ' + existing.qty + ' pcs');
-  } else {
-    const p = productMap[code];
-    cart.push({ barcode: code, design: p ? p.design : '', name: p ? p.name : 'Not in product master',
-                qty: qty, sales: document.getElementById('s-sales').value || '', category: p ? p.category : '' });
-    toast('✓ ' + (p && p.design ? p.design : code));
-  }
-  renderCart(); markDirty();
-}
-function changeQty(i, d) { cart[i].qty = Math.max(1, cart[i].qty + d); renderCart(); markDirty(); }
-function setQty(i, v) {
-  const n = Math.max(1, parseInt(v) || 1);
-  cart[i].qty = n; renderCart(); markDirty();
-}
-function removeItem(i) { cart.splice(i, 1); renderCart(); markDirty(); }
-
-function renderCart() {
-  document.querySelector('#cart tbody').innerHTML = cart.map((it, i) => `
-    <tr>
-      <td>
-        <div class="item-code">${it.design || it.barcode}</div>
-        <div class="item-name">${it.design ? it.barcode + (it.name && it.name !== 'Not in product master' ? ' · ' + it.name : '') : it.name}</div>
-        ${it.sales ? '<div class="item-sales">' + it.sales + '</div>' : ''}
-      </td>
-      <td style="white-space:nowrap; text-align:right">
-        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
-        <input class="qty-in" inputmode="numeric" value="${it.qty}" onchange="setQty(${i},this.value)">
-        <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-        <button class="del" onclick="removeItem(${i})">✕</button>
-      </td>
-    </tr>`).join('');
-  const total = cart.reduce((s, i) => s + i.qty, 0);
-  const label = cart.length + ' designs · ' + total + ' pcs';
-  document.getElementById('cart-count').textContent = label;
-  document.getElementById('cart-empty').style.display = cart.length ? 'none' : 'block';
-  document.getElementById('s-savep').disabled = !cart.length || !selectedParty;
-  document.getElementById('s-final').disabled = !cart.length || !selectedParty;
-  const strip = document.getElementById('total-strip');
-  strip.classList.toggle('show', !!selectedParty && cart.length > 0);
-  document.getElementById('strip-party').textContent = selectedParty ? selectedParty.name : '';
-  document.getElementById('strip-count').textContent = label;
-}
-
-/* ============ SAVE PROGRESS (background, retry) ============ */
-function markDirty() { saveDirty = true; }
-function payload() {
-  return { orderId: currentOrderId, partyId: selectedParty.id, partyName: selectedParty.name, items: cart.slice() };
-}
-function saveProgress(manual) {
-  if (!selectedParty || !cart.length) return;
-  if (!document.getElementById('s-sales').value || document.getElementById('s-sales').value === '__add__')
-    return toast('Select salesperson first');
-  if (saveInFlight) { saveDirty = true; return; }
-  saveInFlight = true; saveDirty = false;
-  syncChip('busy', '● saving…');
-  const btn = document.getElementById('s-savep');
-  if (manual) { btn.disabled = true; btn.textContent = 'Saving…'; }
-  attemptSave(payload(), 0, manual);
-}
-function attemptSave(pl, tries, manual) {
-  google.script.run
-    .withSuccessHandler(res => {
-      currentOrderId = res.orderId;
-      saveInFlight = false;
-      syncChip('ok', '✓ synced');
-      const btn = document.getElementById('s-savep');
-      btn.textContent = 'Save Progress (keep open)'; btn.disabled = !cart.length;
-      if (manual) toast('✓ Saved as ' + res.orderId + ' (still open for next department)');
-      if (saveDirty) saveProgress(false); // newer changes arrived meanwhile
-    })
-    .withFailureHandler(() => {
-      if (tries < 3) { setTimeout(() => attemptSave(pl, tries + 1, manual), 2000 * (tries + 1)); }
-      else {
-        saveInFlight = false; saveDirty = true;
-        syncChip('err', '⚠ retry pending');
-        const btn = document.getElementById('s-savep');
-        btn.textContent = 'Save Progress (keep open)'; btn.disabled = false;
-        toast('Network issue — your items are safe on this phone. Tap Save again.');
-      }
-    }).saveOrderProgress(pl);
-}
-
-/* ============ FINALIZE & SHARE ============ */
-let finalizing = false;
-function finalize() {
-  if (finalizing || !selectedParty || !cart.length) return;
-  if (!document.getElementById('s-sales').value || document.getElementById('s-sales').value === '__add__')
-    return toast('Select salesperson first');
-  if (!confirm('Finalize this order? It will be closed for all departments and the order form will be generated.')) return;
-  finalizing = true;
-  document.getElementById('busy-title').textContent = 'Generating Order Form…';
-  document.getElementById('busy-detail').textContent = 'Creating PDF with product images. This takes a few seconds.';
-  document.getElementById('busy-mask').classList.add('open');
-  const pl = payload(), party = selectedParty;
-  google.script.run
-    .withSuccessHandler(res => {
-      finalizing = false;
-      document.getElementById('busy-mask').classList.remove('open');
-      const msg = encodeURIComponent(
-        'Order ' + res.orderId + ' — ' + pl.partyName + '\n' +
-        pl.items.length + ' designs · ' + res.totalPcs + ' pcs\n\n' +
-        (res.pdfUrl ? 'Order form (PDF): ' + res.pdfUrl + '\n\n' : '') +
-        'Thank you for visiting Ekum!');
-      const digits = String(party.phone || '').replace(/\D/g, '');
-      document.getElementById('done-title').textContent = 'Order ' + res.orderId + ' Finalized';
-      document.getElementById('done-detail').textContent =
-        pl.partyName + ' · ' + pl.items.length + ' designs · ' + res.totalPcs + ' pcs' +
-        (res.pdfUrl ? '' : ' — PDF could not be generated; order is saved, share text summary.');
-      document.getElementById('done-wa').href = digits ? 'https://wa.me/' + digits + '?text=' + msg : 'https://wa.me/?text=' + msg;
-      const pdfBtn = document.getElementById('done-pdf');
-      if (res.pdfUrl) { pdfBtn.style.display = 'inline-flex'; pdfBtn.href = res.pdfUrl; }
-      else pdfBtn.style.display = 'none';
-      document.getElementById('done-mask').classList.add('open');
-      cart = []; currentOrderId = null; renderCart();
-      if (scanning) toggleScanner();
-    })
-    .withFailureHandler(e => {
-      finalizing = false;
-      document.getElementById('busy-mask').classList.remove('open');
-      toast('Could not finalize: ' + e.message + ' — try again.');
-    }).finalizeOrder(pl);
-}
-function closeDone() {
-  document.getElementById('done-mask').classList.remove('open');
-  clearPartySilent();
-}
-function clearPartySilent() {
-  selectedParty = null; currentOrderId = null; cart = [];
-  document.getElementById('party-picked').style.display = 'none';
-  document.getElementById('party-search').style.display = 'block';
-  document.getElementById('resume-note').style.display = 'none';
-  renderCart();
-}
-
-/* ============ MAP PRODUCTS ============ */
-function toggleMapScanner() {
-  const btn = document.getElementById('map-scan-toggle');
-  if (mapScanning) {
-    mapScanner.stop().then(() => mapScanner.clear()).catch(() => {});
-    mapScanning = false; btn.textContent = '📷 Start Camera Scan';
-    if (wakeLock) { wakeLock.release().catch(()=>{}); wakeLock = null; }
-    return;
-  }
-  mapScanner = new Html5Qrcode('reader-map');
-  mapScanner.start(
-    { facingMode: 'environment' },
-    { fps: 12, qrbox: { width: 220, height: 220 } },
-    code => {
-      const now = Date.now();
-      if (code === mapLastScan.code && now - mapLastScan.t < 2000) return;
-      mapLastScan = { code, t: now };
-      onMapScan(code);
-    }
-  ).then(() => {
-    mapScanning = true; btn.textContent = '⏹ Stop Camera';
-    if ('wakeLock' in navigator) navigator.wakeLock.request('screen').then(w => wakeLock = w).catch(()=>{});
-  }).catch(() => toast('Camera error: open directly in Chrome/Safari (not inside another app).'));
-}
-function onMapScan(code) {
-  beep();
-  document.getElementById('m-code').value = code;
-  const note = document.getElementById('map-note');
-  const existing = productMap[code];
-  if (existing && existing.design) {
-    note.style.display = 'block';
-    note.textContent = '⚠ ' + code + ' is already mapped to ' + existing.design + '. Saving will overwrite it.';
-  } else {
-    note.style.display = 'none';
-  }
-  document.getElementById('m-design').focus();
-}
-function saveMapping() {
-  if (mapSaving) return;
-  const code = val('m-code');
-  const design = val('m-design');
-  if (!code) return toast('Scan or type the QR code first');
-  if (!design) return toast('Enter the design number');
-  const overwrite = !!(productMap[code] && productMap[code].design);
-  mapSaving = true;
-  const btn = document.getElementById('m-save');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  google.script.run
-    .withSuccessHandler(res => {
-      mapSaving = false; btn.disabled = false; btn.textContent = 'Save Mapping';
-      // update local product map + device cache instantly
-      productMap[code] = Object.assign(productMap[code] || {}, { design: design, name: productMap[code] ? productMap[code].name : '', category: productMap[code] ? productMap[code].category : '', img: productMap[code] ? productMap[code].img : '' });
-      try {
-        const c = JSON.parse(localStorage.getItem('ekum_products') || '[]');
-        const i = c.findIndex(r => r[0] === code);
-        if (i >= 0) c[i][1] = design; else c.push([code, design, '', '', '']);
-        localStorage.setItem('ekum_products', JSON.stringify(c));
-      } catch(e) {}
-      mapCount++;
-      document.getElementById('map-count').textContent = mapCount + ' mapped this session';
-      const log = document.getElementById('map-log');
-      log.className = '';
-      log.innerHTML = '<div style="font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)"><b>' + code + '</b> → ' + design +
-        (res.updated ? ' <span class="pill open" style="margin-left:6px">updated</span>' : '') + '</div>' + (log.innerHTML.startsWith('<div') ? log.innerHTML : '');
-      document.getElementById('m-code').value = '';
-      document.getElementById('m-design').value = '';
-      document.getElementById('map-note').style.display = 'none';
-      toast('✓ ' + code + ' → ' + design);
-    })
-    .withFailureHandler(e => {
-      mapSaving = false; btn.disabled = false; btn.textContent = 'Save Mapping';
-      toast('Error: ' + e.message + ' — not saved, try again.');
-    }).addProductMapping(code, design, overwrite);
-}
-
-/* ============ ORDERS TAB ============ */
-function loadOrders(showToast) {
-  google.script.run.withSuccessHandler(list => {
-    orders = list; renderOrders();
-    if (showToast) toast('Orders refreshed');
-  }).getOrders();
-}
-function renderOrders() {
-  const el = document.getElementById('orders-list');
-  const badge = document.getElementById('orders-badge');
-  badge.style.display = orders.length ? 'inline-flex' : 'none';
-  badge.textContent = orders.length;
-  el.className = orders.length ? '' : 'empty';
-  el.innerHTML = orders.length ? orders.map(o => {
-    const party = parties.find(p => p.id === o.partyId) || {};
-    const digits = String(party.phone || '').replace(/\D/g, '');
-    const msg = encodeURIComponent('Order ' + o.id + ' — ' + o.partyName + '\n' + o.items.length + ' designs · ' + o.totalPcs +
-      ' pcs\n\n' + (o.pdfUrl ? 'Order form (PDF): ' + o.pdfUrl + '\n\n' : '') + 'Thank you for visiting Ekum!');
-    return `<div class="order-card">
-      <div class="order-title">${o.partyName}</div>
-      <span class="pill order-pill ${o.status === 'Open' ? 'open' : ''}">${o.status} · ${o.totalPcs} pcs</span>
-      <div class="order-meta">${o.id} · ${o.time}</div>
-      <table><tbody>${o.items.map(it => `
-        <tr><td><div class="item-code">${it.design || it.barcode}</div>
-          <div class="item-name">${it.barcode}${it.sales ? ' · ' + it.sales : ''}</div></td>
-        <td style="text-align:right"><b>${it.qty} pcs</b></td></tr>`).join('')}
-      </tbody></table>
-      ${o.status === 'Closed'
-        ? `<a class="wa" href="https://wa.me/${digits ? digits : ''}?text=${msg}" target="_blank">Share on WhatsApp</a>
-           ${o.pdfUrl ? `<a class="wa light" href="${o.pdfUrl}" target="_blank">PDF</a>` : ''}`
-        : `<button class="wa light" onclick='resumeOrder(${JSON.stringify(o.partyId)})'>Continue this order ➜</button>`}
-    </div>`;
-  }).join('') : 'No orders yet';
-}
-function resumeOrder(partyId) { go('sales'); pickParty(partyId); }
-
-/* ============ BOOT / SYNC / AUTO-REFRESH ============ */
-function loadProducts() {
-  // serve cached copy instantly, refresh in background
-  try {
-    const c = localStorage.getItem('ekum_products');
-    if (c) buildProductMap(JSON.parse(c));
-  } catch(e) {}
-  google.script.run.withSuccessHandler(rows => {
-    buildProductMap(rows);
-    try { localStorage.setItem('ekum_products', JSON.stringify(rows)); } catch(e) {}
-    toast('Product master loaded: ' + rows.length + ' items');
-  }).getProducts();
-}
-function buildProductMap(rows) {
-  productMap = {};
-  rows.forEach(r => productMap[r[0]] = { design: r[1], name: r[2], category: r[3], img: r[4] });
-}
-function fullSync(showToast) {
-  syncChip('busy', '● syncing…');
-  google.script.run.withSuccessHandler(d => {
-    parties = d.parties; orders = d.orders; masters = d.masters;
-    sortMasters(); renderMasters(); renderParties(); renderOrders();
-    syncChip('ok', '✓ synced');
-    if (showToast) toast('Synced');
-  }).withFailureHandler(() => syncChip('err', '⚠ offline')).getBootData();
-  loadProducts();
-}
-function lightSync() {
-  google.script.run.withSuccessHandler(d => {
-    parties = d.parties; masters = d.masters;
-    sortMasters(); renderMasters(); renderParties();
-    syncChip('ok', '✓ synced');
-  }).withFailureHandler(() => syncChip('err', '⚠ offline')).getLightSync();
-}
-function sortMasters() {
-  masters.agents.sort((a,b) => a.localeCompare(b));
-  masters.salespersons.sort((a,b) => a.localeCompare(b));
-}
-(function init() {
-  const st = document.getElementById('p-state');
-  st.innerHTML = '<option value="">Select state</option>' + STATES.map(s => `<option>${s}</option>`).join('');
-  st.value = 'Maharashtra';
-  fullSync();
-  setInterval(lightSync, 45000); // auto-refresh parties & masters every 45s
-})();
+const API_URL='https://script.google.com/macros/s/AKfycbylfA7EoANdu_99zFWr2NsrX-EjvLmpKk5_Ws5qXhJ6KK-KAiu_1BZbPLe5x95u-gkR/exec';
+function makeRunner(){let ok=()=>{},fail=()=>{};const target={withSuccessHandler(f){ok=f;return proxy},withFailureHandler(f){fail=f;return proxy}};const proxy=new Proxy(target,{get(t,p){if(p in t)return t[p];return(...args)=>fetch(API_URL,{method:'POST',body:JSON.stringify({fn:p,args})}).then(r=>r.json()).then(j=>j.ok?ok(j.data):fail(new Error(j.error||'Server error'))).catch(fail)}});return proxy}const google={script:{get run(){return makeRunner()}}};
+let parties=[],orders=[],masters={agents:[],salespersons:[],categories:[],fabrics:[],styles:[]},productMap={};
+let selectedParty=null,currentOrderId=null,existingItems=[],sessionItems=[];let scanner=null,scanning=false,lastScan={code:'',t:0},mapScanner=null,mapScanning=false,mapLast={code:'',t:0},audioCtx=null,wakeLock=null,mapCount=0;
+const STATES=['Andaman & Nicobar','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra & Nagar Haveli and Daman & Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu & Kashmir','Jharkhand','Karnataka','Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+function val(id){return document.getElementById(id).value.trim()}function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2200)}function syncChip(c,t){const e=document.getElementById('sync-chip');e.className='sync-chip '+c;e.textContent=t}function beep(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=1150;g.gain.value=.15;o.start();o.stop(audioCtx.currentTime+.09)}catch(e){}if(navigator.vibrate)navigator.vibrate(60)}
+function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+n).classList.add('active');['reception','sales','orders','map'].forEach(x=>document.getElementById('nav-'+x).classList.toggle('active',x===n));if(n==='orders')loadOrders();if(n!=='sales'&&scanning)toggleScanner();if(n!=='map'&&mapScanning)toggleMapScanner();scrollTo(0,0)}
+const masterCfg={agent:{list:'agents',select:'p-agent',fn:'addAgent',placeholder:'Select agent',direct:true},salesperson:{list:'salespersons',select:'s-sales',fn:'addSalesperson',placeholder:'Select salesperson'},category:{list:'categories',select:'m-category',fn:'addCategory',placeholder:'Select category'},fabric:{list:'fabrics',select:'m-fabric',fn:'addFabric',placeholder:'Select fabric'},style:{list:'styles',select:'m-style',fn:'addStyle',placeholder:'Select style'}};
+function renderMasters(){Object.keys(masterCfg).forEach(k=>{const c=masterCfg[k],sel=document.getElementById(c.select),cur=sel.value;let h='<option value="">'+c.placeholder+'</option>';if(c.direct)h+='<option value="Direct">Direct / No agent</option>';h+=(masters[c.list]||[]).map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')+'<option value="__add__">＋ Add new…</option>';sel.innerHTML=h;if(cur&&cur!=='__add__')sel.value=cur});try{const s=localStorage.getItem('cmai_sales');if(s&&masters.salespersons.includes(s))document.getElementById('s-sales').value=s}catch(e){}}
+function onMasterSelect(sel,k){const row=document.getElementById(k+'-addnew');if(sel.value==='__add__'){row.classList.add('open');document.getElementById(k+'-new-name').focus()}else{row.classList.remove('open');if(k==='salesperson'&&sel.value)try{localStorage.setItem('cmai_sales',sel.value)}catch(e){}}}
+function saveMaster(k){const c=masterCfg[k],input=document.getElementById(k+'-new-name'),name=input.value.trim();if(!name)return toast('Enter a value first');google.script.run.withSuccessHandler(r=>{if(!masters[c.list].includes(r.name))masters[c.list].push(r.name);masters[c.list].sort((a,b)=>a.localeCompare(b));renderMasters();document.getElementById(c.select).value=r.name;document.getElementById(k+'-addnew').classList.remove('open');input.value='';toast(r.existed?r.name+' already exists':'✓ '+r.name+' added')}).withFailureHandler(e=>toast('Error: '+e.message))[c.fn](name)}
+function saveParty(){const name=val('p-name'),contact=val('p-contact'),phone=val('p-phone'),city=val('p-city'),state=document.getElementById('p-state').value;if(!name)return toast('Company name is required');if(!contact)return toast('Contact person is required');if(!/^\d{10}$/.test(phone))return toast('Enter a valid 10-digit mobile number');if(!city)return toast('City is required');if(!state)return toast('Select state');const agent=document.getElementById('p-agent').value;if(agent==='__add__')return toast('Finish adding the agent');const b=document.getElementById('p-save');b.disabled=true;b.textContent='Saving…';google.script.run.withSuccessHandler(r=>{b.disabled=false;b.textContent='Register Party';['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(i=>document.getElementById(i).value='');document.getElementById('p-agent').value='';document.getElementById('p-state').value='';toast('✓ '+r.name+' registered');lightSync()}).withFailureHandler(e=>{b.disabled=false;b.textContent='Register Party';toast('Error: '+e.message)}).addParty({name,contact,phone:'91'+phone,agent,city,state,gstin:val('p-gstin').toUpperCase(),notes:val('p-notes')})}
+function partyMeta(p){return [p.city,p.state,p.agent||'Direct'].filter(Boolean).join(' · ')}function renderParties(){const el=document.getElementById('party-list'),cnt=document.getElementById('party-count');cnt.style.display=parties.length?'inline-flex':'none';cnt.textContent=parties.length;el.className=parties.length?'':'empty';el.innerHTML=parties.length?parties.slice(0,12).map(p=>`<div class="item-row"><div><div class="item-code">${esc(p.name)}</div><div class="item-meta">${esc(partyMeta(p))}</div></div></div>`).join(''):'No parties registered yet'}
+function searchParty(){const q=val('party-search').toLowerCase(),box=document.getElementById('party-results');if(q.length<2){box.classList.remove('open');return}const hits=parties.filter(p=>[p.name,p.city,p.state,p.agent].some(v=>String(v||'').toLowerCase().includes(q))).slice(0,8);box.innerHTML=hits.length?hits.map(p=>`<div class="sr-row" onclick="pickParty('${escAttr(p.id)}')"><div>${esc(p.name)}</div><div class="sr-meta">${esc(partyMeta(p))}</div></div>`).join(''):'<div class="sr-row" style="color:var(--muted)">No match — register at Reception first</div>';box.classList.add('open')}
+function pickParty(id){selectedParty=parties.find(p=>p.id===id);currentOrderId=null;existingItems=[];sessionItems=[];document.getElementById('party-chip-text').textContent=selectedParty.name;document.getElementById('party-picked').style.display='block';document.getElementById('party-search').style.display='none';document.getElementById('party-results').classList.remove('open');const note=document.getElementById('resume-note');note.style.display='block';note.textContent='Checking for existing order…';renderCart();google.script.run.withSuccessHandler(r=>{if(!selectedParty||selectedParty.id!==id)return;if(r){currentOrderId=r.orderId;existingItems=r.items;note.textContent='Continuing '+r.orderId+' · '+r.items.length+' saved design lines';}else note.style.display='none';renderCart()}).withFailureHandler(()=>note.style.display='none').getOpenOrder(id)}
+function clearParty(){if(sessionItems.length&&!confirm('Discard unsaved designs?'))return;resetSalesForm(false)}function resetSalesForm(clearSales){selectedParty=null;currentOrderId=null;existingItems=[];sessionItems=[];document.getElementById('party-picked').style.display='none';document.getElementById('party-search').style.display='block';document.getElementById('party-search').value='';document.getElementById('resume-note').style.display='none';if(clearSales)document.getElementById('s-sales').value='';renderCart()}
+function toggleScanner(){const b=document.getElementById('scan-toggle');if(scanning){scanner.stop().then(()=>scanner.clear()).catch(()=>{});scanning=false;b.textContent='📷 Start Camera Scan';return}scanner=new Html5Qrcode('reader');scanner.start({facingMode:'environment'},{fps:12,qrbox:{width:250,height:140}},code=>{const n=Date.now();if(code===lastScan.code&&n-lastScan.t<1500)return;lastScan={code,t:n};addToSession(code,1)}).then(()=>{scanning=true;b.textContent='⏹ Stop Camera'}).catch(()=>toast('Camera error: open directly in Chrome/Safari'))}
+function addManual(){const c=val('s-barcode'),q=Math.max(1,parseInt(document.getElementById('s-qty').value)||1);if(!c)return;addToSession(c,q);document.getElementById('s-barcode').value='';document.getElementById('s-qty').value='1'}function addToSession(code,qty){if(!selectedParty)return toast('Select a party first');const sales=document.getElementById('s-sales').value;if(!sales||sales==='__add__')return toast('Select salesperson first');beep();let x=sessionItems.find(i=>i.barcode===code);if(x)x.qty+=qty;else{const p=productMap[code]||{};sessionItems.push({barcode:code,design:p.design||'',qty,sales,category:p.category||'',fabric:p.fabric||'',style:p.style||'',notes:p.notes||''})}renderCart();toast('✓ '+((productMap[code]||{}).design||code))}
+function changeQty(i,d){sessionItems[i].qty=Math.max(1,sessionItems[i].qty+d);renderCart()}function setQty(i,v){sessionItems[i].qty=Math.max(1,parseInt(v)||1);renderCart()}function removeItem(i){sessionItems.splice(i,1);renderCart()}
+function lineHtml(it,locked,i){const meta=[it.category,it.fabric,it.style].filter(Boolean).join(' · ');return `<div class="item-row ${locked?'locked':''}"><div><div class="item-code">${esc(it.design||it.barcode)}</div><div class="item-meta">${esc(it.barcode)}${meta?' · '+esc(meta):''}${it.notes?'<br>'+esc(it.notes):''}</div><div class="item-sales">${esc(it.sales||'')}</div></div>${locked?`<div><b>${it.qty} pcs</b></div>`:`<div class="qty-wrap"><button class="qty-btn" onclick="changeQty(${i},-1)">−</button><input class="qty-in" value="${it.qty}" inputmode="numeric" onchange="setQty(${i},this.value)"><button class="qty-btn" onclick="changeQty(${i},1)">+</button><button class="del" onclick="removeItem(${i})">✕</button></div>`}</div>`}
+function renderCart(){document.getElementById('existing-items').innerHTML=existingItems.length?'<div class="hint" style="margin:0 0 5px">Previously saved</div>'+existingItems.map(x=>lineHtml(x,true)).join(''):'';document.getElementById('new-items').innerHTML=sessionItems.length?'<div class="hint" style="margin:12px 0 5px">This salesperson’s additions</div>'+sessionItems.map((x,i)=>lineHtml(x,false,i)).join(''):'';const all=existingItems.concat(sessionItems),pcs=all.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById('cart-count').textContent=all.length+' lines · '+pcs+' pcs';document.getElementById('cart-empty').style.display=all.length?'none':'block';document.getElementById('s-save').disabled=!selectedParty||!sessionItems.length;const strip=document.getElementById('total-strip');strip.classList.toggle('show',!!selectedParty&&all.length>0);document.getElementById('strip-party').textContent=selectedParty?selectedParty.name:'';document.getElementById('strip-count').textContent=all.length+' lines · '+pcs+' pcs'}
+function saveOrder(){const sales=document.getElementById('s-sales').value;if(!sales||sales==='__add__')return toast('Select salesperson first');if(!selectedParty||!sessionItems.length)return;document.getElementById('busy-mask').classList.add('open');google.script.run.withSuccessHandler(r=>{document.getElementById('busy-mask').classList.remove('open');document.getElementById('done-title').textContent='Order saved';document.getElementById('done-detail').textContent=selectedParty.name+' · '+sessionItems.length+' design lines saved by '+sales+' · Order '+r.orderId;document.getElementById('done-mask').classList.add('open');if(scanning)toggleScanner()}).withFailureHandler(e=>{document.getElementById('busy-mask').classList.remove('open');toast('Could not save: '+e.message)}).saveOrderProgress({orderId:currentOrderId,partyId:selectedParty.id,partyName:selectedParty.name,salesperson:sales,items:sessionItems})}function closeDone(){document.getElementById('done-mask').classList.remove('open');resetSalesForm(false);lightSync()}
+function toggleMapScanner(){const b=document.getElementById('map-scan-toggle');if(mapScanning){mapScanner.stop().then(()=>mapScanner.clear()).catch(()=>{});mapScanning=false;b.textContent='📷 Start Camera Scan';return}mapScanner=new Html5Qrcode('reader-map');mapScanner.start({facingMode:'environment'},{fps:12,qrbox:{width:220,height:220}},code=>{const n=Date.now();if(code===mapLast.code&&n-mapLast.t<1800)return;mapLast={code,t:n};loadMapping(code)}).then(()=>{mapScanning=true;b.textContent='⏹ Stop Camera'}).catch(()=>toast('Camera error: open directly in Chrome/Safari'))}
+function loadMapping(code){beep();document.getElementById('m-code').value=code;const p=productMap[code];document.getElementById('m-design').value=p?p.design:'';document.getElementById('m-category').value=p?p.category:'';document.getElementById('m-fabric').value=p?p.fabric:'';document.getElementById('m-style').value=p?p.style:'';document.getElementById('m-notes').value=p?p.notes:'';document.getElementById('m-design').focus()}
+function saveMapping(){const barcode=val('m-code'),design=val('m-design');if(!barcode)return toast('Barcode is required');if(!design)return toast('Design number is required');for(const id of ['m-category','m-fabric','m-style'])if(document.getElementById(id).value==='__add__')return toast('Finish adding the new master value');const p={barcode,design,category:document.getElementById('m-category').value,fabric:document.getElementById('m-fabric').value,style:document.getElementById('m-style').value,notes:val('m-notes')};const b=document.getElementById('m-save');b.disabled=true;b.textContent='Saving…';google.script.run.withSuccessHandler(r=>{b.disabled=false;b.textContent='Save Mapping';productMap[barcode]=p;mapCount++;document.getElementById('map-count').textContent=mapCount+' mapped';const log=document.getElementById('map-log');log.className='';log.innerHTML=`<div class="item-row"><div><div class="item-code">${esc(barcode)} → ${esc(design)}</div><div class="item-meta">${esc([p.category,p.fabric,p.style].filter(Boolean).join(' · '))}</div></div></div>`+log.innerHTML;['m-code','m-design','m-notes'].forEach(i=>document.getElementById(i).value='');['m-category','m-fabric','m-style'].forEach(i=>document.getElementById(i).value='');toast(r.updated?'✓ Mapping updated':'✓ Mapping saved')}).withFailureHandler(e=>{b.disabled=false;b.textContent='Save Mapping';toast('Error: '+e.message)}).addProductMapping(p)}
+function loadOrders(show){google.script.run.withSuccessHandler(r=>{orders=r;renderOrders();if(show)toast('Orders refreshed')}).withFailureHandler(e=>toast('Error: '+e.message)).getOrders()}function renderOrders(){const el=document.getElementById('orders-list');el.className=orders.length?'':'empty';el.innerHTML=orders.length?orders.map(o=>`<div class="order-card"><div class="order-head"><div><div class="order-title">${esc(o.partyName)}</div><div class="order-meta">${esc(o.id)} · Updated ${esc(o.lastUpdated||o.time)}</div></div><span class="pill">${o.totalPcs} pcs</span></div>${o.items.map(x=>lineHtml(x,true)).join('')}</div>`).join(''):'No orders yet'}
+function buildProductMap(rows){productMap={};rows.forEach(r=>productMap[String(r[0])]={design:r[1],category:r[2],fabric:r[3],style:r[4],notes:r[5]})}function loadProducts(){try{const c=localStorage.getItem('cmai_products');if(c)buildProductMap(JSON.parse(c))}catch(e){}google.script.run.withSuccessHandler(rows=>{buildProductMap(rows);try{localStorage.setItem('cmai_products',JSON.stringify(rows))}catch(e){}}).getProducts()}
+function fullSync(show){syncChip('busy','● syncing…');google.script.run.withSuccessHandler(d=>{parties=d.parties;orders=d.orders;masters=d.masters;renderMasters();renderParties();renderOrders();syncChip('ok','✓ synced');if(show)toast('Synced')}).withFailureHandler(()=>syncChip('err','⚠ offline')).getBootData();loadProducts()}function lightSync(){google.script.run.withSuccessHandler(d=>{parties=d.parties;masters=d.masters;renderMasters();renderParties();syncChip('ok','✓ synced')}).withFailureHandler(()=>syncChip('err','⚠ offline')).getLightSync()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function escAttr(v){return String(v??'').replace(/'/g,'\\&#39;')}
+(function init(){document.getElementById('p-state').innerHTML='<option value="">Select state</option>'+STATES.map(s=>`<option>${s}</option>`).join('');document.getElementById('p-state').value='';fullSync();setInterval(lightSync,45000)})();
 </script>
 </body>
 </html>
