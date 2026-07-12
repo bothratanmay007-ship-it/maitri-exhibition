@@ -1939,7 +1939,744 @@
       }
     }
 
-  </style>
+  
+    /* ======================================================================
+       DASHBOARD V2 — chart-led, one-thumb manager analytics
+       Only the active dashboard sub-tab creates Chart.js instances.
+       ====================================================================== */
+    #pg-dashboard {
+      max-width:1120px;
+      padding-left:12px;
+      padding-right:12px;
+    }
+
+    .dashboard-v2-header {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .dashboard-v2-title {
+      margin:0;
+      color:var(--teal-deep);
+      font-size:21px;
+      line-height:1.15;
+    }
+
+    .dashboard-v2-updated {
+      margin-top:4px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.35;
+    }
+
+    .dashboard-refresh {
+      min-width:88px;
+      min-height:42px;
+      margin:0;
+      padding:0 13px;
+    }
+
+    .dashboard-refresh:disabled,
+    .dashboard-filter-open:disabled {
+      opacity:.48;
+      cursor:not-allowed;
+    }
+
+    .dashboard-action-reason {
+      min-height:15px;
+      margin:3px 0 9px;
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .dashboard-subnav {
+      position:sticky;
+      top:58px;
+      z-index:42;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:4px;
+      margin:0 -2px 10px;
+      padding:4px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:rgba(255,255,255,.96);
+      box-shadow:0 5px 16px rgba(34,94,99,.08);
+      backdrop-filter:blur(10px);
+    }
+
+    .dashboard-subtab {
+      min-height:40px;
+      padding:7px 5px;
+      border:0;
+      border-radius:9px;
+      background:transparent;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:750;
+      cursor:pointer;
+      transition:background .16s ease,color .16s ease,transform .12s ease;
+    }
+
+    .dashboard-subtab:active {
+      transform:scale(.97);
+    }
+
+    .dashboard-subtab.active {
+      background:var(--teal-deep);
+      color:#fff;
+      box-shadow:0 4px 10px rgba(34,94,99,.19);
+    }
+
+    .dashboard-filter-bar {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-height:50px;
+      margin-bottom:10px;
+      padding:8px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:#fff;
+    }
+
+    .dashboard-filter-chips {
+      display:flex;
+      align-items:center;
+      flex:1;
+      gap:6px;
+      min-width:0;
+      overflow-x:auto;
+      padding-bottom:1px;
+      scrollbar-width:none;
+    }
+
+    .dashboard-filter-chips::-webkit-scrollbar {
+      display:none;
+    }
+
+    .dashboard-filter-chip {
+      flex:0 0 auto;
+      min-height:32px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 10px;
+      border:0;
+      border-radius:16px;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:11px;
+      font-weight:750;
+      cursor:pointer;
+    }
+
+    .dashboard-filter-chip span {
+      font-size:14px;
+      line-height:1;
+    }
+
+    .dashboard-filter-empty {
+      color:var(--muted);
+      font-size:11px;
+      white-space:nowrap;
+    }
+
+    .dashboard-filter-open {
+      flex:0 0 auto;
+      min-height:38px;
+      padding:0 12px;
+      border:1.5px solid var(--teal-deep);
+      border-radius:10px;
+      background:#fff;
+      color:var(--teal-deep);
+      font-size:11px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .dashboard-clear-all {
+      flex:0 0 auto;
+      min-height:38px;
+      padding:0 10px;
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .dashboard-kpi-strip {
+      display:flex;
+      gap:8px;
+      margin-bottom:12px;
+      overflow-x:auto;
+      scroll-snap-type:x proximity;
+      scrollbar-width:none;
+    }
+
+    .dashboard-kpi-strip::-webkit-scrollbar {
+      display:none;
+    }
+
+    .dashboard-kpi-compact {
+      flex:0 0 116px;
+      min-height:70px;
+      scroll-snap-align:start;
+      padding:11px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      box-shadow:0 4px 14px rgba(34,94,99,.05);
+    }
+
+    .dashboard-kpi-compact.primary {
+      background:linear-gradient(135deg,var(--teal-deep),var(--teal));
+      border-color:transparent;
+      color:#fff;
+    }
+
+    .dashboard-kpi-compact b {
+      display:block;
+      font-size:21px;
+      line-height:1.05;
+    }
+
+    .dashboard-kpi-compact span {
+      display:block;
+      margin-top:5px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:750;
+      line-height:1.2;
+      letter-spacing:.035em;
+      text-transform:uppercase;
+    }
+
+    .dashboard-kpi-compact.primary span {
+      color:rgba(255,255,255,.75);
+    }
+
+    .dashboard-tab-panel[hidden] {
+      display:none !important;
+    }
+
+    .dashboard-viz-grid {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .dashboard-viz-card {
+      min-width:0;
+      overflow:hidden;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:15px;
+      background:#fff;
+      box-shadow:0 5px 18px rgba(34,94,99,.055);
+    }
+
+    .dashboard-viz-card.hero {
+      border-color:rgba(255,151,0,.34);
+      box-shadow:0 8px 24px rgba(255,151,0,.08);
+    }
+
+    .dashboard-viz-head {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .dashboard-viz-title {
+      margin:0;
+      color:var(--teal-deep);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.25;
+    }
+
+    .dashboard-viz-copy {
+      margin-top:3px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.4;
+    }
+
+    .dashboard-mini-segment {
+      display:flex;
+      flex:0 0 auto;
+      gap:3px;
+      padding:3px;
+      border-radius:10px;
+      background:var(--foam);
+    }
+
+    .dashboard-mini-segment button {
+      min-height:30px;
+      padding:5px 8px;
+      border:0;
+      border-radius:7px;
+      background:transparent;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .dashboard-mini-segment button.active {
+      background:#fff;
+      color:var(--teal-deep);
+      box-shadow:0 2px 7px rgba(34,94,99,.12);
+    }
+
+    .dashboard-chart-frame {
+      position:relative;
+      height:245px;
+      min-height:245px;
+    }
+
+    .dashboard-chart-frame.hero {
+      height:275px;
+      min-height:275px;
+    }
+
+    .dashboard-chart-frame canvas {
+      width:100% !important;
+      height:100% !important;
+    }
+
+    .dashboard-v2-empty {
+      position:absolute;
+      inset:0;
+      display:none;
+      place-items:center;
+      padding:20px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.45;
+      text-align:center;
+    }
+
+    .dashboard-v2-empty.show {
+      display:grid;
+    }
+
+    .dashboard-ranking {
+      display:grid;
+      gap:6px;
+      margin-top:8px;
+    }
+
+    .dashboard-rank-row {
+      width:100%;
+      min-height:45px;
+      display:grid;
+      grid-template-columns:30px minmax(0,1fr) auto;
+      align-items:center;
+      gap:9px;
+      padding:7px 8px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fff;
+      color:inherit;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .dashboard-rank-row:active {
+      background:var(--foam);
+      transform:scale(.995);
+    }
+
+    .dashboard-rank-no {
+      width:27px;
+      height:27px;
+      display:grid;
+      place-items:center;
+      border-radius:8px;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:10px;
+      font-weight:850;
+    }
+
+    .dashboard-rank-row.first .dashboard-rank-no {
+      background:var(--orange);
+      color:#fff;
+    }
+
+    .dashboard-rank-label {
+      min-width:0;
+      overflow:hidden;
+      color:var(--charcoal);
+      font-size:11px;
+      font-weight:750;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .dashboard-rank-meta {
+      display:block;
+      margin-top:2px;
+      overflow:hidden;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:500;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .dashboard-rank-value {
+      color:var(--teal-deep);
+      font-size:11px;
+      font-weight:850;
+      white-space:nowrap;
+    }
+
+    .dashboard-list-card {
+      margin-top:10px;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:15px;
+      background:#fff;
+    }
+
+    .dashboard-list-toolbar {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:9px;
+      margin-bottom:9px;
+    }
+
+    .dashboard-list-toolbar input {
+      max-width:190px;
+      height:39px;
+      font-size:12px;
+    }
+
+    .dashboard-list-v2 {
+      display:grid;
+      gap:7px;
+    }
+
+    .dashboard-list-empty {
+      padding:28px 14px;
+      color:var(--muted);
+      font-size:11px;
+      text-align:center;
+    }
+
+    .dashboard-loading-state {
+      display:none;
+      gap:10px;
+    }
+
+    #pg-dashboard.dashboard-loading .dashboard-loading-state {
+      display:grid;
+    }
+
+    #pg-dashboard.dashboard-loading .dashboard-content-ready {
+      display:none;
+    }
+
+    .dashboard-skeleton-card {
+      min-height:250px;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:15px;
+      background:#fff;
+      overflow:hidden;
+    }
+
+    .dashboard-skeleton-line,
+    .dashboard-skeleton-circle {
+      position:relative;
+      overflow:hidden;
+      background:#EEF1EF;
+    }
+
+    .dashboard-skeleton-line:after,
+    .dashboard-skeleton-circle:after {
+      content:"";
+      position:absolute;
+      inset:0;
+      transform:translateX(-100%);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);
+      animation:dashboardShimmer 1.15s infinite;
+    }
+
+    .dashboard-skeleton-line {
+      width:62%;
+      height:13px;
+      border-radius:7px;
+    }
+
+    .dashboard-skeleton-line.short {
+      width:36%;
+      margin-top:8px;
+    }
+
+    .dashboard-skeleton-circle {
+      width:154px;
+      height:154px;
+      margin:26px auto 0;
+      border-radius:50%;
+    }
+
+    @keyframes dashboardShimmer {
+      to { transform:translateX(100%); }
+    }
+
+    .dashboard-filter-mask {
+      position:fixed;
+      inset:0;
+      z-index:182;
+      display:none;
+      align-items:flex-end;
+      background:rgba(30,37,35,.54);
+      backdrop-filter:blur(2px);
+    }
+
+    .dashboard-filter-mask.open {
+      display:flex;
+      animation:modalBackdropIn .18s ease-out;
+    }
+
+    .dashboard-filter-sheet {
+      width:100%;
+      max-height:84vh;
+      overflow:auto;
+      padding:18px 16px calc(22px + env(safe-area-inset-bottom));
+      border-radius:19px 19px 0 0;
+      background:#fff;
+      box-shadow:0 -20px 50px rgba(0,0,0,.18);
+      animation:modalSheetIn .24s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .dashboard-filter-field-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .dashboard-filter-field {
+      min-height:54px;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:#fff;
+      color:var(--teal-deep);
+      font-size:11px;
+      font-weight:800;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .dashboard-filter-field:active {
+      background:var(--foam);
+    }
+
+    .dashboard-filter-values {
+      display:grid;
+      gap:5px;
+      max-height:48vh;
+      margin-top:10px;
+      overflow:auto;
+    }
+
+    .dashboard-filter-value {
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fff;
+      color:var(--charcoal);
+      font-size:12px;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .dashboard-filter-value.active {
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-weight:800;
+    }
+
+    .dashboard-date-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:12px;
+    }
+
+    .dashboard-detail-breadcrumbs {
+      display:flex;
+      gap:6px;
+      margin:0 0 10px;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+
+    .dashboard-detail-breadcrumbs::-webkit-scrollbar {
+      display:none;
+    }
+
+    .dashboard-breadcrumb {
+      flex:0 0 auto;
+      min-height:30px;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:5px 9px;
+      border:0;
+      border-radius:15px;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:10px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .dashboard-detail-actions {
+      position:sticky;
+      bottom:calc(-24px - env(safe-area-inset-bottom));
+      display:grid;
+      grid-template-columns:1fr;
+      margin:14px -18px calc(-24px - env(safe-area-inset-bottom));
+      padding:10px 18px calc(12px + env(safe-area-inset-bottom));
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.97);
+      backdrop-filter:blur(8px);
+    }
+
+    .dashboard-detail-group-title {
+      margin:15px 0 5px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:850;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .dashboard-detail-button {
+      width:100%;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 0;
+      border:0;
+      border-bottom:1px solid var(--border);
+      background:transparent;
+      color:inherit;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .dashboard-detail-button:last-child {
+      border-bottom:0;
+    }
+
+    .dashboard-detail-button b {
+      display:block;
+      font-size:12px;
+    }
+
+    .dashboard-detail-button span {
+      display:block;
+      margin-top:2px;
+      color:var(--muted);
+      font-size:9px;
+    }
+
+    .dashboard-detail-button strong {
+      color:var(--teal-deep);
+      font-size:11px;
+      white-space:nowrap;
+    }
+
+    @media (min-width:720px) {
+      .dashboard-viz-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .dashboard-viz-card.wide {
+        grid-column:1 / -1;
+      }
+
+      .dashboard-filter-sheet {
+        width:520px;
+        margin:0 auto;
+      }
+
+      .dashboard-kpi-compact {
+        flex:1 1 0;
+      }
+    }
+
+    @media (max-width:390px) {
+      #pg-dashboard {
+        padding-left:9px;
+        padding-right:9px;
+      }
+
+      .dashboard-v2-title {
+        font-size:19px;
+      }
+
+      .dashboard-refresh {
+        min-width:78px;
+      }
+
+      .dashboard-subtab {
+        font-size:10px;
+      }
+
+      .dashboard-filter-bar {
+        align-items:flex-start;
+        flex-wrap:wrap;
+      }
+
+      .dashboard-filter-chips {
+        order:3;
+        width:100%;
+        flex-basis:100%;
+      }
+
+      .dashboard-list-toolbar {
+        flex-direction:column;
+      }
+
+      .dashboard-list-toolbar input {
+        width:100%;
+        max-width:none;
+      }
+
+      .dashboard-chart-frame,
+      .dashboard-chart-frame.hero {
+        height:235px;
+        min-height:235px;
+      }
+
+      .dashboard-filter-field-grid {
+        grid-template-columns:1fr;
+      }
+
+      .dashboard-date-grid {
+        grid-template-columns:1fr;
+      }
+    }
+
+</style>
 </head>
 
 <body>
@@ -2189,173 +2926,292 @@
 
   <!-- DASHBOARD -->
   <main class="page" id="pg-dashboard">
-    <section class="card">
-      <div class="dashboard-title-row">
-        <div>
-          <h2>Exhibition Dashboard</h2>
-          <div class="dashboard-last-updated" id="dashboard-last-updated">Not loaded yet</div>
-        </div>
-        <button class="btn small secondary" onclick="loadDashboard(true)">Refresh</button>
+    <div class="dashboard-v2-header">
+      <div>
+        <h2 class="dashboard-v2-title">Exhibition Dashboard</h2>
+        <div class="dashboard-v2-updated" id="dashboard-last-updated">Not loaded yet</div>
       </div>
-
-      <div class="dashboard-filter-grid">
-        <div>
-          <label>Date from</label>
-          <input id="d-date-from" type="date">
-        </div>
-        <div>
-          <label>Date to</label>
-          <input id="d-date-to" type="date">
-        </div>
-        <div>
-          <label>State</label>
-          <input id="d-state" list="d-state-list" placeholder="Search state">
-          <datalist id="d-state-list"></datalist>
-        </div>
-        <div>
-          <label>City</label>
-          <input id="d-city" list="d-city-list" placeholder="Search city">
-          <datalist id="d-city-list"></datalist>
-        </div>
-        <div>
-          <label>Agent</label>
-          <input id="d-agent" list="d-agent-list" placeholder="Search agent">
-          <datalist id="d-agent-list"></datalist>
-        </div>
-        <div>
-          <label>Salesperson</label>
-          <input id="d-salesperson" list="d-salesperson-list" placeholder="Search salesperson">
-          <datalist id="d-salesperson-list"></datalist>
-        </div>
-        <div>
-          <label>Party</label>
-          <input id="d-party" list="d-party-list" placeholder="Search party">
-          <datalist id="d-party-list"></datalist>
-        </div>
-        <div>
-          <label>Category</label>
-          <input id="d-category" list="d-category-list" placeholder="Search category">
-          <datalist id="d-category-list"></datalist>
-        </div>
-        <div>
-          <label>Fabric</label>
-          <input id="d-fabric" list="d-fabric-list" placeholder="Search fabric">
-          <datalist id="d-fabric-list"></datalist>
-        </div>
-        <div>
-          <label>Style</label>
-          <input id="d-style" list="d-style-list" placeholder="Search style">
-          <datalist id="d-style-list"></datalist>
-        </div>
-      </div>
-
-      <div class="dashboard-filter-actions">
-        <button class="btn secondary" onclick="clearDashboardFilters()">Clear filters</button>
-        <button class="btn" onclick="loadDashboard(true)">Apply filters</button>
-      </div>
-    </section>
-
-    <div class="dashboard-kpis">
-      <div class="dashboard-kpi primary">
-        <span>Total customers</span>
-        <b id="dk-total-customers">0</b>
-        <small>Accepted / registered parties matching the filters</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Customers with orders</span>
-        <b id="dk-order-customers">0</b>
-        <small>Unique parties with active order lines</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Total pieces</span>
-        <b id="dk-total-pieces">0</b>
-        <small>Sum of active ordered quantity</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Average pcs / customer</span>
-        <b id="dk-average-pieces">0</b>
-        <small>Calculated using customers with orders</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Total orders</span>
-        <b id="dk-total-orders">0</b>
-        <small>Orders represented by the filters</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Unique designs</span>
-        <b id="dk-unique-designs">0</b>
-        <small>Distinct design numbers ordered</small>
-      </div>
-      <div class="dashboard-kpi">
-        <span>Pending queue</span>
-        <b id="dk-pending-queue">0</b>
-        <small>Customers currently waiting at reception</small>
-      </div>
+      <button class="btn small secondary dashboard-refresh" id="dashboard-refresh-btn"
+        onclick="loadDashboard(true)">Refresh</button>
     </div>
 
-    <div class="dashboard-chart-grid">
-      <section class="dashboard-chart-card">
-        <div class="dashboard-section-head">
-          <div>
-            <h3>State Distribution</h3>
-            <div class="dashboard-chart-subtitle">Switch between customer count and ordered pieces.</div>
+    <div class="dashboard-subnav" role="tablist" aria-label="Dashboard sections">
+      <button class="dashboard-subtab active" id="dashboard-tab-overview"
+        onclick="switchDashboardTab('overview',true)">Overview</button>
+      <button class="dashboard-subtab" id="dashboard-tab-products"
+        onclick="switchDashboardTab('products',true)">Products</button>
+      <button class="dashboard-subtab" id="dashboard-tab-customers"
+        onclick="switchDashboardTab('customers',true)">Customers</button>
+      <button class="dashboard-subtab" id="dashboard-tab-zones"
+        onclick="switchDashboardTab('zones',true)">Zones</button>
+    </div>
+
+    <div class="dashboard-filter-bar">
+      <button class="dashboard-filter-open" id="dashboard-filter-open-btn"
+        onclick="openDashboardFilterPicker()">＋ Filter</button>
+      <button class="dashboard-clear-all" id="dashboard-clear-all-btn"
+        onclick="clearDashboardFilters()">Clear</button>
+      <div class="dashboard-filter-chips" id="dashboard-filter-chips">
+        <span class="dashboard-filter-empty">All exhibition data</span>
+      </div>
+    </div>
+    <div class="dashboard-action-reason" id="dashboard-action-reason"></div>
+
+    <div class="dashboard-content-ready">
+      <div class="dashboard-kpi-strip" aria-label="Dashboard summary">
+        <div class="dashboard-kpi-compact primary">
+          <b id="dk-total-pieces">0</b><span>Total pieces</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-total-customers">0</b><span>Total customers</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-order-customers">0</b><span>Buyers with orders</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-average-pieces">0</b><span>Average pcs / buyer</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-total-orders">0</b><span>Total orders</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-unique-designs">0</b><span>Unique designs</span>
+        </div>
+        <div class="dashboard-kpi-compact">
+          <b id="dk-pending-queue">0</b><span>Pending queue</span>
+        </div>
+      </div>
+
+      <!-- OVERVIEW: exactly four live canvases -->
+      <section class="dashboard-tab-panel" id="dashboard-panel-overview">
+        <div class="dashboard-viz-grid">
+          <article class="dashboard-viz-card hero wide">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">What’s selling best</h3>
+                <div class="dashboard-viz-copy">Top designs by ordered pieces. Tap a slice or row to drill down.</div>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame hero">
+              <canvas id="dash-overview-design-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-overview-design-chart-empty">No design data for this filter.</div>
+            </div>
+            <div class="dashboard-ranking" id="dash-overview-design-ranking"></div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">What kind of customers came</h3>
+                <div class="dashboard-viz-copy">Switch between agent mix and customer states.</div>
+              </div>
+              <div class="dashboard-mini-segment">
+                <button id="dash-overview-customer-agent" class="active"
+                  onclick="setDashboardOverviewCustomerMode('agent')">Agent</button>
+                <button id="dash-overview-customer-state"
+                  onclick="setDashboardOverviewCustomerMode('state')">State</button>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-overview-customer-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-overview-customer-chart-empty">No customer mix for this filter.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">Zone-wise sales</h3>
+                <div class="dashboard-viz-copy">Compare customer reach with ordered pieces by state.</div>
+              </div>
+              <div class="dashboard-mini-segment">
+                <button id="dash-overview-zone-customers" class="active"
+                  onclick="setDashboardZoneMode('customers')">Customers</button>
+                <button id="dash-overview-zone-pieces"
+                  onclick="setDashboardZoneMode('pieces')">Pieces</button>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-overview-zone-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-overview-zone-chart-empty">No state data for this filter.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card wide">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">Best product mix</h3>
+                <div class="dashboard-viz-copy">Pieces grouped by category, fabric or style.</div>
+              </div>
+              <div class="dashboard-mini-segment">
+                <button id="dash-overview-product-category" class="active"
+                  onclick="setDashboardOverviewProductMode('category')">Category</button>
+                <button id="dash-overview-product-fabric"
+                  onclick="setDashboardOverviewProductMode('fabric')">Fabric</button>
+                <button id="dash-overview-product-style"
+                  onclick="setDashboardOverviewProductMode('style')">Style</button>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-overview-product-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-overview-product-chart-empty">No product-mix data for this filter.</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- PRODUCTS: exactly four live canvases -->
+      <section class="dashboard-tab-panel" id="dashboard-panel-products" hidden>
+        <div class="dashboard-viz-grid">
+          <article class="dashboard-viz-card hero wide">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">Top designs</h3>
+                <div class="dashboard-viz-copy">Top 7 designs plus all remaining pieces grouped as Others.</div>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame hero">
+              <canvas id="dash-products-design-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-products-design-chart-empty">No design data for this filter.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <h3 class="dashboard-viz-title">Categories</h3>
+            <div class="dashboard-viz-copy">Ordered pieces by category.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-products-category-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-products-category-chart-empty">No category data.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <h3 class="dashboard-viz-title">Fabrics</h3>
+            <div class="dashboard-viz-copy">Ordered pieces by fabric.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-products-fabric-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-products-fabric-chart-empty">No fabric data.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card wide">
+            <h3 class="dashboard-viz-title">Styles</h3>
+            <div class="dashboard-viz-copy">Ordered pieces by style.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-products-style-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-products-style-chart-empty">No style data.</div>
+            </div>
+          </article>
+        </div>
+
+        <section class="dashboard-list-card">
+          <div class="dashboard-list-toolbar">
+            <div>
+              <h3 class="dashboard-viz-title">Full design ranking</h3>
+              <div class="dashboard-viz-copy">Search and tap a design for customers and state spread.</div>
+            </div>
+            <input id="dashboard-product-search" placeholder="Search design, fabric…"
+              oninput="renderDashboardProductList()">
           </div>
-          <select id="dashboard-state-mode" onchange="renderDashboardStateChart()" style="width:auto;height:36px;font-size:12px">
-            <option value="customers">Customers</option>
-            <option value="pieces">Pieces</option>
-          </select>
+          <div class="dashboard-list-v2" id="dashboard-products-list"></div>
+        </section>
+      </section>
+
+      <!-- CUSTOMERS: exactly four live canvases -->
+      <section class="dashboard-tab-panel" id="dashboard-panel-customers" hidden>
+        <div class="dashboard-viz-grid">
+          <article class="dashboard-viz-card hero wide">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">Top customers</h3>
+                <div class="dashboard-viz-copy">Best customers by ordered pieces.</div>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame hero">
+              <canvas id="dash-customers-top-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-customers-top-chart-empty">No customer order data.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <h3 class="dashboard-viz-title">Agent mix</h3>
+            <div class="dashboard-viz-copy">Customer distribution by agent.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-customers-agent-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-customers-agent-chart-empty">No agent data.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card">
+            <h3 class="dashboard-viz-title">Customer states</h3>
+            <div class="dashboard-viz-copy">Customer distribution by state.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-customers-state-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-customers-state-chart-empty">No state data.</div>
+            </div>
+          </article>
+
+          <article class="dashboard-viz-card wide">
+            <h3 class="dashboard-viz-title">Salesperson contribution</h3>
+            <div class="dashboard-viz-copy">Pieces linked to each salesperson’s design lines.</div>
+            <div class="dashboard-chart-frame">
+              <canvas id="dash-customers-salesperson-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-customers-salesperson-chart-empty">No salesperson data.</div>
+            </div>
+          </article>
         </div>
-        <div class="dashboard-chart-wrap"><canvas id="dashboard-state-chart"></canvas></div>
+
+        <section class="dashboard-list-card">
+          <div class="dashboard-list-toolbar">
+            <div>
+              <h3 class="dashboard-viz-title">Best customers</h3>
+              <div class="dashboard-viz-copy">Tap a customer to see their complete design breakdown.</div>
+            </div>
+            <input id="dashboard-customer-search" placeholder="Search customer…"
+              oninput="renderDashboardCustomerList()">
+          </div>
+          <div class="dashboard-list-v2" id="dashboard-customers-list"></div>
+        </section>
       </section>
 
-      <section class="dashboard-chart-card">
-        <h3>Category Mix</h3>
-        <div class="dashboard-chart-subtitle">Share of ordered pieces by category.</div>
-        <div class="dashboard-chart-wrap"><canvas id="dashboard-category-chart"></canvas></div>
-      </section>
-
-      <section class="dashboard-chart-card wide">
-        <h3>Top Customers</h3>
-        <div class="dashboard-chart-subtitle">Best parties ranked by total pieces ordered.</div>
-        <div class="dashboard-chart-wrap"><canvas id="dashboard-customer-chart"></canvas></div>
-      </section>
-
-      <section class="dashboard-chart-card wide">
-        <h3>Top Designs</h3>
-        <div class="dashboard-chart-subtitle">Best designs ranked by total ordered pieces.</div>
-        <div class="dashboard-chart-wrap"><canvas id="dashboard-design-chart"></canvas></div>
-      </section>
-
-      <section class="dashboard-chart-card wide">
-        <h3>Salesperson Contribution</h3>
-        <div class="dashboard-chart-subtitle">Pieces linked to each salesperson’s design lines.</div>
-        <div class="dashboard-chart-wrap"><canvas id="dashboard-salesperson-chart"></canvas></div>
+      <!-- ZONES: one live canvas -->
+      <section class="dashboard-tab-panel" id="dashboard-panel-zones" hidden>
+        <div class="dashboard-viz-grid">
+          <article class="dashboard-viz-card hero wide">
+            <div class="dashboard-viz-head">
+              <div>
+                <h3 class="dashboard-viz-title">State performance</h3>
+                <div class="dashboard-viz-copy">Tap a state to view its strongest designs and categories.</div>
+              </div>
+              <div class="dashboard-mini-segment">
+                <button id="dash-zones-customers" class="active"
+                  onclick="setDashboardZoneMode('customers')">Customers</button>
+                <button id="dash-zones-pieces"
+                  onclick="setDashboardZoneMode('pieces')">Pieces</button>
+              </div>
+            </div>
+            <div class="dashboard-chart-frame hero">
+              <canvas id="dash-zones-state-chart"></canvas>
+              <div class="dashboard-v2-empty" id="dash-zones-state-chart-empty">No state data for this filter.</div>
+            </div>
+            <div class="dashboard-ranking" id="dash-zones-state-ranking"></div>
+          </article>
+        </div>
       </section>
     </div>
 
-    <section class="card">
-      <div class="dashboard-section-head">
-        <div>
-          <h2>Best Customers</h2>
-          <div class="dashboard-chart-subtitle">Tap a party to view the designs ordered.</div>
-        </div>
-        <input class="dashboard-search" id="dashboard-customer-search"
-          placeholder="Search customer…" oninput="renderDashboardCustomers()">
+    <div class="dashboard-loading-state">
+      <div class="dashboard-skeleton-card">
+        <div class="dashboard-skeleton-line"></div>
+        <div class="dashboard-skeleton-line short"></div>
+        <div class="dashboard-skeleton-circle"></div>
       </div>
-      <div class="dashboard-list" id="dashboard-customers-list"></div>
-    </section>
-
-    <section class="card">
-      <div class="dashboard-section-head">
-        <div>
-          <h2>Best Designs</h2>
-          <div class="dashboard-chart-subtitle">Tap a design to view customer and state spread.</div>
-        </div>
-        <input class="dashboard-search" id="dashboard-design-search"
-          placeholder="Search design, fabric…" oninput="renderDashboardDesigns()">
+      <div class="dashboard-skeleton-card">
+        <div class="dashboard-skeleton-line"></div>
+        <div class="dashboard-skeleton-line short"></div>
+        <div class="dashboard-skeleton-circle"></div>
       </div>
-      <div class="dashboard-list" id="dashboard-designs-list"></div>
-    </section>
+    </div>
   </main>
 
   <!-- ORDERS -->
@@ -2466,7 +3322,24 @@
         </div>
         <button class="icon-delete" onclick="closeDashboardDetail()" aria-label="Close">×</button>
       </div>
+      <div class="dashboard-detail-breadcrumbs" id="dashboard-detail-breadcrumbs"></div>
       <div id="dashboard-detail-body"></div>
+      <div class="dashboard-detail-actions">
+        <button class="btn" id="dashboard-detail-apply" onclick="dashboardApplyDrillAsFilter()">Apply as filter</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-filter-mask" id="dashboard-filter-mask" onclick="dashboardFilterBackdrop(event)">
+    <div class="dashboard-filter-sheet">
+      <div class="dashboard-detail-top">
+        <div>
+          <div class="dashboard-detail-title" id="dashboard-filter-title">Add a filter</div>
+          <div class="dashboard-detail-copy" id="dashboard-filter-copy">Choose what you want to narrow down.</div>
+        </div>
+        <button class="icon-delete" onclick="closeDashboardFilterPicker()" aria-label="Close">×</button>
+      </div>
+      <div id="dashboard-filter-body"></div>
     </div>
   </div>
 
@@ -2603,6 +3476,18 @@
   let dashboardLoading = false;
   let dashboardReloadPending = false;
   let dashboardFilterTimer = null;
+
+  // Dashboard v2 keeps its navigation/filter/drill state in memory so the
+  // manager can move around without reloading or re-rendering hidden charts.
+  let dashboardActiveTab = 'overview';
+  let dashboardActiveFilters = {};
+  let dashboardFilterField = '';
+  let dashboardFilterSearch = '';
+  let dashboardOverviewCustomerMode = 'agent';
+  let dashboardOverviewProductMode = 'category';
+  let dashboardZoneMode = 'customers';
+  let dashboardDrillPath = [];
+  let dashboardRenderToken = 0;
   let staffStarted = false;
   let queueRefreshTimer = null;
   let lightSyncTimer = null;
@@ -3047,7 +3932,7 @@
       if (node) node.classList.toggle('active', key === name);
     });
 
-    if (name === 'dashboard') loadDashboard(false);
+    if (name === 'dashboard') enterDashboard();
     if (name === 'orders') loadOrders(false);
     if (name === 'map') {
       renderMappingBatch();
@@ -5022,61 +5907,99 @@
   }
 
 
+
   /* --------------------------------------------------------------------------
-     DASHBOARD
+     DASHBOARD V2
      -------------------------------------------------------------------------- */
-  const DASHBOARD_COLORS = [
-    '#225E63','#FF9700','#4F8F95','#8B5CF6','#D97706',
-    '#2563EB','#16A34A','#DB2777','#64748B','#A16207'
+  const DASHBOARD_PALETTE = [
+    '#225E63', // teal deep
+    '#2B7379', // teal
+    '#DEDE6E', // lemon
+    '#E8E7D5', // linen
+    '#FF9700', // single accent
+    '#5F9094',
+    '#A9BDB9',
+    '#7A8A87'
   ];
+  const DASHBOARD_OTHERS_COLOR = '#A7ABA8';
+
+  const DASHBOARD_FILTER_FIELDS = {
+    dateRange:{ label:'Date range', pickable:true },
+    state:{ label:'State', optionKey:'states', pickable:true },
+    city:{ label:'City', optionKey:'cities', pickable:true },
+    agent:{ label:'Agent', optionKey:'agents', pickable:true },
+    party:{ label:'Party', optionKey:'parties', pickable:true },
+    salesperson:{ label:'Salesperson', optionKey:'salespersons', pickable:true },
+    category:{ label:'Category', optionKey:'categories', pickable:true },
+    fabric:{ label:'Fabric', optionKey:'fabrics', pickable:true },
+    style:{ label:'Style', optionKey:'styles', pickable:true },
+    // Design is created only from a drill-down. Keeping it out of the normal
+    // picker avoids a large list on old phones while still allowing precision.
+    design:{ label:'Design', optionKey:'designs', pickable:false }
+  };
+
+  function initializeDashboardUi() {
+    try {
+      const saved = sessionStorage.getItem('cmai_dashboard_tab');
+      if (['overview','products','customers','zones'].includes(saved)) {
+        dashboardActiveTab = saved;
+      }
+    } catch (error) {}
+
+    renderDashboardFilterChips();
+    updateDashboardSubnav();
+    el('dashboard-filter-open-btn').disabled = !dashboardData;
+    el('dashboard-action-reason').textContent = dashboardData
+      ? ''
+      : 'Open the Dashboard to load filter choices.';
+  }
+
+  function enterDashboard() {
+    updateDashboardSubnav();
+    if (!dashboardData) {
+      loadDashboard(false);
+    } else {
+      renderDashboard();
+    }
+  }
 
   function dashboardFilters() {
-    return {
-      dateFrom:value('d-date-from'),
-      dateTo:value('d-date-to'),
-      state:value('d-state'),
-      city:value('d-city'),
-      agent:value('d-agent'),
-      salesperson:value('d-salesperson'),
-      party:value('d-party'),
-      category:value('d-category'),
-      fabric:value('d-fabric'),
-      style:value('d-style')
-    };
+    return Object.assign({}, dashboardActiveFilters);
   }
 
   function scheduleDashboardLoad() {
     if (!el('pg-dashboard').classList.contains('active')) return;
     clearTimeout(dashboardFilterTimer);
-    dashboardFilterTimer = setTimeout(() => loadDashboard(false), 450);
+    dashboardFilterTimer = setTimeout(() => loadDashboard(false), 320);
   }
 
   function clearDashboardFilters() {
-    [
-      'd-date-from','d-date-to','d-state','d-city','d-agent',
-      'd-salesperson','d-party','d-category','d-fabric','d-style'
-    ].forEach(id => { el(id).value = ''; });
-
-    loadDashboard(true);
+    if (!Object.keys(dashboardActiveFilters).length) {
+      toast('No dashboard filters are active', 'warning');
+      return;
+    }
+    dashboardActiveFilters = {};
+    renderDashboardFilterChips();
+    scheduleDashboardLoad();
   }
 
   function setDashboardLoading() {
-    [
-      'dk-total-customers','dk-order-customers','dk-total-pieces',
-      'dk-average-pieces','dk-total-orders','dk-unique-designs',
-      'dk-pending-queue'
-    ].forEach(id => { el(id).textContent = '…'; });
+    dashboardRenderToken += 1;
+    destroyDashboardCharts();
+    el('pg-dashboard').classList.add('dashboard-loading');
+    el('dashboard-refresh-btn').disabled = true;
+    el('dashboard-filter-open-btn').disabled = true;
+    el('dashboard-action-reason').textContent =
+      'Loading the filtered dashboard…';
+  }
 
-    if (!dashboardData) {
-      el('dashboard-customers-list').innerHTML =
-        '<div class="skeleton-list">' +
-          '<div class="skeleton-row"></div>'.repeat(4) +
-        '</div>';
-      el('dashboard-designs-list').innerHTML =
-        '<div class="skeleton-list">' +
-          '<div class="skeleton-row"></div>'.repeat(4) +
-        '</div>';
-    }
+  function finishDashboardLoading() {
+    el('pg-dashboard').classList.remove('dashboard-loading');
+    el('dashboard-refresh-btn').disabled = false;
+    el('dashboard-filter-open-btn').disabled = !dashboardData;
+    el('dashboard-action-reason').textContent = dashboardData
+      ? ''
+      : 'Load the dashboard before adding filters.';
   }
 
   function loadDashboard(showToast) {
@@ -5093,7 +6016,9 @@
       .withSuccessHandler(data => {
         dashboardLoading = false;
         dashboardData = data || null;
+        finishDashboardLoading();
         renderDashboard();
+
         if (showToast) toast('Dashboard refreshed', 'success');
 
         if (dashboardReloadPending) {
@@ -5103,6 +6028,7 @@
       })
       .withFailureHandler(error => {
         dashboardLoading = false;
+        finishDashboardLoading();
 
         if (dashboardReloadPending) {
           dashboardReloadPending = false;
@@ -5112,7 +6038,7 @@
 
         showFailureModal(
           'Dashboard could not be loaded',
-          error.message,
+          error.message || 'The dashboard request failed. Check the connection and try again.',
           () => loadDashboard(true)
         );
       })
@@ -5125,39 +6051,22 @@
     }).format(Number(value) || 0);
   }
 
-  function populateDashboardDatalist(id, values) {
-    const list = el(id);
-    if (!list) return;
-    list.innerHTML = (values || [])
-      .map(item => '<option value="' + escapeHtml(item) + '"></option>')
-      .join('');
-  }
-
-  function populateDashboardOptions(options) {
-    options = options || {};
-    populateDashboardDatalist('d-state-list', options.states);
-    populateDashboardDatalist('d-city-list', options.cities);
-    populateDashboardDatalist('d-agent-list', options.agents);
-    populateDashboardDatalist('d-salesperson-list', options.salespersons);
-    populateDashboardDatalist('d-party-list', options.parties);
-    populateDashboardDatalist('d-category-list', options.categories);
-    populateDashboardDatalist('d-fabric-list', options.fabrics);
-    populateDashboardDatalist('d-style-list', options.styles);
-  }
-
   function renderDashboard() {
-    if (!dashboardData) return;
+    if (!dashboardData) {
+      finishDashboardLoading();
+      return;
+    }
 
     const summary = dashboardData.summary || {};
     el('dashboard-last-updated').textContent =
-      'Last updated ' + (dashboardData.generatedAt || 'just now');
+      'Generated ' + (dashboardData.generatedAt || 'just now');
 
+    el('dk-total-pieces').textContent =
+      formatDashboardNumber(summary.totalPieces);
     el('dk-total-customers').textContent =
       formatDashboardNumber(summary.totalCustomers);
     el('dk-order-customers').textContent =
       formatDashboardNumber(summary.customersWithOrders);
-    el('dk-total-pieces').textContent =
-      formatDashboardNumber(summary.totalPieces);
     el('dk-average-pieces').textContent =
       formatDashboardNumber(summary.averagePiecesPerCustomer);
     el('dk-total-orders').textContent =
@@ -5167,316 +6076,1194 @@
     el('dk-pending-queue').textContent =
       formatDashboardNumber(summary.pendingQueue);
 
-    populateDashboardOptions(dashboardData.options || {});
-    renderDashboardStateChart();
-    renderDashboardChart(
-      'category',
-      'dashboard-category-chart',
-      'doughnut',
-      (dashboardData.charts || {}).categoryPieces || [],
-      'Pieces'
-    );
-    renderDashboardChart(
-      'customers',
-      'dashboard-customer-chart',
-      'bar',
-      (dashboardData.charts || {}).topCustomers || [],
-      'Pieces',
-      true
-    );
-    renderDashboardChart(
-      'designs',
-      'dashboard-design-chart',
-      'bar',
-      (dashboardData.charts || {}).topDesigns || [],
-      'Pieces',
-      true
-    );
-    renderDashboardChart(
-      'salespersons',
-      'dashboard-salesperson-chart',
-      'bar',
-      (dashboardData.charts || {}).salespersonPieces || [],
-      'Pieces',
-      true
-    );
-
-    renderDashboardCustomers();
-    renderDashboardDesigns();
+    renderDashboardFilterChips();
+    switchDashboardTab(dashboardActiveTab, false);
   }
 
-  function renderDashboardStateChart() {
+  function updateDashboardSubnav() {
+    ['overview','products','customers','zones'].forEach(tab => {
+      const button = el('dashboard-tab-' + tab);
+      const panel = el('dashboard-panel-' + tab);
+      if (button) button.classList.toggle('active', tab === dashboardActiveTab);
+      if (panel) panel.hidden = tab !== dashboardActiveTab;
+    });
+  }
+
+  function switchDashboardTab(tab, remember) {
+    if (!['overview','products','customers','zones'].includes(tab)) return;
+    dashboardActiveTab = tab;
+
+    if (remember) {
+      try {
+        sessionStorage.setItem('cmai_dashboard_tab', tab);
+      } catch (error) {}
+    }
+
+    updateDashboardSubnav();
+    destroyDashboardCharts();
+
+    if (!dashboardData || dashboardLoading) return;
+
+    // Defer until the selected panel is visible, otherwise Chart.js measures a
+    // zero-width hidden canvas on mobile.
+    const token = ++dashboardRenderToken;
+    requestAnimationFrame(() => {
+      if (token !== dashboardRenderToken) return;
+      renderDashboardActiveSection();
+    });
+  }
+
+  function destroyDashboardCharts() {
+    Object.keys(dashboardCharts).forEach(key => {
+      if (dashboardCharts[key]) {
+        try { dashboardCharts[key].destroy(); } catch (error) {}
+      }
+    });
+    dashboardCharts = {};
+  }
+
+  function renderDashboardActiveSection() {
     if (!dashboardData) return;
-    const mode = el('dashboard-state-mode').value;
-    const charts = dashboardData.charts || {};
-    const rows = mode === 'pieces'
-      ? (charts.statePieces || [])
-      : (charts.stateCustomers || []);
 
-    renderDashboardChart(
-      'states',
-      'dashboard-state-chart',
-      'doughnut',
-      rows,
-      mode === 'pieces' ? 'Pieces' : 'Customers'
-    );
+    if (dashboardActiveTab === 'overview') renderDashboardOverview();
+    if (dashboardActiveTab === 'products') renderDashboardProducts();
+    if (dashboardActiveTab === 'customers') renderDashboardCustomersSection();
+    if (dashboardActiveTab === 'zones') renderDashboardZones();
   }
 
-  function renderDashboardChart(key, canvasId, type, rows, label, horizontal) {
+  function dashboardTopRows(items, labelKey, valueKey, limit, totalValue) {
+    const sorted = (items || [])
+      .map(item => ({
+        label:String(item[labelKey] || 'Not specified'),
+        value:Number(item[valueKey]) || 0,
+        source:item
+      }))
+      .filter(row => row.value > 0)
+      .sort((a,b) => b.value - a.value);
+
+    const head = sorted.slice(0, limit);
+    const knownTotal = Number(totalValue) || sorted.reduce((sum,row) => sum + row.value,0);
+    const remainder = Math.max(
+      0,
+      knownTotal - head.reduce((sum,row) => sum + row.value,0)
+    );
+
+    if (remainder > 0) {
+      head.push({ label:'Others', value:remainder, source:null });
+    }
+    return head;
+  }
+
+  function dashboardRows(rows) {
+    return (rows || [])
+      .map(row => ({
+        label:String(row.label || 'Not specified'),
+        value:Number(row.value) || 0,
+        source:row
+      }))
+      .filter(row => row.value > 0);
+  }
+
+  function dashboardChartColors(rows, firstOrange) {
+    return rows.map((row,index) => {
+      if (row.label === 'Others') return DASHBOARD_OTHERS_COLOR;
+      if (firstOrange && index === 0) return '#FF9700';
+      const palette = firstOrange
+        ? ['#225E63','#2B7379','#DEDE6E','#E8E7D5','#5F9094','#A9BDB9']
+        : DASHBOARD_PALETTE;
+      return palette[index % palette.length];
+    });
+  }
+
+  function dashboardCenterTextPlugin() {
+    return {
+      id:'dashboardCenterText',
+      afterDraw(chart, args, pluginOptions) {
+        if (!pluginOptions || !pluginOptions.text) return;
+        const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || !meta.data.length) return;
+
+        const center = meta.data[0];
+        const ctx = chart.ctx;
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#225E63';
+        ctx.font = '800 19px Inter, Arial, sans-serif';
+        ctx.fillText(pluginOptions.text, center.x, center.y - 3);
+        ctx.fillStyle = '#7B817F';
+        ctx.font = '600 9px Inter, Arial, sans-serif';
+        ctx.fillText(pluginOptions.subtext || '', center.x, center.y + 15);
+        ctx.restore();
+      }
+    };
+  }
+
+  function renderDashboardDonut(key, canvasId, rows, settings) {
+    settings = settings || {};
     if (dashboardCharts[key]) {
       dashboardCharts[key].destroy();
-      dashboardCharts[key] = null;
+      delete dashboardCharts[key];
     }
 
     const canvas = el(canvasId);
+    const empty = el(canvasId + '-empty');
     if (!canvas || typeof Chart === 'undefined') return;
 
-    rows = rows || [];
+    rows = (rows || []).filter(row => Number(row.value) > 0);
+    if (!rows.length) {
+      canvas.style.display = 'none';
+      if (empty) empty.classList.add('show');
+      return;
+    }
+
+    canvas.style.display = 'block';
+    if (empty) empty.classList.remove('show');
+
     const labels = rows.map(row => row.label);
-    const values = rows.map(row => Number(row.value) || 0);
+    const values = rows.map(row => row.value);
+    const total = settings.total !== undefined
+      ? Number(settings.total) || 0
+      : values.reduce((sum,value) => sum + value,0);
 
     dashboardCharts[key] = new Chart(canvas.getContext('2d'), {
-      type,
+      type:'doughnut',
       data:{
         labels,
         datasets:[{
-          label,
+          label:settings.metric || 'Pieces',
           data:values,
-          backgroundColor:type === 'doughnut'
-            ? labels.map((_, index) =>
-                DASHBOARD_COLORS[index % DASHBOARD_COLORS.length])
-            : DASHBOARD_COLORS[0],
-          borderColor:type === 'doughnut' ? '#FFFFFF' : DASHBOARD_COLORS[0],
-          borderWidth:type === 'doughnut' ? 2 : 0,
-          borderRadius:type === 'bar' ? 7 : 0
+          backgroundColor:dashboardChartColors(rows, !!settings.firstOrange),
+          borderColor:'#FFFFFF',
+          borderWidth:2,
+          hoverOffset:5,
+          spacing:1
         }]
       },
+      plugins:[dashboardCenterTextPlugin()],
       options:{
         responsive:true,
         maintainAspectRatio:false,
-        indexAxis:horizontal ? 'y' : 'x',
-        animation:{ duration:450 },
+        cutout:settings.cutout || '61%',
+        animation:{ duration:360 },
+        onClick:(event,elements) => {
+          if (!elements.length || typeof settings.onSelect !== 'function') return;
+          const row = rows[elements[0].index];
+          if (!row || row.label === 'Others') return;
+          settings.onSelect(row);
+        },
         plugins:{
+          dashboardCenterText:{
+            text:formatDashboardNumber(total),
+            subtext:settings.centerLabel || settings.metric || ''
+          },
           legend:{
-            display:type === 'doughnut',
+            display:settings.legend !== false,
             position:'bottom',
             labels:{
-              boxWidth:10,
-              boxHeight:10,
+              boxWidth:9,
+              boxHeight:9,
               usePointStyle:true,
               pointStyle:'circle',
-              padding:12,
-              font:{ size:10 }
+              padding:10,
+              font:{ size:9, family:'Inter' },
+              generateLabels(chart) {
+                const data = chart.data;
+                return data.labels.map((label,index) => ({
+                  text:String(label).length > 18
+                    ? String(label).slice(0,17) + '…'
+                    : String(label),
+                  fillStyle:data.datasets[0].backgroundColor[index],
+                  strokeStyle:'#fff',
+                  lineWidth:1,
+                  hidden:false,
+                  index
+                }));
+              }
+            },
+            onClick:(event,item,legend) => {
+              const row = rows[item.index];
+              if (row && row.label !== 'Others' &&
+                  typeof settings.onSelect === 'function') {
+                settings.onSelect(row);
+              }
             }
           },
           tooltip:{
             callbacks:{
               label:context =>
-                ' ' + context.dataset.label + ': ' +
-                formatDashboardNumber(context.raw)
+                ' ' + context.label + ': ' +
+                formatDashboardNumber(context.raw) + ' ' +
+                (settings.metric || '').toLowerCase()
             }
           }
-        },
-        scales:type === 'bar' ? {
-          x:{
-            beginAtZero:true,
-            grid:{ color:'#EEF1EF' },
-            ticks:{ precision:0, font:{ size:10 } }
-          },
-          y:{
-            grid:{ display:false },
-            ticks:{
-              autoSkip:false,
-              font:{ size:10 },
-              callback:function(value) {
-                const text = this.getLabelForValue(value);
-                return text.length > 22 ? text.slice(0, 21) + '…' : text;
-              }
-            }
-          }
-        } : undefined
+        }
       }
     });
   }
 
-  function renderDashboardCustomers() {
-    const list = el('dashboard-customers-list');
-    if (!dashboardData) {
-      list.innerHTML = emptyState('⌛', 'Dashboard loading', 'Please wait.');
+  function renderDashboardRanking(containerId, rows, type, metaFn, limit) {
+    const container = el(containerId);
+    if (!container) return;
+
+    const visible = (rows || [])
+      .filter(row => row.label !== 'Others')
+      .slice(0, limit || 10);
+
+    if (!visible.length) {
+      container.innerHTML =
+        '<div class="dashboard-list-empty">No data for this filter.</div>';
       return;
     }
 
-    const query = value('dashboard-customer-search').toLowerCase();
-    const rows = (dashboardData.topCustomers || [])
-      .filter(row => !query || [
-        row.partyName,row.city,row.state,row.agent
-      ].join(' ').toLowerCase().includes(query))
-      .slice(0, 30);
-
-    if (!rows.length) {
-      list.innerHTML = emptyState(
-        '⌕',
-        'No customers found',
-        'Change or clear the dashboard filters.'
-      );
-      return;
-    }
-
-    list.innerHTML = rows.map((row, index) =>
-      '<div class="dashboard-row" onclick="openDashboardCustomerDetail(' +
-        jsString(row.partyId) + ')">' +
-        '<div class="dashboard-rank">' + (index + 1) + '</div>' +
-        '<div>' +
-          '<div class="dashboard-row-title">' +
-            escapeHtml(row.partyName) +
-          '</div>' +
-          '<div class="dashboard-row-meta">' +
-            escapeHtml([
-              row.city,
-              row.state,
-              row.agent,
-              row.designs + ' designs',
-              (row.salespersons || []).join(', ')
-            ].filter(Boolean).join(' · ')) +
-          '</div>' +
-        '</div>' +
-        '<div class="dashboard-row-value">' +
-          '<b>' + formatDashboardNumber(row.pieces) + '</b>' +
-          '<span>pieces</span>' +
-        '</div>' +
-      '</div>'
-    ).join('');
+    container.innerHTML = visible.map((row,index) => {
+      const meta = typeof metaFn === 'function' ? metaFn(row) : '';
+      return '<button class="dashboard-rank-row' +
+          (index === 0 ? ' first' : '') +
+          '" onclick="openDashboardDrill(' +
+          jsString(type) + ',' + jsString(row.label) + ')">' +
+        '<span class="dashboard-rank-no">' + (index + 1) + '</span>' +
+        '<span class="dashboard-rank-label">' +
+          escapeHtml(row.label) +
+          (meta ? '<span class="dashboard-rank-meta">' +
+            escapeHtml(meta) + '</span>' : '') +
+        '</span>' +
+        '<span class="dashboard-rank-value">' +
+          formatDashboardNumber(row.value) + '</span>' +
+      '</button>';
+    }).join('');
   }
 
-  function renderDashboardDesigns() {
-    const list = el('dashboard-designs-list');
-    if (!dashboardData) {
-      list.innerHTML = emptyState('⌛', 'Dashboard loading', 'Please wait.');
-      return;
-    }
+  function setDashboardOverviewCustomerMode(mode) {
+    dashboardOverviewCustomerMode = mode === 'state' ? 'state' : 'agent';
+    if (dashboardActiveTab === 'overview') renderDashboardOverview();
+  }
 
-    const query = value('dashboard-design-search').toLowerCase();
+  function setDashboardOverviewProductMode(mode) {
+    dashboardOverviewProductMode =
+      ['category','fabric','style'].includes(mode) ? mode : 'category';
+    if (dashboardActiveTab === 'overview') renderDashboardOverview();
+  }
+
+  function setDashboardZoneMode(mode) {
+    dashboardZoneMode = mode === 'pieces' ? 'pieces' : 'customers';
+    if (dashboardActiveTab === 'overview') renderDashboardOverview();
+    if (dashboardActiveTab === 'zones') renderDashboardZones();
+  }
+
+  function setDashboardMiniToggle(prefix, activeValue, values) {
+    values.forEach(value => {
+      const button = el(prefix + '-' + value);
+      if (button) button.classList.toggle('active', value === activeValue);
+    });
+  }
+
+  function renderDashboardOverview() {
+    destroyDashboardCharts();
+    const charts = dashboardData.charts || {};
+    const summary = dashboardData.summary || {};
+
+    const designRows = dashboardTopRows(
+      dashboardData.topDesigns || [],
+      'design',
+      'pieces',
+      7,
+      summary.totalPieces
+    );
+
+    renderDashboardDonut(
+      'overview-design',
+      'dash-overview-design-chart',
+      designRows,
+      {
+        metric:'Pieces',
+        centerLabel:'ordered pieces',
+        total:summary.totalPieces,
+        firstOrange:true,
+        legend:false,
+        onSelect:row => openDashboardDrill('design', row.label)
+      }
+    );
+
+    renderDashboardRanking(
+      'dash-overview-design-ranking',
+      designRows,
+      'design',
+      row => {
+        const source = row.source || {};
+        return [
+          source.category,
+          source.customers ? source.customers + ' customers' : ''
+        ].filter(Boolean).join(' · ');
+      },
+      7
+    );
+
+    setDashboardMiniToggle(
+      'dash-overview-customer',
+      dashboardOverviewCustomerMode,
+      ['agent','state']
+    );
+    const customerRows = dashboardOverviewCustomerMode === 'agent'
+      ? dashboardRows(charts.agentCustomers)
+      : dashboardRows(charts.stateCustomers);
+    renderDashboardDonut(
+      'overview-customer',
+      'dash-overview-customer-chart',
+      customerRows,
+      {
+        metric:'Customers',
+        centerLabel:dashboardOverviewCustomerMode === 'agent'
+          ? 'agent mix'
+          : 'state mix',
+        onSelect:row => openDashboardDrill(
+          dashboardOverviewCustomerMode,
+          row.label
+        )
+      }
+    );
+
+    setDashboardMiniToggle(
+      'dash-overview-zone',
+      dashboardZoneMode,
+      ['customers','pieces']
+    );
+    const zoneRows = dashboardZoneMode === 'pieces'
+      ? dashboardRows(charts.statePieces)
+      : dashboardRows(charts.stateCustomers);
+    renderDashboardDonut(
+      'overview-zone',
+      'dash-overview-zone-chart',
+      zoneRows,
+      {
+        metric:dashboardZoneMode === 'pieces' ? 'Pieces' : 'Customers',
+        centerLabel:'state total',
+        onSelect:row => openDashboardDrill('state', row.label)
+      }
+    );
+
+    setDashboardMiniToggle(
+      'dash-overview-product',
+      dashboardOverviewProductMode,
+      ['category','fabric','style']
+    );
+    const productMap = {
+      category:charts.categoryPieces,
+      fabric:charts.fabricPieces,
+      style:charts.stylePieces
+    };
+    renderDashboardDonut(
+      'overview-product',
+      'dash-overview-product-chart',
+      dashboardRows(productMap[dashboardOverviewProductMode]),
+      {
+        metric:'Pieces',
+        centerLabel:dashboardOverviewProductMode + ' mix',
+        onSelect:row => openDashboardDrill(
+          dashboardOverviewProductMode,
+          row.label
+        )
+      }
+    );
+  }
+
+  function renderDashboardProducts() {
+    destroyDashboardCharts();
+    const charts = dashboardData.charts || {};
+    const summary = dashboardData.summary || {};
+    const designRows = dashboardTopRows(
+      dashboardData.topDesigns || [],
+      'design',
+      'pieces',
+      7,
+      summary.totalPieces
+    );
+
+    renderDashboardDonut(
+      'products-design',
+      'dash-products-design-chart',
+      designRows,
+      {
+        metric:'Pieces',
+        centerLabel:'ordered pieces',
+        total:summary.totalPieces,
+        firstOrange:true,
+        onSelect:row => openDashboardDrill('design', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'products-category',
+      'dash-products-category-chart',
+      dashboardRows(charts.categoryPieces),
+      {
+        metric:'Pieces',
+        centerLabel:'category mix',
+        onSelect:row => openDashboardDrill('category', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'products-fabric',
+      'dash-products-fabric-chart',
+      dashboardRows(charts.fabricPieces),
+      {
+        metric:'Pieces',
+        centerLabel:'fabric mix',
+        onSelect:row => openDashboardDrill('fabric', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'products-style',
+      'dash-products-style-chart',
+      dashboardRows(charts.stylePieces),
+      {
+        metric:'Pieces',
+        centerLabel:'style mix',
+        onSelect:row => openDashboardDrill('style', row.label)
+      }
+    );
+
+    renderDashboardProductList();
+  }
+
+  function renderDashboardCustomersSection() {
+    destroyDashboardCharts();
+    const charts = dashboardData.charts || {};
+    const summary = dashboardData.summary || {};
+    const customerRows = dashboardTopRows(
+      dashboardData.topCustomers || [],
+      'partyName',
+      'pieces',
+      7,
+      summary.totalPieces
+    );
+
+    renderDashboardDonut(
+      'customers-top',
+      'dash-customers-top-chart',
+      customerRows,
+      {
+        metric:'Pieces',
+        centerLabel:'ordered pieces',
+        total:summary.totalPieces,
+        firstOrange:true,
+        onSelect:row => openDashboardDrill('customer', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'customers-agent',
+      'dash-customers-agent-chart',
+      dashboardRows(charts.agentCustomers),
+      {
+        metric:'Customers',
+        centerLabel:'agent mix',
+        onSelect:row => openDashboardDrill('agent', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'customers-state',
+      'dash-customers-state-chart',
+      dashboardRows(charts.stateCustomers),
+      {
+        metric:'Customers',
+        centerLabel:'state mix',
+        onSelect:row => openDashboardDrill('state', row.label)
+      }
+    );
+    renderDashboardDonut(
+      'customers-salesperson',
+      'dash-customers-salesperson-chart',
+      dashboardRows(charts.salespersonPieces),
+      {
+        metric:'Pieces',
+        centerLabel:'salesperson mix',
+        onSelect:row => openDashboardDrill('salesperson', row.label)
+      }
+    );
+
+    renderDashboardCustomerList();
+  }
+
+  function renderDashboardZones() {
+    destroyDashboardCharts();
+    const charts = dashboardData.charts || {};
+    setDashboardMiniToggle(
+      'dash-zones',
+      dashboardZoneMode,
+      ['customers','pieces']
+    );
+
+    const rows = dashboardZoneMode === 'pieces'
+      ? dashboardRows(charts.statePieces)
+      : dashboardRows(charts.stateCustomers);
+
+    renderDashboardDonut(
+      'zones-state',
+      'dash-zones-state-chart',
+      rows,
+      {
+        metric:dashboardZoneMode === 'pieces' ? 'Pieces' : 'Customers',
+        centerLabel:'state total',
+        firstOrange:false,
+        onSelect:row => openDashboardDrill('state', row.label)
+      }
+    );
+
+    renderDashboardRanking(
+      'dash-zones-state-ranking',
+      rows,
+      'state',
+      () => dashboardZoneMode === 'pieces'
+        ? 'Ordered pieces'
+        : 'Customers',
+      12
+    );
+  }
+
+  function renderDashboardProductList() {
+    const list = el('dashboard-products-list');
+    if (!list || !dashboardData) return;
+    const query = value('dashboard-product-search').toLowerCase();
+
     const rows = (dashboardData.topDesigns || [])
       .filter(row => !query || [
         row.design,row.barcode,row.category,row.fabric,row.style
       ].join(' ').toLowerCase().includes(query))
-      .slice(0, 30);
+      .slice(0,100);
 
     if (!rows.length) {
-      list.innerHTML = emptyState(
-        '⌕',
-        'No designs found',
-        'Change or clear the dashboard filters.'
+      list.innerHTML =
+        '<div class="dashboard-list-empty">No designs for this filter.</div>';
+      return;
+    }
+
+    list.innerHTML = rows.map((row,index) =>
+      '<button class="dashboard-rank-row' +
+        (index === 0 ? ' first' : '') +
+        '" onclick="openDashboardDrill(\'design\',' +
+          jsString(row.design) + ')">' +
+        '<span class="dashboard-rank-no">' + (index + 1) + '</span>' +
+        '<span class="dashboard-rank-label">' +
+          escapeHtml(row.design) +
+          '<span class="dashboard-rank-meta">' +
+            escapeHtml([
+              row.category,row.fabric,row.style,
+              row.customers + ' customers',
+              row.states + ' states'
+            ].filter(Boolean).join(' · ')) +
+          '</span>' +
+        '</span>' +
+        '<span class="dashboard-rank-value">' +
+          formatDashboardNumber(row.pieces) + ' pcs</span>' +
+      '</button>'
+    ).join('');
+  }
+
+  function renderDashboardCustomerList() {
+    const list = el('dashboard-customers-list');
+    if (!list || !dashboardData) return;
+    const query = value('dashboard-customer-search').toLowerCase();
+
+    const rows = (dashboardData.topCustomers || [])
+      .filter(row => !query || [
+        row.partyName,row.city,row.state,row.agent
+      ].join(' ').toLowerCase().includes(query))
+      .slice(0,100);
+
+    if (!rows.length) {
+      list.innerHTML =
+        '<div class="dashboard-list-empty">No customers for this filter.</div>';
+      return;
+    }
+
+    list.innerHTML = rows.map((row,index) =>
+      '<button class="dashboard-rank-row' +
+        (index === 0 ? ' first' : '') +
+        '" onclick="openDashboardDrill(\'customer\',' +
+          jsString(row.partyName) + ')">' +
+        '<span class="dashboard-rank-no">' + (index + 1) + '</span>' +
+        '<span class="dashboard-rank-label">' +
+          escapeHtml(row.partyName) +
+          '<span class="dashboard-rank-meta">' +
+            escapeHtml([
+              row.city,row.state,row.agent,
+              row.designs + ' designs'
+            ].filter(Boolean).join(' · ')) +
+          '</span>' +
+        '</span>' +
+        '<span class="dashboard-rank-value">' +
+          formatDashboardNumber(row.pieces) + ' pcs</span>' +
+      '</button>'
+    ).join('');
+  }
+
+  /* ------------------------- CHIP FILTERS ------------------------------ */
+  function dashboardFilterLabel(key) {
+    const config = DASHBOARD_FILTER_FIELDS[key];
+    return config ? config.label : key;
+  }
+
+  function renderDashboardFilterChips() {
+    const container = el('dashboard-filter-chips');
+    if (!container) return;
+
+    const chips = [];
+    const dateFrom = dashboardActiveFilters.dateFrom || '';
+    const dateTo = dashboardActiveFilters.dateTo || '';
+
+    if (dateFrom || dateTo) {
+      chips.push({
+        key:'dateRange',
+        label:(dateFrom || 'Start') + ' → ' + (dateTo || 'Today')
+      });
+    }
+
+    Object.keys(dashboardActiveFilters).forEach(key => {
+      if (key === 'dateFrom' || key === 'dateTo') return;
+      const current = dashboardActiveFilters[key];
+      if (!current) return;
+      chips.push({
+        key,
+        label:dashboardFilterLabel(key) + ': ' + current
+      });
+    });
+
+    if (!chips.length) {
+      container.innerHTML =
+        '<span class="dashboard-filter-empty">All exhibition data</span>';
+    } else {
+      container.innerHTML = chips.map(chip =>
+        '<button class="dashboard-filter-chip" onclick="removeDashboardFilter(' +
+          jsString(chip.key) + ')">' +
+          escapeHtml(chip.label) + '<span>×</span></button>'
+      ).join('');
+    }
+
+    el('dashboard-clear-all-btn').style.display =
+      chips.length ? 'inline-flex' : 'none';
+  }
+
+  function removeDashboardFilter(key) {
+    if (key === 'dateRange') {
+      delete dashboardActiveFilters.dateFrom;
+      delete dashboardActiveFilters.dateTo;
+    } else {
+      delete dashboardActiveFilters[key];
+    }
+    renderDashboardFilterChips();
+    scheduleDashboardLoad();
+  }
+
+  function openDashboardFilterPicker() {
+    if (!dashboardData) {
+      toast('Load the dashboard before adding filters', 'warning');
+      return;
+    }
+
+    dashboardFilterField = '';
+    dashboardFilterSearch = '';
+    el('dashboard-filter-title').textContent = 'Add a filter';
+    el('dashboard-filter-copy').textContent =
+      'Choose what you want to narrow down.';
+    el('dashboard-filter-body').innerHTML =
+      '<div class="dashboard-filter-field-grid">' +
+      Object.keys(DASHBOARD_FILTER_FIELDS)
+        .filter(key => DASHBOARD_FILTER_FIELDS[key].pickable)
+        .map(key =>
+          '<button class="dashboard-filter-field" onclick="selectDashboardFilterField(' +
+            jsString(key) + ')">' +
+            escapeHtml(DASHBOARD_FILTER_FIELDS[key].label) +
+          '</button>'
+        ).join('') +
+      '</div>';
+    el('dashboard-filter-mask').classList.add('open');
+  }
+
+  function closeDashboardFilterPicker() {
+    el('dashboard-filter-mask').classList.remove('open');
+  }
+
+  function dashboardFilterBackdrop(event) {
+    if (event.target === el('dashboard-filter-mask')) {
+      closeDashboardFilterPicker();
+    }
+  }
+
+  function selectDashboardFilterField(field) {
+    dashboardFilterField = field;
+    const config = DASHBOARD_FILTER_FIELDS[field];
+    if (!config) return;
+
+    el('dashboard-filter-title').textContent = config.label;
+    el('dashboard-filter-copy').textContent =
+      field === 'dateRange'
+        ? 'Choose a start and end date.'
+        : 'Search or tap a value.';
+
+    if (field === 'dateRange') {
+      el('dashboard-filter-body').innerHTML =
+        '<div class="dashboard-date-grid">' +
+          '<div><label>Date from</label><input id="dashboard-filter-date-from" type="date" value="' +
+            escapeHtml(dashboardActiveFilters.dateFrom || '') + '"></div>' +
+          '<div><label>Date to</label><input id="dashboard-filter-date-to" type="date" value="' +
+            escapeHtml(dashboardActiveFilters.dateTo || '') + '"></div>' +
+        '</div>' +
+        '<button class="btn" onclick="applyDashboardDateFilter()">Apply date range</button>';
+      return;
+    }
+
+    el('dashboard-filter-body').innerHTML =
+      '<input id="dashboard-filter-search" placeholder="Search ' +
+        escapeHtml(config.label.toLowerCase()) +
+        '…" oninput="dashboardFilterSearch=this.value;renderDashboardFilterValues()">' +
+      '<div class="dashboard-filter-values" id="dashboard-filter-values"></div>';
+    renderDashboardFilterValues();
+    setTimeout(() => el('dashboard-filter-search').focus(), 40);
+  }
+
+  function renderDashboardFilterValues() {
+    const config = DASHBOARD_FILTER_FIELDS[dashboardFilterField];
+    const container = el('dashboard-filter-values');
+    if (!config || !container) return;
+
+    const options = ((dashboardData.options || {})[config.optionKey] || [])
+      .filter(item => !dashboardFilterSearch ||
+        String(item).toLowerCase().includes(
+          dashboardFilterSearch.toLowerCase()
+        ))
+      .slice(0,80);
+
+    if (!options.length) {
+      container.innerHTML =
+        '<div class="dashboard-list-empty">No matching values.</div>';
+      return;
+    }
+
+    container.innerHTML = options.map(item =>
+      '<button class="dashboard-filter-value' +
+        (dashboardActiveFilters[dashboardFilterField] === item
+          ? ' active'
+          : '') +
+        '" onclick="setDashboardFilterValue(' +
+          jsString(dashboardFilterField) + ',' + jsString(item) + ')">' +
+        escapeHtml(item) +
+      '</button>'
+    ).join('');
+  }
+
+  function setDashboardFilterValue(field, selectedValue) {
+    dashboardActiveFilters[field] = selectedValue;
+    closeDashboardFilterPicker();
+    renderDashboardFilterChips();
+    scheduleDashboardLoad();
+  }
+
+  function applyDashboardDateFilter() {
+    const from = value('dashboard-filter-date-from');
+    const to = value('dashboard-filter-date-to');
+
+    if (from && to && from > to) {
+      showFailureModal(
+        'Check the date range',
+        'The start date cannot be after the end date.',
+        () => selectDashboardFilterField('dateRange')
       );
       return;
     }
 
-    list.innerHTML = rows.map((row, index) =>
-      '<div class="dashboard-row" onclick="openDashboardDesignDetail(' +
-        jsString(row.design) + ')">' +
-        '<div class="dashboard-rank">' + (index + 1) + '</div>' +
-        '<div>' +
-          '<div class="dashboard-row-title">' +
-            escapeHtml(row.design) +
-          '</div>' +
-          '<div class="dashboard-row-meta">' +
-            escapeHtml([
-              row.category,
-              row.fabric,
-              row.style,
-              row.customers + ' customers',
-              row.states + ' states'
-            ].filter(Boolean).join(' · ')) +
-          '</div>' +
-        '</div>' +
-        '<div class="dashboard-row-value">' +
-          '<b>' + formatDashboardNumber(row.pieces) + '</b>' +
-          '<span>pieces</span>' +
-        '</div>' +
-      '</div>'
+    if (from) dashboardActiveFilters.dateFrom = from;
+    else delete dashboardActiveFilters.dateFrom;
+    if (to) dashboardActiveFilters.dateTo = to;
+    else delete dashboardActiveFilters.dateTo;
+
+    closeDashboardFilterPicker();
+    renderDashboardFilterChips();
+    scheduleDashboardLoad();
+  }
+
+  /* -------------------------- DRILL CHAINS ----------------------------- */
+  function openDashboardDrill(type, selectedValue) {
+    if (!selectedValue || selectedValue === 'Others') return;
+    dashboardDrillPath = [{ type, value:selectedValue }];
+    renderDashboardDrill();
+    el('dashboard-detail-mask').classList.add('open');
+  }
+
+  function appendDashboardDrill(type, selectedValue) {
+    if (!selectedValue || selectedValue === 'Others') return;
+    dashboardDrillPath.push({ type, value:selectedValue });
+    renderDashboardDrill();
+  }
+
+  function dashboardDrillTo(index) {
+    if (index < 0 || index >= dashboardDrillPath.length) return;
+
+    if (index === dashboardDrillPath.length - 1) {
+      dashboardDrillPath.pop();
+      if (!dashboardDrillPath.length) {
+        closeDashboardDetail();
+        return;
+      }
+    } else {
+      dashboardDrillPath = dashboardDrillPath.slice(0,index + 1);
+    }
+    renderDashboardDrill();
+  }
+
+  function dashboardDrillConstraints() {
+    const constraints = {};
+    dashboardDrillPath.forEach(step => {
+      constraints[step.type] = step.value;
+    });
+    return constraints;
+  }
+
+  function dashboardFindCustomer(name) {
+    return (dashboardData.topCustomers || [])
+      .find(row => row.partyName === name || row.partyId === name);
+  }
+
+  function dashboardFindDesign(name) {
+    return (dashboardData.topDesigns || [])
+      .find(row => row.design === name || row.barcode === name);
+  }
+
+  function dashboardDesignRowsForPath() {
+    const constraints = dashboardDrillConstraints();
+    const customerAgentByName = {};
+    (dashboardData.topCustomers || []).forEach(customer => {
+      customerAgentByName[customer.partyName] = customer.agent;
+    });
+
+    return (dashboardData.topDesigns || [])
+      .map(row => {
+        if (constraints.design && row.design !== constraints.design) return null;
+        if (constraints.category && row.category !== constraints.category) return null;
+        if (constraints.fabric && row.fabric !== constraints.fabric) return null;
+        if (constraints.style && row.style !== constraints.style) return null;
+        if (constraints.salesperson &&
+            !(row.salespersons || []).includes(constraints.salesperson)) {
+          return null;
+        }
+
+        let details = (row.customerDetails || []).slice();
+        if (constraints.state) {
+          details = details.filter(item => item.state === constraints.state);
+        }
+        if (constraints.customer) {
+          details = details.filter(item =>
+            item.partyName === constraints.customer
+          );
+        }
+        if (constraints.agent) {
+          details = details.filter(item =>
+            customerAgentByName[item.partyName] === constraints.agent
+          );
+        }
+
+        const customerScoped =
+          constraints.state || constraints.customer || constraints.agent;
+        const pieces = customerScoped
+          ? details.reduce((sum,item) => sum + Number(item.pieces || 0),0)
+          : Number(row.pieces) || 0;
+
+        if (pieces <= 0) return null;
+        return Object.assign({}, row, {
+          pieces,
+          customerDetails:details,
+          customers:details.length || row.customers
+        });
+      })
+      .filter(Boolean)
+      .sort((a,b) => b.pieces - a.pieces);
+  }
+
+  function dashboardCustomerRowsForPath() {
+    const constraints = dashboardDrillConstraints();
+    const productScoped = constraints.design || constraints.category ||
+      constraints.fabric || constraints.style;
+
+    return (dashboardData.topCustomers || [])
+      .map(row => {
+        if (constraints.customer && row.partyName !== constraints.customer) {
+          return null;
+        }
+        if (constraints.state && row.state !== constraints.state) return null;
+        if (constraints.agent && row.agent !== constraints.agent) return null;
+        if (constraints.salesperson &&
+            !(row.salespersons || []).includes(constraints.salesperson)) {
+          return null;
+        }
+
+        const details = (row.designDetails || []).filter(item => {
+          if (constraints.design && item.design !== constraints.design) return false;
+          if (constraints.category && item.category !== constraints.category) return false;
+          if (constraints.fabric && item.fabric !== constraints.fabric) return false;
+          if (constraints.style && item.style !== constraints.style) return false;
+          return true;
+        });
+
+        const pieces = productScoped
+          ? details.reduce((sum,item) => sum + Number(item.pieces || 0),0)
+          : Number(row.pieces) || 0;
+        if (pieces <= 0) return null;
+
+        return Object.assign({}, row, {
+          pieces,
+          designDetails:productScoped ? details : row.designDetails
+        });
+      })
+      .filter(Boolean)
+      .sort((a,b) => b.pieces - a.pieces);
+  }
+
+  function dashboardAggregate(rows, field) {
+    const grouped = {};
+    (rows || []).forEach(row => {
+      const label = row[field] || 'Not specified';
+      grouped[label] = (grouped[label] || 0) + Number(row.pieces || 0);
+    });
+    return Object.keys(grouped)
+      .map(label => ({ label, value:grouped[label] }))
+      .sort((a,b) => b.value - a.value);
+  }
+
+  function dashboardBreadcrumbLabel(step) {
+    return dashboardFilterLabel(
+      step.type === 'customer' ? 'party' : step.type
+    ) + ': ' + step.value;
+  }
+
+  function renderDashboardDrillBreadcrumbs() {
+    const container = el('dashboard-detail-breadcrumbs');
+    container.innerHTML = dashboardDrillPath.map((step,index) =>
+      '<button class="dashboard-breadcrumb" onclick="dashboardDrillTo(' +
+        index + ')">' +
+        escapeHtml(dashboardBreadcrumbLabel(step)) +
+        '<span>' +
+          (index === dashboardDrillPath.length - 1 ? '×' : '›') +
+        '</span>' +
+      '</button>'
     ).join('');
   }
 
-  function openDashboardCustomerDetail(partyId) {
-    if (!dashboardData) return;
-    const row = (dashboardData.topCustomers || [])
-      .find(item => item.partyId === partyId);
-    if (!row) return;
-
-    el('dashboard-detail-title').textContent = row.partyName;
-    el('dashboard-detail-copy').textContent =
-      [row.city,row.state,row.agent].filter(Boolean).join(' · ');
-
-    el('dashboard-detail-body').innerHTML =
-      '<div class="dashboard-detail-stats">' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.pieces) +
-          '</b><span>Pieces</span></div>' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.designs) +
-          '</b><span>Designs</span></div>' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.orders) +
-          '</b><span>Orders</span></div>' +
-      '</div>' +
-      '<div class="section-label">Designs ordered</div>' +
-      (row.designDetails || []).map(item =>
-        '<div class="dashboard-detail-line">' +
-          '<div><b>' + escapeHtml(item.design) + '</b>' +
-            '<span>' + escapeHtml([
-              item.category,item.fabric,item.style
-            ].filter(Boolean).join(' · ')) + '</span></div>' +
-          '<b>' + formatDashboardNumber(item.pieces) + ' pcs</b>' +
-        '</div>'
-      ).join('') +
-      '<div class="callout" style="margin-top:12px"><b>Salespersons:</b> ' +
-        escapeHtml((row.salespersons || []).join(', ') || 'Not specified') +
-      '</div>';
-
-    el('dashboard-detail-mask').classList.add('open');
+  function dashboardDetailStats(pieces, customers, designs) {
+    return '<div class="dashboard-detail-stats">' +
+      '<div class="dashboard-detail-stat"><b>' +
+        formatDashboardNumber(pieces) +
+        '</b><span>Pieces</span></div>' +
+      '<div class="dashboard-detail-stat"><b>' +
+        formatDashboardNumber(customers) +
+        '</b><span>Customers</span></div>' +
+      '<div class="dashboard-detail-stat"><b>' +
+        formatDashboardNumber(designs) +
+        '</b><span>Designs</span></div>' +
+    '</div>';
   }
 
-  function openDashboardDesignDetail(designName) {
-    if (!dashboardData) return;
-    const row = (dashboardData.topDesigns || [])
-      .find(item => item.design === designName);
-    if (!row) return;
+  function dashboardDetailButtons(title, rows, type, metaFn, limit) {
+    rows = (rows || []).slice(0,limit || 10);
+    if (!rows.length) return '';
 
-    el('dashboard-detail-title').textContent = row.design;
+    return '<div class="dashboard-detail-group-title">' +
+      escapeHtml(title) + '</div>' +
+      rows.map(row => {
+        const label = row.label || row.partyName || row.design;
+        const value = row.value !== undefined ? row.value : row.pieces;
+        const meta = typeof metaFn === 'function' ? metaFn(row) : '';
+        return '<button class="dashboard-detail-button" onclick="appendDashboardDrill(' +
+          jsString(type) + ',' + jsString(label) + ')">' +
+          '<span><b>' + escapeHtml(label) + '</b>' +
+            (meta ? '<span>' + escapeHtml(meta) + '</span>' : '') +
+          '</span>' +
+          '<strong>' + formatDashboardNumber(value) + ' pcs</strong>' +
+        '</button>';
+      }).join('');
+  }
+
+  function renderDashboardDrill() {
+    if (!dashboardData || !dashboardDrillPath.length) return;
+
+    const last = dashboardDrillPath[dashboardDrillPath.length - 1];
+    const designRows = dashboardDesignRowsForPath();
+    const customerRows = dashboardCustomerRowsForPath();
+    const totalPieces = designRows.reduce(
+      (sum,row) => sum + Number(row.pieces || 0),0
+    );
+
+    renderDashboardDrillBreadcrumbs();
+    el('dashboard-detail-title').textContent = last.value;
     el('dashboard-detail-copy').textContent =
-      [row.category,row.fabric,row.style].filter(Boolean).join(' · ');
+      'Tap a row to continue the drill-down.';
 
-    el('dashboard-detail-body').innerHTML =
-      '<div class="dashboard-detail-stats">' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.pieces) +
-          '</b><span>Pieces</span></div>' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.customers) +
-          '</b><span>Customers</span></div>' +
-        '<div class="dashboard-detail-stat"><b>' +
-          formatDashboardNumber(row.states) +
-          '</b><span>States</span></div>' +
-      '</div>' +
-      '<div class="section-label">Customers ordering this design</div>' +
-      (row.customerDetails || []).map(item =>
-        '<div class="dashboard-detail-line">' +
-          '<div><b>' + escapeHtml(item.partyName) + '</b>' +
-            '<span>' + escapeHtml([
-              item.city,item.state
-            ].filter(Boolean).join(' · ')) + '</span></div>' +
-          '<b>' + formatDashboardNumber(item.pieces) + ' pcs</b>' +
-        '</div>'
-      ).join('') +
-      '<div class="callout" style="margin-top:12px"><b>Salespersons:</b> ' +
-        escapeHtml((row.salespersons || []).join(', ') || 'Not specified') +
-      '</div>';
+    let body = '';
 
-    el('dashboard-detail-mask').classList.add('open');
+    if (last.type === 'customer') {
+      const customer = dashboardFindCustomer(last.value);
+      const rows = customerRows.length ? customerRows[0] : customer;
+      if (!rows) {
+        body = '<div class="dashboard-list-empty">Customer details are unavailable.</div>';
+      } else {
+        const details = rows.designDetails || [];
+        body =
+          dashboardDetailStats(rows.pieces, 1, details.length) +
+          '<div class="dashboard-detail-group-title">Design breakdown</div>' +
+          details.map(item =>
+            '<button class="dashboard-detail-button" onclick="appendDashboardDrill(\'design\',' +
+              jsString(item.design) + ')">' +
+              '<span><b>' + escapeHtml(item.design) + '</b>' +
+                '<span>' + escapeHtml([
+                  item.category,item.fabric,item.style
+                ].filter(Boolean).join(' · ')) + '</span>' +
+              '</span>' +
+              '<strong>' + formatDashboardNumber(item.pieces) + ' pcs</strong>' +
+            '</button>'
+          ).join('') +
+          '<div class="callout" style="margin-top:12px"><b>Salespersons:</b> ' +
+            escapeHtml((rows.salespersons || []).join(', ') || 'Not specified') +
+          '</div>';
+      }
+    } else if (last.type === 'design') {
+      const design = designRows.find(row => row.design === last.value) ||
+        dashboardFindDesign(last.value);
+      if (!design) {
+        body = '<div class="dashboard-list-empty">Design details are unavailable.</div>';
+      } else {
+        const details = design.customerDetails || [];
+        const stateRows = {};
+        details.forEach(item => {
+          stateRows[item.state] = (stateRows[item.state] || 0) +
+            Number(item.pieces || 0);
+        });
+        const states = Object.keys(stateRows)
+          .map(label => ({ label, value:stateRows[label] }))
+          .sort((a,b) => b.value - a.value);
+
+        body =
+          dashboardDetailStats(
+            design.pieces,
+            details.length || design.customers,
+            1
+          ) +
+          dashboardDetailButtons(
+            'Customers buying this design',
+            details.map(item => ({
+              label:item.partyName,
+              value:item.pieces,
+              city:item.city,
+              state:item.state
+            })),
+            'customer',
+            row => [row.city,row.state].filter(Boolean).join(' · '),
+            15
+          ) +
+          dashboardDetailButtons(
+            'State spread',
+            states,
+            'state',
+            () => 'Ordered pieces',
+            10
+          ) +
+          '<div class="callout" style="margin-top:12px"><b>Product:</b> ' +
+            escapeHtml([
+              design.category,design.fabric,design.style
+            ].filter(Boolean).join(' · ') || 'Not specified') +
+          '</div>';
+      }
+    } else {
+      const categoryRows = dashboardAggregate(designRows,'category');
+      const fabricRows = dashboardAggregate(designRows,'fabric');
+      const styleRows = dashboardAggregate(designRows,'style');
+
+      body =
+        dashboardDetailStats(
+          totalPieces,
+          customerRows.length,
+          designRows.length
+        ) +
+        dashboardDetailButtons(
+          'Top designs',
+          designRows.map(row => ({
+            label:row.design,
+            value:row.pieces,
+            category:row.category,
+            fabric:row.fabric
+          })),
+          'design',
+          row => [row.category,row.fabric].filter(Boolean).join(' · '),
+          10
+        );
+
+      if (last.type === 'state') {
+        body += dashboardDetailButtons(
+          'Top categories',
+          categoryRows,
+          'category',
+          () => 'Ordered pieces',
+          8
+        );
+      } else if (last.type === 'category') {
+        body += dashboardDetailButtons(
+          'Top fabrics',
+          fabricRows,
+          'fabric',
+          () => 'Ordered pieces',
+          8
+        );
+      } else if (last.type === 'fabric') {
+        body += dashboardDetailButtons(
+          'Top styles',
+          styleRows,
+          'style',
+          () => 'Ordered pieces',
+          8
+        );
+      } else if (last.type === 'style') {
+        body += dashboardDetailButtons(
+          'Top categories',
+          categoryRows,
+          'category',
+          () => 'Ordered pieces',
+          8
+        );
+      }
+
+      body += dashboardDetailButtons(
+        'Top customers',
+        customerRows.map(row => ({
+          label:row.partyName,
+          value:row.pieces,
+          city:row.city,
+          state:row.state
+        })),
+        'customer',
+        row => [row.city,row.state].filter(Boolean).join(' · '),
+        10
+      );
+    }
+
+    el('dashboard-detail-body').innerHTML = body;
+    el('dashboard-detail-apply').disabled = !dashboardDrillPath.length;
+  }
+
+  function dashboardApplyDrillAsFilter() {
+    if (!dashboardDrillPath.length) return;
+
+    dashboardDrillPath.forEach(step => {
+      const key = step.type === 'customer' ? 'party' : step.type;
+      if (DASHBOARD_FILTER_FIELDS[key]) {
+        dashboardActiveFilters[key] = step.value;
+      }
+    });
+
+    renderDashboardFilterChips();
+    closeDashboardDetail();
+    scheduleDashboardLoad();
+    toast('Drill path applied as dashboard filters', 'success');
   }
 
   function closeDashboardDetail() {
     el('dashboard-detail-mask').classList.remove('open');
+    dashboardDrillPath = [];
   }
 
   function dashboardDetailBackdrop(event) {
@@ -5729,14 +7516,6 @@
     ['m-code','m-design','m-notes'].forEach(id => el(id).addEventListener('input', updateMapActionStates));
     ['m-category','m-fabric','m-style'].forEach(id => el(id).addEventListener('change', updateMapActionStates));
 
-    [
-      'd-date-from','d-date-to','d-state','d-city','d-agent',
-      'd-salesperson','d-party','d-category','d-fabric','d-style'
-    ].forEach(id => {
-      el(id).addEventListener('change', scheduleDashboardLoad);
-      el(id).addEventListener('input', scheduleDashboardLoad);
-    });
-
     const stateOptions = '<option value="">Select state</option>' +
       STATES.map(name => '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + '</option>').join('');
 
@@ -5748,6 +7527,7 @@
       '<option value="">No agent / Direct</option><option value="Direct">Direct</option>';
 
     initMasterSearchableSelects();
+    initializeDashboardUi();
     renderMappingBatch();
     renderRecentMappings();
     renderReceptionQueue();
