@@ -1844,7 +1844,7 @@
         '<div class="line-top">' +
           '<div class="line-main">' +
             '<div class="item-code">' + escapeHtml(line.design || line.barcode) + '</div>' +
-            '<div class="item-name">' + escapeHtml(line.barcode) + '</div>' +
+            (details ? '<div class="line-detail">' + escapeHtml(details) + '</div>' : '') +
             '<div class="item-sales">' + escapeHtml(ownership) + '</div>' +
           '</div>' +
           (
@@ -1858,7 +1858,6 @@
               : '<div class="locked-qty">' + escapeHtml(line.qty) + ' pcs</div>'
           ) +
         '</div>' +
-        (details ? '<div class="line-detail">' + escapeHtml(details) + '</div>' : '') +
       '</div>'
     );
   }
