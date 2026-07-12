@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <title>EKUM · CMAI Orders</title>
 
   <style>
@@ -1372,7 +1373,8 @@
       color:#166534;
     }
 
-    .queue-status.removed {
+    .queue-status.removed,
+    .queue-status.rejected {
       background:#FEE2E2;
       color:#991B1B;
     }
@@ -1514,7 +1516,430 @@
       }
     }
 
-</style>
+
+    /* ----------------------------------------------------------------------
+       MOBILE DASHBOARD
+       ---------------------------------------------------------------------- */
+    .dashboard-title-row {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .dashboard-title-row h2 {
+      margin-bottom:3px;
+      font-size:20px;
+    }
+
+    .dashboard-last-updated {
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .dashboard-filter-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .dashboard-filter-grid label {
+      margin-top:0;
+    }
+
+    .dashboard-filter-actions {
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .dashboard-filter-actions .btn {
+      margin-top:0;
+    }
+
+    .dashboard-kpis {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .dashboard-kpi {
+      min-height:100px;
+      padding:15px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      box-shadow:0 5px 18px rgba(34,94,99,.05);
+    }
+
+    .dashboard-kpi.primary {
+      background:linear-gradient(135deg,var(--teal-deep),var(--teal));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .dashboard-kpi span {
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .dashboard-kpi.primary span {
+      color:rgba(255,255,255,.72);
+    }
+
+    .dashboard-kpi b {
+      display:block;
+      margin-top:7px;
+      font-size:25px;
+      line-height:1;
+    }
+
+    .dashboard-kpi small {
+      display:block;
+      margin-top:7px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.35;
+    }
+
+    .dashboard-kpi.primary small {
+      color:rgba(255,255,255,.76);
+    }
+
+    .dashboard-chart-grid {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .dashboard-chart-card {
+      position:relative;
+      min-height:310px;
+      padding:15px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      box-shadow:0 5px 18px rgba(34,94,99,.05);
+    }
+
+    .dashboard-chart-card h3 {
+      margin:0;
+      color:var(--teal-deep);
+      font-size:14px;
+    }
+
+    .dashboard-chart-subtitle {
+      margin:3px 0 12px;
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .dashboard-chart-wrap {
+      position:relative;
+      min-height:245px;
+      height:245px;
+    }
+
+    .dashboard-chart-empty {
+      min-height:245px;
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+
+    .dashboard-section-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .dashboard-section-head h2 {
+      margin:0;
+    }
+
+    .dashboard-search {
+      max-width:190px;
+      height:38px;
+      font-size:13px;
+    }
+
+    .dashboard-list {
+      display:grid;
+      gap:8px;
+    }
+
+    .dashboard-row {
+      display:grid;
+      grid-template-columns:42px minmax(0,1fr) auto;
+      align-items:center;
+      gap:10px;
+      padding:11px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:#fff;
+      cursor:pointer;
+    }
+
+    .dashboard-row:active {
+      background:var(--foam);
+      transform:scale(.995);
+    }
+
+    .dashboard-rank {
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:10px;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .dashboard-row-title {
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .dashboard-row-meta {
+      margin-top:3px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.4;
+    }
+
+    .dashboard-row-value {
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    .dashboard-row-value b {
+      display:block;
+      color:var(--teal-deep);
+      font-size:15px;
+    }
+
+    .dashboard-row-value span {
+      display:block;
+      color:var(--muted);
+      font-size:9px;
+      text-transform:uppercase;
+    }
+
+    .dashboard-detail-mask {
+      position:fixed;
+      inset:0;
+      z-index:175;
+      display:none;
+      align-items:flex-end;
+      background:rgba(30,37,35,.54);
+      backdrop-filter:blur(2px);
+    }
+
+    .dashboard-detail-mask.open {
+      display:flex;
+      animation:modalBackdropIn .18s ease-out;
+    }
+
+    .dashboard-detail-sheet {
+      width:100%;
+      max-height:88vh;
+      overflow:auto;
+      padding:19px 18px calc(24px + env(safe-area-inset-bottom));
+      border-radius:19px 19px 0 0;
+      background:#fff;
+      box-shadow:0 -20px 50px rgba(0,0,0,.18);
+      animation:modalSheetIn .25s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .dashboard-detail-top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .dashboard-detail-title {
+      color:var(--teal-deep);
+      font-size:17px;
+      font-weight:800;
+    }
+
+    .dashboard-detail-copy {
+      margin-top:3px;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .dashboard-detail-stats {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin:12px 0;
+    }
+
+    .dashboard-detail-stat {
+      padding:10px;
+      border-radius:10px;
+      background:var(--foam);
+      text-align:center;
+    }
+
+    .dashboard-detail-stat b {
+      display:block;
+      color:var(--teal-deep);
+      font-size:17px;
+    }
+
+    .dashboard-detail-stat span {
+      display:block;
+      color:var(--muted);
+      font-size:9px;
+      text-transform:uppercase;
+    }
+
+    .dashboard-detail-line {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--border);
+      font-size:12px;
+    }
+
+    .dashboard-detail-line:last-child {
+      border-bottom:0;
+    }
+
+    .dashboard-detail-line span {
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .queue-source {
+      display:inline-flex;
+      align-items:center;
+      min-height:20px;
+      margin-left:5px;
+      padding:2px 7px;
+      border-radius:10px;
+      background:#EEF2FF;
+      color:#4338CA;
+      font-size:9px;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+
+    .queue-reviewed {
+      display:inline-flex;
+      align-items:center;
+      min-height:20px;
+      margin-left:4px;
+      padding:2px 7px;
+      border-radius:10px;
+      background:#DCFCE7;
+      color:#166534;
+      font-size:9px;
+      font-weight:800;
+    }
+
+    .queue-actions.three {
+      grid-template-columns:repeat(3,1fr);
+    }
+
+    .queue-action.accept {
+      background:var(--teal-deep);
+      color:#fff;
+      border-color:var(--teal-deep);
+    }
+
+    .queue-action.reject {
+      color:var(--error);
+      border-color:#FECACA;
+      background:#FFF7F7;
+    }
+
+    .center-nav {
+      cursor:pointer;
+    }
+
+    .center-nav .fab {
+      margin:-23px auto 0;
+    }
+
+    .fab-label {
+      margin-top:2px;
+      font-size:10px;
+      font-weight:700;
+    }
+
+    @media (min-width:720px) {
+      .dashboard-filter-grid {
+        grid-template-columns:repeat(4,minmax(0,1fr));
+      }
+
+      .dashboard-kpis {
+        grid-template-columns:repeat(4,minmax(0,1fr));
+      }
+
+      .dashboard-chart-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .dashboard-chart-card.wide {
+        grid-column:1 / -1;
+      }
+
+      .dashboard-detail-sheet {
+        width:620px;
+        margin:0 auto;
+      }
+    }
+
+    @media (max-width:390px) {
+      .dashboard-section-head {
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .dashboard-search {
+        max-width:none;
+      }
+
+      .dashboard-row {
+        grid-template-columns:34px minmax(0,1fr);
+      }
+
+      .dashboard-row-value {
+        grid-column:2;
+        text-align:left;
+      }
+
+      .dashboard-row-value b,
+      .dashboard-row-value span {
+        display:inline;
+      }
+
+      .dashboard-row-value span {
+        margin-left:5px;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
@@ -1560,8 +1985,8 @@
     <section class="card">
       <div class="queue-head">
         <div>
-          <h2 style="margin-bottom:0">Waiting Queue <span class="badge" id="queue-count" style="display:none"></span></h2>
-          <div class="queue-subtitle">Tap any party to review and accept them. Reception may serve entries out of sequence when required.</div>
+          <h2 style="margin-bottom:0">Pending Queue <span class="badge" id="queue-count" style="display:none"></span></h2>
+          <div class="queue-subtitle">Every registration enters this queue. Review, accept or reject any party; reception may serve entries out of sequence.</div>
         </div>
         <button class="btn small secondary" onclick="loadReceptionQueue(true)">Refresh</button>
       </div>
@@ -1574,7 +1999,7 @@
       <div class="queue-review-top">
         <div>
           <h2 id="queue-review-title" style="margin-bottom:2px">Review registration</h2>
-          <div class="queue-subtitle">Edit the customer’s submitted details, then accept or remove the entry. The remaining queue stays visible above.</div>
+          <div class="queue-subtitle">Edit the submitted details, save the review, then accept or reject the entry. The remaining queue stays visible above.</div>
         </div>
         <button class="icon-delete" onclick="closeQueueReview()" aria-label="Close">×</button>
       </div>
@@ -1621,8 +2046,8 @@
         </div>
 
         <div class="full">
-          <label>Removal reason</label>
-          <select id="q-remove-reason">
+          <label>Rejection reason</label>
+          <select id="q-reject-reason">
             <option value="No-show">No-show</option>
             <option value="Duplicate registration">Duplicate registration</option>
             <option value="Customer left">Customer left</option>
@@ -1635,14 +2060,15 @@
       <div class="queue-match-box" id="queue-match-box"></div>
 
       <div class="queue-review-actions">
-        <button class="btn danger-outline" onclick="removeSelectedQueue()">Remove / No-show</button>
+        <button class="btn secondary" onclick="saveQueueReview()">Save Review</button>
+        <button class="btn danger-outline" onclick="rejectSelectedQueue()">Reject</button>
         <button class="btn" onclick="reviewAndAcceptQueue()">Accept Party</button>
         <button class="btn secondary full" onclick="closeQueueReview()">Close without changes</button>
       </div>
     </section>
 
     <section class="card">
-      <h2>Manual Party Registration <span class="optional">(backup)</span></h2>
+      <h2>Reception Registration <span class="optional">(adds to queue)</span></h2>
 
       <label>Company / Firm name <span class="req">*</span></label>
       <input id="p-name" autocomplete="off">
@@ -1675,7 +2101,7 @@
       <label>Notes <span class="optional">(optional)</span></label>
       <textarea id="p-notes"></textarea>
 
-      <button class="btn" id="p-save" onclick="saveParty()" disabled>Register Party</button>
+      <button class="btn" id="p-save" onclick="saveParty()" disabled>Add to Queue</button>
       <div class="button-reason" id="p-save-reason">Enter the required party details</div>
     </section>
 
@@ -1761,6 +2187,177 @@
     </section>
   </main>
 
+  <!-- DASHBOARD -->
+  <main class="page" id="pg-dashboard">
+    <section class="card">
+      <div class="dashboard-title-row">
+        <div>
+          <h2>Exhibition Dashboard</h2>
+          <div class="dashboard-last-updated" id="dashboard-last-updated">Not loaded yet</div>
+        </div>
+        <button class="btn small secondary" onclick="loadDashboard(true)">Refresh</button>
+      </div>
+
+      <div class="dashboard-filter-grid">
+        <div>
+          <label>Date from</label>
+          <input id="d-date-from" type="date">
+        </div>
+        <div>
+          <label>Date to</label>
+          <input id="d-date-to" type="date">
+        </div>
+        <div>
+          <label>State</label>
+          <input id="d-state" list="d-state-list" placeholder="Search state">
+          <datalist id="d-state-list"></datalist>
+        </div>
+        <div>
+          <label>City</label>
+          <input id="d-city" list="d-city-list" placeholder="Search city">
+          <datalist id="d-city-list"></datalist>
+        </div>
+        <div>
+          <label>Agent</label>
+          <input id="d-agent" list="d-agent-list" placeholder="Search agent">
+          <datalist id="d-agent-list"></datalist>
+        </div>
+        <div>
+          <label>Salesperson</label>
+          <input id="d-salesperson" list="d-salesperson-list" placeholder="Search salesperson">
+          <datalist id="d-salesperson-list"></datalist>
+        </div>
+        <div>
+          <label>Party</label>
+          <input id="d-party" list="d-party-list" placeholder="Search party">
+          <datalist id="d-party-list"></datalist>
+        </div>
+        <div>
+          <label>Category</label>
+          <input id="d-category" list="d-category-list" placeholder="Search category">
+          <datalist id="d-category-list"></datalist>
+        </div>
+        <div>
+          <label>Fabric</label>
+          <input id="d-fabric" list="d-fabric-list" placeholder="Search fabric">
+          <datalist id="d-fabric-list"></datalist>
+        </div>
+        <div>
+          <label>Style</label>
+          <input id="d-style" list="d-style-list" placeholder="Search style">
+          <datalist id="d-style-list"></datalist>
+        </div>
+      </div>
+
+      <div class="dashboard-filter-actions">
+        <button class="btn secondary" onclick="clearDashboardFilters()">Clear filters</button>
+        <button class="btn" onclick="loadDashboard(true)">Apply filters</button>
+      </div>
+    </section>
+
+    <div class="dashboard-kpis">
+      <div class="dashboard-kpi primary">
+        <span>Total customers</span>
+        <b id="dk-total-customers">0</b>
+        <small>Accepted / registered parties matching the filters</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Customers with orders</span>
+        <b id="dk-order-customers">0</b>
+        <small>Unique parties with active order lines</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Total pieces</span>
+        <b id="dk-total-pieces">0</b>
+        <small>Sum of active ordered quantity</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Average pcs / customer</span>
+        <b id="dk-average-pieces">0</b>
+        <small>Calculated using customers with orders</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Total orders</span>
+        <b id="dk-total-orders">0</b>
+        <small>Orders represented by the filters</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Unique designs</span>
+        <b id="dk-unique-designs">0</b>
+        <small>Distinct design numbers ordered</small>
+      </div>
+      <div class="dashboard-kpi">
+        <span>Pending queue</span>
+        <b id="dk-pending-queue">0</b>
+        <small>Customers currently waiting at reception</small>
+      </div>
+    </div>
+
+    <div class="dashboard-chart-grid">
+      <section class="dashboard-chart-card">
+        <div class="dashboard-section-head">
+          <div>
+            <h3>State Distribution</h3>
+            <div class="dashboard-chart-subtitle">Switch between customer count and ordered pieces.</div>
+          </div>
+          <select id="dashboard-state-mode" onchange="renderDashboardStateChart()" style="width:auto;height:36px;font-size:12px">
+            <option value="customers">Customers</option>
+            <option value="pieces">Pieces</option>
+          </select>
+        </div>
+        <div class="dashboard-chart-wrap"><canvas id="dashboard-state-chart"></canvas></div>
+      </section>
+
+      <section class="dashboard-chart-card">
+        <h3>Category Mix</h3>
+        <div class="dashboard-chart-subtitle">Share of ordered pieces by category.</div>
+        <div class="dashboard-chart-wrap"><canvas id="dashboard-category-chart"></canvas></div>
+      </section>
+
+      <section class="dashboard-chart-card wide">
+        <h3>Top Customers</h3>
+        <div class="dashboard-chart-subtitle">Best parties ranked by total pieces ordered.</div>
+        <div class="dashboard-chart-wrap"><canvas id="dashboard-customer-chart"></canvas></div>
+      </section>
+
+      <section class="dashboard-chart-card wide">
+        <h3>Top Designs</h3>
+        <div class="dashboard-chart-subtitle">Best designs ranked by total ordered pieces.</div>
+        <div class="dashboard-chart-wrap"><canvas id="dashboard-design-chart"></canvas></div>
+      </section>
+
+      <section class="dashboard-chart-card wide">
+        <h3>Salesperson Contribution</h3>
+        <div class="dashboard-chart-subtitle">Pieces linked to each salesperson’s design lines.</div>
+        <div class="dashboard-chart-wrap"><canvas id="dashboard-salesperson-chart"></canvas></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Best Customers</h2>
+          <div class="dashboard-chart-subtitle">Tap a party to view the designs ordered.</div>
+        </div>
+        <input class="dashboard-search" id="dashboard-customer-search"
+          placeholder="Search customer…" oninput="renderDashboardCustomers()">
+      </div>
+      <div class="dashboard-list" id="dashboard-customers-list"></div>
+    </section>
+
+    <section class="card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Best Designs</h2>
+          <div class="dashboard-chart-subtitle">Tap a design to view customer and state spread.</div>
+        </div>
+        <input class="dashboard-search" id="dashboard-design-search"
+          placeholder="Search design, fabric…" oninput="renderDashboardDesigns()">
+      </div>
+      <div class="dashboard-list" id="dashboard-designs-list"></div>
+    </section>
+  </main>
+
   <!-- ORDERS -->
   <main class="page" id="pg-orders">
     <button class="btn secondary" onclick="loadOrders(true)" style="margin-top:0">↻ Refresh Orders</button>
@@ -1835,16 +2432,17 @@
       Reception
     </button>
 
-    <button class="nav-item" id="nav-sales" onclick="go('sales')">
-      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      Sales
+    <button class="nav-item" id="nav-dashboard" onclick="go('dashboard')">
+      <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19V2"/></svg>
+      Dashboard
     </button>
 
-    <div class="nav-item">
-      <button class="fab" onclick="fabScan()" aria-label="Scan product">
+    <button class="nav-item center-nav" id="nav-sales" onclick="go('sales')" aria-label="Open Sales">
+      <span class="fab">
         <svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg>
-      </button>
-    </div>
+      </span>
+      <span class="fab-label">Sales</span>
+    </button>
 
     <button class="nav-item" id="nav-orders" onclick="go('orders')">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
@@ -1857,6 +2455,20 @@
       Map
     </button>
   </nav>
+
+
+  <div class="dashboard-detail-mask" id="dashboard-detail-mask" onclick="dashboardDetailBackdrop(event)">
+    <div class="dashboard-detail-sheet">
+      <div class="dashboard-detail-top">
+        <div>
+          <div class="dashboard-detail-title" id="dashboard-detail-title">Details</div>
+          <div class="dashboard-detail-copy" id="dashboard-detail-copy"></div>
+        </div>
+        <button class="icon-delete" onclick="closeDashboardDetail()" aria-label="Close">×</button>
+      </div>
+      <div id="dashboard-detail-body"></div>
+    </div>
+  </div>
 
   <div class="sheet-mask" id="busy-mask">
     <div class="sheet">
@@ -1983,9 +2595,14 @@
   let mappingSaving = false;
   let orderSaving = false;
   let pendingSavePayload = null;
-  let receptionQueue = { waiting:[], recent:[] };
+  let receptionQueue = { pending:[], waiting:[], recent:[] };
   let selectedQueueEntry = null;
   let selectedQueueMatches = [];
+  let dashboardData = null;
+  let dashboardCharts = {};
+  let dashboardLoading = false;
+  let dashboardReloadPending = false;
+  let dashboardFilterTimer = null;
   let staffStarted = false;
   let queueRefreshTimer = null;
   let lightSyncTimer = null;
@@ -2421,24 +3038,31 @@
      -------------------------------------------------------------------------- */
   function go(name) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    el('pg-' + name).classList.add('active');
+    const page = el('pg-' + name);
+    if (!page) return;
+    page.classList.add('active');
 
-    ['reception','sales','orders','map'].forEach(key => {
+    ['reception','dashboard','sales','orders','map'].forEach(key => {
       const node = el('nav-' + key);
       if (node) node.classList.toggle('active', key === name);
     });
 
+    if (name === 'dashboard') loadDashboard(false);
     if (name === 'orders') loadOrders(false);
-    if (name === 'map') { renderMappingBatch(); renderRecentMappings(); }
+    if (name === 'map') {
+      renderMappingBatch();
+      renderRecentMappings();
+    }
+
     if (name !== 'sales' && scanning) stopScanner();
     if (name !== 'map' && mapScanning) stopMapScanner();
     closePartyResults();
+    closeAllSearchableSelects(true);
     window.scrollTo({ top:0, behavior:'auto' });
   }
 
   function fabScan() {
     go('sales');
-    if (!scanning) toggleScanner();
   }
 
 
@@ -2927,7 +3551,8 @@
   }
 
   function queueEntryById(queueId) {
-    return (receptionQueue.waiting || []).find(item => item.queueId === queueId) || null;
+    const pending = receptionQueue.pending || receptionQueue.waiting || [];
+    return pending.find(item => item.queueId === queueId) || null;
   }
 
   function queueLocation(entry) {
@@ -2939,14 +3564,21 @@
   function loadReceptionQueue(showToast) {
     if (!staffStarted && !getStoredStaffPin()) return;
 
-    if (!receptionQueue.waiting.length) {
+    const currentPending = receptionQueue.pending || receptionQueue.waiting || [];
+    if (!currentPending.length) {
       renderSkeleton('queue-list', 3);
     }
 
     google.script.run
       .withSuccessHandler(data => {
-        const previouslySelectedId = selectedQueueEntry && selectedQueueEntry.queueId;
-        receptionQueue = data || { waiting:[], recent:[] };
+        const previouslySelectedId =
+          selectedQueueEntry && selectedQueueEntry.queueId;
+
+        receptionQueue = data || { pending:[], waiting:[], recent:[] };
+        if (!receptionQueue.pending) {
+          receptionQueue.pending = receptionQueue.waiting || [];
+        }
+
         renderReceptionQueue();
 
         if (previouslySelectedId && !queueEntryById(previouslySelectedId)) {
@@ -2957,7 +3589,11 @@
       })
       .withFailureHandler(error => {
         if (showToast) {
-          showFailureModal('Queue could not refresh', error.message, () => loadReceptionQueue(true));
+          showFailureModal(
+            'Queue could not refresh',
+            error.message,
+            () => loadReceptionQueue(true)
+          );
         }
       })
       .getReceptionQueue();
@@ -2967,23 +3603,28 @@
     const list = el('queue-list');
     const recent = el('queue-recent');
     const badge = el('queue-count');
-    const waiting = receptionQueue.waiting || [];
+    const pending = receptionQueue.pending || receptionQueue.waiting || [];
 
-    badge.style.display = waiting.length ? 'inline-flex' : 'none';
-    badge.textContent = waiting.length;
+    badge.style.display = pending.length ? 'inline-flex' : 'none';
+    badge.textContent = pending.length;
 
-    if (!waiting.length) {
+    if (!pending.length) {
       list.innerHTML = emptyState(
         '✓',
-        'No parties waiting',
-        'New customer registrations will appear here automatically.'
+        'No parties pending',
+        'New customer and reception registrations will appear here automatically.'
       );
     } else {
-      list.innerHTML = waiting.map(entry =>
+      list.innerHTML = pending.map(entry =>
         '<div class="queue-row">' +
           '<div class="queue-position">' + escapeHtml(entry.position) + '</div>' +
           '<div>' +
-            '<div class="queue-number">' + escapeHtml(entry.queueNumber) + '</div>' +
+            '<div class="queue-number">' + escapeHtml(entry.queueNumber) +
+              '<span class="queue-source">' + escapeHtml(entry.source || 'Customer') + '</span>' +
+              (entry.reviewedAt
+                ? '<span class="queue-reviewed">Reviewed</span>'
+                : '') +
+            '</div>' +
             '<div class="queue-party">' + escapeHtml(entry.partyName) + '</div>' +
             '<div class="queue-meta">' +
               escapeHtml(entry.contact + ' · ' + queueLocation(entry)) +
@@ -2992,11 +3633,13 @@
               escapeHtml(entry.waitingMinutes + ' min waiting') +
             '</div>' +
           '</div>' +
-          '<div class="queue-actions">' +
+          '<div class="queue-actions three">' +
             '<button class="queue-action" onclick="openQueueReview(' +
-              jsString(entry.queueId) + ')">Review / Accept</button>' +
-            '<button class="queue-action remove" onclick="quickRemoveQueue(' +
-              jsString(entry.queueId) + ')">Remove</button>' +
+              jsString(entry.queueId) + ')">Review</button>' +
+            '<button class="queue-action accept" onclick="quickAcceptQueue(' +
+              jsString(entry.queueId) + ')">Accept</button>' +
+            '<button class="queue-action reject" onclick="quickRejectQueue(' +
+              jsString(entry.queueId) + ')">Reject</button>' +
           '</div>' +
         '</div>'
       ).join('');
@@ -3004,16 +3647,25 @@
 
     const recentItems = receptionQueue.recent || [];
     if (!recentItems.length) {
-      recent.innerHTML = '<div class="queue-subtitle">No queue entries handled yet.</div>';
+      recent.innerHTML =
+        '<div class="queue-subtitle">No queue entries handled yet.</div>';
     } else {
-      recent.innerHTML = recentItems.slice(0, 6).map(entry =>
+      recent.innerHTML = recentItems.slice(0, 8).map(entry =>
         '<div class="queue-recent-row">' +
           '<div>' +
             '<div class="queue-party">' +
               escapeHtml(entry.queueNumber + ' · ' + entry.partyName) +
+              '<span class="queue-source">' +
+                escapeHtml(entry.source || 'Customer') +
+              '</span>' +
             '</div>' +
             '<div class="queue-meta">' +
-              escapeHtml([entry.city, entry.state, entry.handledAt].filter(Boolean).join(' · ')) +
+              escapeHtml([
+                entry.city,
+                entry.state,
+                entry.rejectionReason,
+                entry.handledAt
+              ].filter(Boolean).join(' · ')) +
             '</div>' +
           '</div>' +
           '<span class="queue-status ' + entry.status.toLowerCase() + '">' +
@@ -3027,7 +3679,7 @@
   function openQueueReview(queueId) {
     const entry = queueEntryById(queueId);
     if (!entry) {
-      toast('This queue entry is no longer waiting', 'warning');
+      toast('This queue entry is no longer pending', 'warning');
       loadReceptionQueue(false);
       return;
     }
@@ -3043,7 +3695,7 @@
     el('q-city').value = entry.city || '';
     el('q-gstin').value = entry.gstin || '';
     el('q-notes').value = entry.notes || '';
-    el('q-remove-reason').value = 'No-show';
+    el('q-reject-reason').value = 'No-show';
 
     setSearchableSelectValue('q-agent', entry.agent || '', false);
     setSearchableSelectValue('q-state', entry.state || '', false);
@@ -3051,6 +3703,7 @@
     el('queue-match-box').classList.remove('open');
     el('queue-match-box').innerHTML = '';
     el('queue-review-card').classList.add('open');
+
     setTimeout(() => el('queue-review-card').scrollIntoView({
       behavior:'smooth',
       block:'start'
@@ -3083,6 +3736,53 @@
     if (!data.city) throw new Error('City is required');
 
     return data;
+  }
+
+
+  function saveQueueReview() {
+    if (!selectedQueueEntry) return;
+
+    let data;
+    try {
+      data = queueReviewData();
+    } catch (error) {
+      showFailureModal('Complete the party details', error.message);
+      return;
+    }
+
+    showBusy('Saving Review…', 'Updating the pending registration without accepting it.');
+
+    google.script.run
+      .withSuccessHandler(result => {
+        hideBusy();
+        toast('✓ ' + result.queueNumber + ' review saved', 'success');
+        loadReceptionQueue(false);
+      })
+      .withFailureHandler(error => {
+        hideBusy();
+        showFailureModal(
+          'Review could not be saved',
+          error.message,
+          saveQueueReview
+        );
+      })
+      .reviewQueueEntry({
+        queueId:selectedQueueEntry.queueId,
+        data,
+        reviewedBy:queueStaffIdentity()
+      });
+  }
+
+  async function quickAcceptQueue(queueId) {
+    openQueueReview(queueId);
+    if (!selectedQueueEntry) return;
+    await reviewAndAcceptQueue();
+  }
+
+  async function quickRejectQueue(queueId) {
+    openQueueReview(queueId);
+    if (!selectedQueueEntry) return;
+    await rejectSelectedQueue();
   }
 
   async function reviewAndAcceptQueue() {
@@ -3127,7 +3827,7 @@
     const confirmed = await openModal({
       type:'info',
       title:'Accept ' + selectedQueueEntry.queueNumber + '?',
-      message:'Create ' + data.name + ' as a new party and remove them from the waiting queue?',
+      message:'Create ' + data.name + ' as a new party and accept them from the pending queue?',
       confirmText:'Accept Party',
       cancelText:'Cancel'
     });
@@ -3237,48 +3937,50 @@
   }
 
   async function quickRemoveQueue(queueId) {
-    openQueueReview(queueId);
-    if (!selectedQueueEntry) return;
-    await removeSelectedQueue();
+    return quickRejectQueue(queueId);
   }
 
   async function removeSelectedQueue() {
+    return rejectSelectedQueue();
+  }
+
+  async function rejectSelectedQueue() {
     if (!selectedQueueEntry) return;
 
-    const reason = el('q-remove-reason').value || 'No-show';
+    const reason = el('q-reject-reason').value || 'Invalid details';
     const confirmed = await openModal({
       type:'danger',
-      title:'Remove ' + selectedQueueEntry.queueNumber + '?',
-      message:'Remove ' + selectedQueueEntry.partyName +
-        ' from the waiting queue?\nReason: ' + reason,
-      confirmText:'Remove',
+      title:'Reject ' + selectedQueueEntry.queueNumber + '?',
+      message:'Reject ' + selectedQueueEntry.partyName +
+        ' from the pending queue?\nReason: ' + reason,
+      confirmText:'Reject',
       cancelText:'Cancel'
     });
 
     if (!confirmed) return;
 
     const queueId = selectedQueueEntry.queueId;
-    showBusy('Removing Entry…', 'Updating the reception queue.');
+    showBusy('Rejecting Entry…', 'Updating the reception queue.');
 
     google.script.run
       .withSuccessHandler(result => {
         hideBusy();
         closeQueueReview();
-        toast(result.partyName + ' removed from queue', 'success');
+        toast(result.partyName + ' rejected', 'success');
         loadReceptionQueue(false);
       })
       .withFailureHandler(error => {
         hideBusy();
         showFailureModal(
-          'Queue entry could not be removed',
+          'Queue entry could not be rejected',
           error.message,
-          removeSelectedQueue
+          rejectSelectedQueue
         );
       })
-      .removeQueueEntry({
+      .rejectQueueEntry({
         queueId,
         reason,
-        removedBy:queueStaffIdentity()
+        rejectedBy:queueStaffIdentity()
       });
   }
 
@@ -3292,7 +3994,7 @@
     const payload = {
       name:value('p-name'),
       contact:value('p-contact'),
-      phone:'91' + value('p-phone'),
+      phone:value('p-phone'),
       agent:el('p-agent').value || '',
       city:value('p-city'),
       state:value('p-state'),
@@ -3300,45 +4002,67 @@
       notes:value('p-notes')
     };
 
-    const phone = value('p-phone');
-    if (!payload.name || !payload.contact || !/^\d{10}$/.test(phone) || !payload.city) {
+    if (
+      !payload.name ||
+      !payload.contact ||
+      !/^\d{10}$/.test(payload.phone) ||
+      !payload.city
+    ) {
       updateRegisterActionState();
       return toast('Complete the required party details', 'warning');
     }
-    if (payload.agent === '__add__') return toast('Finish adding the agent first', 'warning');
+
+    if (payload.agent === '__add__') {
+      return toast('Finish adding the agent first', 'warning');
+    }
 
     const confirmed = await openModal({
       type:'info',
-      title:'Register this party?',
-      message:'Add “' + payload.name + '” to the shared party list for all counters?',
-      confirmText:'Register party',
-      cancelText:'Cancel',
+      title:'Add this party to the queue?',
+      message:'Add “' + payload.name +
+        '” to the pending reception queue? No Party record is created until reception accepts them.',
+      confirmText:'Add to Queue',
+      cancelText:'Review',
       dismissOnBackdrop:false
     });
+
     if (!confirmed) return;
 
     partySaving = true;
     updateRegisterActionState();
-    el('p-save').textContent = 'Saving…';
+    el('p-save').textContent = 'Adding…';
 
     google.script.run
       .withSuccessHandler(result => {
         partySaving = false;
-        el('p-save').textContent = 'Register Party';
-        ['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(id => { el(id).value = ''; });
+        el('p-save').textContent = 'Add to Queue';
+
+        ['p-name','p-contact','p-phone','p-city','p-gstin','p-notes']
+          .forEach(id => { el(id).value = ''; });
+
         setSearchableSelectValue('p-agent', '', false);
         setSearchableSelectValue('p-state', '', false);
         updateRegisterActionState();
-        toast('✓ ' + result.name + ' registered', 'success');
-        lightSync();
+
+        toast(
+          result.existed
+            ? result.queueNumber + ' was already pending'
+            : '✓ ' + result.queueNumber + ' added to queue',
+          result.existed ? 'warning' : 'success'
+        );
+
+        loadReceptionQueue(false);
       })
       .withFailureHandler(error => {
         partySaving = false;
-        el('p-save').textContent = 'Register Party';
+        el('p-save').textContent = 'Add to Queue';
         updateRegisterActionState();
-        showFailureModal('Party was not registered', error.message + '\nYour form is still filled in.');
+        showFailureModal(
+          'Party was not added to the queue',
+          error.message + '\nYour form is still filled in.'
+        );
       })
-      .addParty(payload);
+      .addReceptionQueueEntry(payload);
   }
 
   function renderRecentParties() {
@@ -4297,6 +5021,469 @@
     pickParty(partyId);
   }
 
+
+  /* --------------------------------------------------------------------------
+     DASHBOARD
+     -------------------------------------------------------------------------- */
+  const DASHBOARD_COLORS = [
+    '#225E63','#FF9700','#4F8F95','#8B5CF6','#D97706',
+    '#2563EB','#16A34A','#DB2777','#64748B','#A16207'
+  ];
+
+  function dashboardFilters() {
+    return {
+      dateFrom:value('d-date-from'),
+      dateTo:value('d-date-to'),
+      state:value('d-state'),
+      city:value('d-city'),
+      agent:value('d-agent'),
+      salesperson:value('d-salesperson'),
+      party:value('d-party'),
+      category:value('d-category'),
+      fabric:value('d-fabric'),
+      style:value('d-style')
+    };
+  }
+
+  function scheduleDashboardLoad() {
+    if (!el('pg-dashboard').classList.contains('active')) return;
+    clearTimeout(dashboardFilterTimer);
+    dashboardFilterTimer = setTimeout(() => loadDashboard(false), 450);
+  }
+
+  function clearDashboardFilters() {
+    [
+      'd-date-from','d-date-to','d-state','d-city','d-agent',
+      'd-salesperson','d-party','d-category','d-fabric','d-style'
+    ].forEach(id => { el(id).value = ''; });
+
+    loadDashboard(true);
+  }
+
+  function setDashboardLoading() {
+    [
+      'dk-total-customers','dk-order-customers','dk-total-pieces',
+      'dk-average-pieces','dk-total-orders','dk-unique-designs',
+      'dk-pending-queue'
+    ].forEach(id => { el(id).textContent = '…'; });
+
+    if (!dashboardData) {
+      el('dashboard-customers-list').innerHTML =
+        '<div class="skeleton-list">' +
+          '<div class="skeleton-row"></div>'.repeat(4) +
+        '</div>';
+      el('dashboard-designs-list').innerHTML =
+        '<div class="skeleton-list">' +
+          '<div class="skeleton-row"></div>'.repeat(4) +
+        '</div>';
+    }
+  }
+
+  function loadDashboard(showToast) {
+    if (dashboardLoading) {
+      dashboardReloadPending = true;
+      return;
+    }
+
+    dashboardLoading = true;
+    dashboardReloadPending = false;
+    setDashboardLoading();
+
+    google.script.run
+      .withSuccessHandler(data => {
+        dashboardLoading = false;
+        dashboardData = data || null;
+        renderDashboard();
+        if (showToast) toast('Dashboard refreshed', 'success');
+
+        if (dashboardReloadPending) {
+          dashboardReloadPending = false;
+          setTimeout(() => loadDashboard(false), 80);
+        }
+      })
+      .withFailureHandler(error => {
+        dashboardLoading = false;
+
+        if (dashboardReloadPending) {
+          dashboardReloadPending = false;
+          setTimeout(() => loadDashboard(false), 80);
+          return;
+        }
+
+        showFailureModal(
+          'Dashboard could not be loaded',
+          error.message,
+          () => loadDashboard(true)
+        );
+      })
+      .getDashboardData(dashboardFilters());
+  }
+
+  function formatDashboardNumber(value) {
+    return new Intl.NumberFormat('en-IN', {
+      maximumFractionDigits:0
+    }).format(Number(value) || 0);
+  }
+
+  function populateDashboardDatalist(id, values) {
+    const list = el(id);
+    if (!list) return;
+    list.innerHTML = (values || [])
+      .map(item => '<option value="' + escapeHtml(item) + '"></option>')
+      .join('');
+  }
+
+  function populateDashboardOptions(options) {
+    options = options || {};
+    populateDashboardDatalist('d-state-list', options.states);
+    populateDashboardDatalist('d-city-list', options.cities);
+    populateDashboardDatalist('d-agent-list', options.agents);
+    populateDashboardDatalist('d-salesperson-list', options.salespersons);
+    populateDashboardDatalist('d-party-list', options.parties);
+    populateDashboardDatalist('d-category-list', options.categories);
+    populateDashboardDatalist('d-fabric-list', options.fabrics);
+    populateDashboardDatalist('d-style-list', options.styles);
+  }
+
+  function renderDashboard() {
+    if (!dashboardData) return;
+
+    const summary = dashboardData.summary || {};
+    el('dashboard-last-updated').textContent =
+      'Last updated ' + (dashboardData.generatedAt || 'just now');
+
+    el('dk-total-customers').textContent =
+      formatDashboardNumber(summary.totalCustomers);
+    el('dk-order-customers').textContent =
+      formatDashboardNumber(summary.customersWithOrders);
+    el('dk-total-pieces').textContent =
+      formatDashboardNumber(summary.totalPieces);
+    el('dk-average-pieces').textContent =
+      formatDashboardNumber(summary.averagePiecesPerCustomer);
+    el('dk-total-orders').textContent =
+      formatDashboardNumber(summary.totalOrders);
+    el('dk-unique-designs').textContent =
+      formatDashboardNumber(summary.uniqueDesigns);
+    el('dk-pending-queue').textContent =
+      formatDashboardNumber(summary.pendingQueue);
+
+    populateDashboardOptions(dashboardData.options || {});
+    renderDashboardStateChart();
+    renderDashboardChart(
+      'category',
+      'dashboard-category-chart',
+      'doughnut',
+      (dashboardData.charts || {}).categoryPieces || [],
+      'Pieces'
+    );
+    renderDashboardChart(
+      'customers',
+      'dashboard-customer-chart',
+      'bar',
+      (dashboardData.charts || {}).topCustomers || [],
+      'Pieces',
+      true
+    );
+    renderDashboardChart(
+      'designs',
+      'dashboard-design-chart',
+      'bar',
+      (dashboardData.charts || {}).topDesigns || [],
+      'Pieces',
+      true
+    );
+    renderDashboardChart(
+      'salespersons',
+      'dashboard-salesperson-chart',
+      'bar',
+      (dashboardData.charts || {}).salespersonPieces || [],
+      'Pieces',
+      true
+    );
+
+    renderDashboardCustomers();
+    renderDashboardDesigns();
+  }
+
+  function renderDashboardStateChart() {
+    if (!dashboardData) return;
+    const mode = el('dashboard-state-mode').value;
+    const charts = dashboardData.charts || {};
+    const rows = mode === 'pieces'
+      ? (charts.statePieces || [])
+      : (charts.stateCustomers || []);
+
+    renderDashboardChart(
+      'states',
+      'dashboard-state-chart',
+      'doughnut',
+      rows,
+      mode === 'pieces' ? 'Pieces' : 'Customers'
+    );
+  }
+
+  function renderDashboardChart(key, canvasId, type, rows, label, horizontal) {
+    if (dashboardCharts[key]) {
+      dashboardCharts[key].destroy();
+      dashboardCharts[key] = null;
+    }
+
+    const canvas = el(canvasId);
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    rows = rows || [];
+    const labels = rows.map(row => row.label);
+    const values = rows.map(row => Number(row.value) || 0);
+
+    dashboardCharts[key] = new Chart(canvas.getContext('2d'), {
+      type,
+      data:{
+        labels,
+        datasets:[{
+          label,
+          data:values,
+          backgroundColor:type === 'doughnut'
+            ? labels.map((_, index) =>
+                DASHBOARD_COLORS[index % DASHBOARD_COLORS.length])
+            : DASHBOARD_COLORS[0],
+          borderColor:type === 'doughnut' ? '#FFFFFF' : DASHBOARD_COLORS[0],
+          borderWidth:type === 'doughnut' ? 2 : 0,
+          borderRadius:type === 'bar' ? 7 : 0
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        indexAxis:horizontal ? 'y' : 'x',
+        animation:{ duration:450 },
+        plugins:{
+          legend:{
+            display:type === 'doughnut',
+            position:'bottom',
+            labels:{
+              boxWidth:10,
+              boxHeight:10,
+              usePointStyle:true,
+              pointStyle:'circle',
+              padding:12,
+              font:{ size:10 }
+            }
+          },
+          tooltip:{
+            callbacks:{
+              label:context =>
+                ' ' + context.dataset.label + ': ' +
+                formatDashboardNumber(context.raw)
+            }
+          }
+        },
+        scales:type === 'bar' ? {
+          x:{
+            beginAtZero:true,
+            grid:{ color:'#EEF1EF' },
+            ticks:{ precision:0, font:{ size:10 } }
+          },
+          y:{
+            grid:{ display:false },
+            ticks:{
+              autoSkip:false,
+              font:{ size:10 },
+              callback:function(value) {
+                const text = this.getLabelForValue(value);
+                return text.length > 22 ? text.slice(0, 21) + '…' : text;
+              }
+            }
+          }
+        } : undefined
+      }
+    });
+  }
+
+  function renderDashboardCustomers() {
+    const list = el('dashboard-customers-list');
+    if (!dashboardData) {
+      list.innerHTML = emptyState('⌛', 'Dashboard loading', 'Please wait.');
+      return;
+    }
+
+    const query = value('dashboard-customer-search').toLowerCase();
+    const rows = (dashboardData.topCustomers || [])
+      .filter(row => !query || [
+        row.partyName,row.city,row.state,row.agent
+      ].join(' ').toLowerCase().includes(query))
+      .slice(0, 30);
+
+    if (!rows.length) {
+      list.innerHTML = emptyState(
+        '⌕',
+        'No customers found',
+        'Change or clear the dashboard filters.'
+      );
+      return;
+    }
+
+    list.innerHTML = rows.map((row, index) =>
+      '<div class="dashboard-row" onclick="openDashboardCustomerDetail(' +
+        jsString(row.partyId) + ')">' +
+        '<div class="dashboard-rank">' + (index + 1) + '</div>' +
+        '<div>' +
+          '<div class="dashboard-row-title">' +
+            escapeHtml(row.partyName) +
+          '</div>' +
+          '<div class="dashboard-row-meta">' +
+            escapeHtml([
+              row.city,
+              row.state,
+              row.agent,
+              row.designs + ' designs',
+              (row.salespersons || []).join(', ')
+            ].filter(Boolean).join(' · ')) +
+          '</div>' +
+        '</div>' +
+        '<div class="dashboard-row-value">' +
+          '<b>' + formatDashboardNumber(row.pieces) + '</b>' +
+          '<span>pieces</span>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  function renderDashboardDesigns() {
+    const list = el('dashboard-designs-list');
+    if (!dashboardData) {
+      list.innerHTML = emptyState('⌛', 'Dashboard loading', 'Please wait.');
+      return;
+    }
+
+    const query = value('dashboard-design-search').toLowerCase();
+    const rows = (dashboardData.topDesigns || [])
+      .filter(row => !query || [
+        row.design,row.barcode,row.category,row.fabric,row.style
+      ].join(' ').toLowerCase().includes(query))
+      .slice(0, 30);
+
+    if (!rows.length) {
+      list.innerHTML = emptyState(
+        '⌕',
+        'No designs found',
+        'Change or clear the dashboard filters.'
+      );
+      return;
+    }
+
+    list.innerHTML = rows.map((row, index) =>
+      '<div class="dashboard-row" onclick="openDashboardDesignDetail(' +
+        jsString(row.design) + ')">' +
+        '<div class="dashboard-rank">' + (index + 1) + '</div>' +
+        '<div>' +
+          '<div class="dashboard-row-title">' +
+            escapeHtml(row.design) +
+          '</div>' +
+          '<div class="dashboard-row-meta">' +
+            escapeHtml([
+              row.category,
+              row.fabric,
+              row.style,
+              row.customers + ' customers',
+              row.states + ' states'
+            ].filter(Boolean).join(' · ')) +
+          '</div>' +
+        '</div>' +
+        '<div class="dashboard-row-value">' +
+          '<b>' + formatDashboardNumber(row.pieces) + '</b>' +
+          '<span>pieces</span>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  function openDashboardCustomerDetail(partyId) {
+    if (!dashboardData) return;
+    const row = (dashboardData.topCustomers || [])
+      .find(item => item.partyId === partyId);
+    if (!row) return;
+
+    el('dashboard-detail-title').textContent = row.partyName;
+    el('dashboard-detail-copy').textContent =
+      [row.city,row.state,row.agent].filter(Boolean).join(' · ');
+
+    el('dashboard-detail-body').innerHTML =
+      '<div class="dashboard-detail-stats">' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.pieces) +
+          '</b><span>Pieces</span></div>' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.designs) +
+          '</b><span>Designs</span></div>' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.orders) +
+          '</b><span>Orders</span></div>' +
+      '</div>' +
+      '<div class="section-label">Designs ordered</div>' +
+      (row.designDetails || []).map(item =>
+        '<div class="dashboard-detail-line">' +
+          '<div><b>' + escapeHtml(item.design) + '</b>' +
+            '<span>' + escapeHtml([
+              item.category,item.fabric,item.style
+            ].filter(Boolean).join(' · ')) + '</span></div>' +
+          '<b>' + formatDashboardNumber(item.pieces) + ' pcs</b>' +
+        '</div>'
+      ).join('') +
+      '<div class="callout" style="margin-top:12px"><b>Salespersons:</b> ' +
+        escapeHtml((row.salespersons || []).join(', ') || 'Not specified') +
+      '</div>';
+
+    el('dashboard-detail-mask').classList.add('open');
+  }
+
+  function openDashboardDesignDetail(designName) {
+    if (!dashboardData) return;
+    const row = (dashboardData.topDesigns || [])
+      .find(item => item.design === designName);
+    if (!row) return;
+
+    el('dashboard-detail-title').textContent = row.design;
+    el('dashboard-detail-copy').textContent =
+      [row.category,row.fabric,row.style].filter(Boolean).join(' · ');
+
+    el('dashboard-detail-body').innerHTML =
+      '<div class="dashboard-detail-stats">' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.pieces) +
+          '</b><span>Pieces</span></div>' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.customers) +
+          '</b><span>Customers</span></div>' +
+        '<div class="dashboard-detail-stat"><b>' +
+          formatDashboardNumber(row.states) +
+          '</b><span>States</span></div>' +
+      '</div>' +
+      '<div class="section-label">Customers ordering this design</div>' +
+      (row.customerDetails || []).map(item =>
+        '<div class="dashboard-detail-line">' +
+          '<div><b>' + escapeHtml(item.partyName) + '</b>' +
+            '<span>' + escapeHtml([
+              item.city,item.state
+            ].filter(Boolean).join(' · ')) + '</span></div>' +
+          '<b>' + formatDashboardNumber(item.pieces) + ' pcs</b>' +
+        '</div>'
+      ).join('') +
+      '<div class="callout" style="margin-top:12px"><b>Salespersons:</b> ' +
+        escapeHtml((row.salespersons || []).join(', ') || 'Not specified') +
+      '</div>';
+
+    el('dashboard-detail-mask').classList.add('open');
+  }
+
+  function closeDashboardDetail() {
+    el('dashboard-detail-mask').classList.remove('open');
+  }
+
+  function dashboardDetailBackdrop(event) {
+    if (event.target === el('dashboard-detail-mask')) closeDashboardDetail();
+  }
+
+
   /* --------------------------------------------------------------------------
      PRODUCTS / SYNC
      -------------------------------------------------------------------------- */
@@ -4422,7 +5609,7 @@
   function updateRegisterActionState() {
     const valid = !!value('p-name') && !!value('p-contact') && /^\d{10}$/.test(value('p-phone')) && !!value('p-city') && !partySaving;
     let reason = 'Enter company, contact person, 10-digit phone and city';
-    if (partySaving) reason = 'Party is being saved';
+    if (partySaving) reason = 'Party is being added to the queue';
     setActionState('p-save', 'p-save-reason', valid, reason);
   }
 
@@ -4541,6 +5728,14 @@
     el('s-sales').addEventListener('change', updateSalesActionStates);
     ['m-code','m-design','m-notes'].forEach(id => el(id).addEventListener('input', updateMapActionStates));
     ['m-category','m-fabric','m-style'].forEach(id => el(id).addEventListener('change', updateMapActionStates));
+
+    [
+      'd-date-from','d-date-to','d-state','d-city','d-agent',
+      'd-salesperson','d-party','d-category','d-fabric','d-style'
+    ].forEach(id => {
+      el(id).addEventListener('change', scheduleDashboardLoad);
+      el(id).addEventListener('input', scheduleDashboardLoad);
+    });
 
     const stateOptions = '<option value="">Select state</option>' +
       STATES.map(name => '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + '</option>').join('');
