@@ -756,7 +756,254 @@
         border-right:1px solid var(--border);
       }
     }
-  </style>
+  
+
+    /* Professional motion and feedback additions. */
+    .page.active {
+      display:block;
+      animation:page-enter .24s cubic-bezier(.2,.75,.25,1) both;
+    }
+
+    @keyframes page-enter {
+      from { opacity:0; transform:translateY(7px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    .btn, .qty-btn, .delete-btn, .link-btn, .nav-item, .fab, .modal-button {
+      transition:transform .12s ease, opacity .12s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn:not(:disabled):active,
+    .qty-btn:active,
+    .delete-btn:active,
+    .link-btn:active,
+    .nav-item:active,
+    .fab:active,
+    .modal-button:active {
+      transform:scale(.97);
+    }
+
+    .button-reason {
+      min-height:16px;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.35;
+      text-align:center;
+    }
+
+    .button-reason.error { color:var(--error); }
+
+    .empty-state {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      min-height:132px;
+      padding:24px 14px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .empty-state-icon {
+      width:42px;
+      height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:20px;
+    }
+
+    .empty-state-title {
+      color:var(--slate);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .empty-state-copy {
+      max-width:280px;
+      font-size:11px;
+      line-height:1.45;
+    }
+
+    .skeleton-stack { padding:3px 0; }
+    .skeleton-row {
+      display:flex;
+      gap:10px;
+      padding:12px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .skeleton-row:last-child { border-bottom:0; }
+    .skeleton-dot, .skeleton-line {
+      background:linear-gradient(90deg,#EDF0EF 25%,#F8F9F8 50%,#EDF0EF 75%);
+      background-size:200% 100%;
+      animation:skeleton-wave 1.25s infinite linear;
+    }
+    .skeleton-dot { width:34px; height:34px; border-radius:10px; flex:0 0 auto; }
+    .skeleton-copy { flex:1; padding-top:2px; }
+    .skeleton-line { height:9px; border-radius:6px; margin-bottom:8px; }
+    .skeleton-line.short { width:52%; }
+    @keyframes skeleton-wave { to { background-position:-200% 0; } }
+
+    .scan-flash {
+      position:fixed;
+      inset:0;
+      z-index:175;
+      pointer-events:none;
+      opacity:0;
+    }
+    .scan-flash.success { background:rgba(21,128,61,.18); animation:scan-flash .42s ease-out; }
+    .scan-flash.error { background:rgba(220,38,38,.22); animation:scan-flash .55s ease-out; }
+    @keyframes scan-flash {
+      0% { opacity:0; }
+      22% { opacity:1; }
+      100% { opacity:0; }
+    }
+
+    .app-modal-backdrop {
+      position:fixed;
+      inset:0;
+      z-index:200;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding:0;
+      background:rgba(24,28,27,.48);
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .2s ease, visibility .2s ease;
+    }
+    .app-modal-backdrop.open { opacity:1; visibility:visible; }
+
+    .app-modal-sheet {
+      width:100%;
+      max-width:580px;
+      padding:22px 20px calc(20px + env(safe-area-inset-bottom));
+      border-radius:20px 20px 0 0;
+      background:#fff;
+      transform:translateY(105%);
+      transition:transform .28s cubic-bezier(.2,.85,.25,1);
+      box-shadow:0 -18px 50px rgba(0,0,0,.16);
+    }
+    .app-modal-backdrop.open .app-modal-sheet { transform:translateY(0); }
+
+    .modal-icon {
+      width:52px;
+      height:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 12px;
+      border-radius:50%;
+      font-size:24px;
+      font-weight:800;
+      animation:modal-icon-in .42s cubic-bezier(.2,1.35,.35,1) both;
+    }
+    @keyframes modal-icon-in {
+      from { transform:scale(.55); opacity:0; }
+      to { transform:scale(1); opacity:1; }
+    }
+
+    .app-modal-sheet.success .modal-icon { background:#E7F7EC; color:#15803D; }
+    .app-modal-sheet.warning .modal-icon { background:#FFF3D9; color:#A16207; }
+    .app-modal-sheet.danger .modal-icon,
+    .app-modal-sheet.error .modal-icon { background:#FDEBEC; color:#C81E1E; }
+    .app-modal-sheet.info .modal-icon { background:var(--foam); color:var(--teal-deep); }
+
+    .modal-title { font-size:17px; font-weight:800; text-align:center; }
+    .modal-message {
+      margin:8px auto 0;
+      max-width:420px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      text-align:center;
+      white-space:pre-line;
+    }
+    .modal-actions {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:20px;
+    }
+    .modal-actions.single { grid-template-columns:1fr; }
+    .modal-button {
+      min-height:46px;
+      border:0;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .modal-button.cancel { background:#F1F3F2; color:var(--slate); }
+    .modal-button.confirm { background:var(--teal-deep); color:#fff; }
+    .app-modal-sheet.warning .modal-button.confirm { background:#A16207; }
+    .app-modal-sheet.danger .modal-button.confirm,
+    .app-modal-sheet.error .modal-button.confirm { background:#C81E1E; }
+
+    .pending-save-panel {
+      display:none;
+      margin-top:12px;
+      padding:13px;
+      border:1px solid #F3C56B;
+      border-radius:10px;
+      background:#FFF9EA;
+    }
+    .pending-save-panel.open { display:block; }
+    .pending-save-title { color:#8A5A09; font-size:12px; font-weight:800; }
+    .pending-save-copy { margin-top:4px; color:#765B29; font-size:11px; line-height:1.45; }
+    .pending-save-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+    .pending-save-actions .btn { height:40px; margin:0; font-size:12px; }
+    .btn.danger-outline { border:1px solid var(--error); background:#fff; color:var(--error); }
+
+    .batch-row {
+      margin-top:10px;
+      padding:13px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:#FCFDFC;
+    }
+    .batch-row-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .batch-row-title { color:var(--teal-deep); font-size:12px; font-weight:800; }
+    .batch-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+    .batch-grid .full { grid-column:1 / -1; }
+    .batch-grid label { margin-top:4px; }
+    .batch-grid input, .batch-grid select { height:40px; font-size:14px; }
+    .batch-grid textarea { min-height:58px; font-size:14px; }
+    .icon-delete {
+      width:38px;
+      height:38px;
+      border:0;
+      border-radius:9px;
+      background:#FDEBEC;
+      color:var(--error);
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .recent-map-row {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:11px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .recent-map-row:last-child { border-bottom:0; }
+    .recent-map-main { min-width:0; }
+    .recent-map-code { font-size:13px; font-weight:800; }
+    .recent-map-meta { margin-top:3px; color:var(--muted); font-size:10px; line-height:1.4; }
+
+    @media (min-width:700px) {
+      .app-modal-backdrop { align-items:center; padding:20px; }
+      .app-modal-sheet { border-radius:20px; transform:translateY(24px) scale(.98); }
+      .app-modal-backdrop.open .app-modal-sheet { transform:translateY(0) scale(1); }
+    }
+
+</style>
 </head>
 
 <body>
@@ -810,7 +1057,8 @@
       <label>Notes <span class="optional">(optional)</span></label>
       <textarea id="p-notes"></textarea>
 
-      <button class="btn" id="p-save" onclick="saveParty()">Register Party</button>
+      <button class="btn" id="p-save" onclick="saveParty()" disabled>Register Party</button>
+      <div class="button-reason" id="p-save-reason">Enter the required party details</div>
     </section>
 
     <section class="card">
@@ -866,9 +1114,10 @@
           <label style="margin-top:0">Qty</label>
           <input id="s-qty" inputmode="numeric" value="1">
         </div>
-        <button class="btn small" style="height:44px" onclick="addManual()">Add</button>
+        <button class="btn small" id="s-add-manual" style="height:44px" onclick="addManual()" disabled>Add</button>
       </div>
 
+      <div class="button-reason" id="s-add-reason">Select a salesperson and party first</div>
       <div class="hint">
         Scan or type a barcode. Scanning the same design again increases its quantity for the selected salesperson.
       </div>
@@ -879,6 +1128,15 @@
       <div id="cart-lines"></div>
       <div class="empty" id="cart-empty">Select a party and add a design</div>
       <button class="btn" id="s-save" onclick="saveOrder()" disabled>Save Order</button>
+      <div class="button-reason" id="s-save-reason">Add or change a design before saving</div>
+      <div class="pending-save-panel" id="pending-save-panel">
+        <div class="pending-save-title">Save needs attention</div>
+        <div class="pending-save-copy">Your changes are still on this phone. Retry the same safe request, or discard only these unsaved changes.</div>
+        <div class="pending-save-actions">
+          <button class="btn" onclick="retryPendingSave()">Retry</button>
+          <button class="btn danger-outline" onclick="discardPendingSave()">Discard changes</button>
+        </div>
+      </div>
       <div class="hint">
         The form resets only after the server confirms the save. Existing designs added by other salespersons cannot be edited here.
       </div>
@@ -893,13 +1151,13 @@
 
   <!-- MAP -->
   <main class="page" id="pg-map">
-    <section class="card">
+    <section class="card" id="map-entry-card">
       <h2>
-        Map Product
-        <span class="pill" id="map-count" style="margin-left:6px">0 this session</span>
+        Batch Product Mapping
+        <span class="pill" id="map-count" style="margin-left:6px">0 pending</span>
       </h2>
       <div class="hint" style="margin-top:0">
-        Scan a tag, enter the design details and save. All values are stored visibly in the Products sheet.
+        Scan a tag, fill the details and add it to the batch. Nothing reaches the server until you tap Save all.
       </div>
 
       <button class="btn secondary" id="map-scan-toggle" onclick="toggleMapScanner()">📷 Start Camera Scan</button>
@@ -935,12 +1193,20 @@
       <label>Notes <span class="optional">(optional)</span></label>
       <textarea id="m-notes"></textarea>
 
-      <button class="btn" id="m-save" onclick="saveMapping()">Save Mapping</button>
+      <button class="btn" id="m-add" onclick="addMappingToBatch()" disabled>Add to batch</button>
+      <div class="button-reason" id="m-add-reason">Scan a barcode and enter its design number</div>
+    </section>
+
+    <section class="card">
+      <h2>Pending Batch <span class="pill" id="batch-count">0 items</span></h2>
+      <div id="mapping-batch"></div>
+      <button class="btn" id="m-save-all" onclick="saveAllMappings()" disabled>Save all (0)</button>
+      <div class="button-reason" id="m-save-all-reason">Add at least one mapping to the batch</div>
     </section>
 
     <section class="card">
       <h2>Recently Mapped</h2>
-      <div id="map-log" class="empty">Nothing mapped in this session</div>
+      <div id="map-log"></div>
     </section>
   </main>
 
@@ -979,6 +1245,21 @@
       <div class="spinner"></div>
       <h3 id="busy-title">Saving…</h3>
       <p id="busy-detail">Please keep this screen open.</p>
+    </div>
+  </div>
+
+
+  <div class="scan-flash" id="scan-flash"></div>
+
+  <div class="app-modal-backdrop" id="app-modal" onclick="modalBackdropClick(event)">
+    <div class="app-modal-sheet info" id="app-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-icon" id="modal-icon">i</div>
+      <div class="modal-title" id="modal-title">Information</div>
+      <div class="modal-message" id="modal-message"></div>
+      <div class="modal-actions" id="modal-actions">
+        <button class="modal-button cancel" id="modal-cancel" onclick="resolveModal(false)">Cancel</button>
+        <button class="modal-button confirm" id="modal-confirm" onclick="resolveModal(true)">Continue</button>
+      </div>
     </div>
   </div>
 
@@ -1047,6 +1328,9 @@
   };
 
   let productMap = {};
+  let productRows = [];
+  let mappingBatch = [];
+  let productsReady = false;
   let selectedParty = null;
   let currentOrderId = null;
   let baseVersion = 0;
@@ -1062,12 +1346,16 @@
   let mapScanning = false;
   let mapLastScan = { code:'', time:0 };
   let mapCount = 0;
+  let scanDecisionPending = false;
+  let lastSalesperson = '';
 
   let partySaving = false;
   let masterSaving = false;
   let mappingSaving = false;
   let orderSaving = false;
   let pendingSavePayload = null;
+  let modalResolver = null;
+  let modalDismissOnBackdrop = true;
   let audioCtx = null;
   let wakeLock = null;
 
@@ -1165,6 +1453,124 @@
     }, 2800);
   }
 
+
+  function haptic(pattern) {
+    if (navigator.vibrate) navigator.vibrate(pattern || 25);
+  }
+
+  function flashScan(type) {
+    const node = el('scan-flash');
+    node.className = 'scan-flash';
+    void node.offsetWidth;
+    node.classList.add(type === 'error' ? 'error' : 'success');
+    haptic(type === 'error' ? [45,35,45] : 45);
+  }
+
+  function modalIconFor(type) {
+    return ({ success:'✓', warning:'!', danger:'×', error:'×', info:'i' })[type] || 'i';
+  }
+
+  function openModal(options) {
+    options = options || {};
+    if (modalResolver) {
+      modalResolver(false);
+      modalResolver = null;
+    }
+
+    const type = options.type || 'info';
+    const backdrop = el('app-modal');
+    const sheet = el('app-modal-sheet');
+    const cancel = el('modal-cancel');
+    const confirm = el('modal-confirm');
+    const showCancel = options.showCancel !== false && !!options.cancelText;
+
+    sheet.className = 'app-modal-sheet ' + type;
+    el('modal-icon').textContent = modalIconFor(type);
+    el('modal-title').textContent = options.title || 'Information';
+    el('modal-message').textContent = options.message || '';
+    cancel.textContent = options.cancelText || 'Cancel';
+    confirm.textContent = options.confirmText || 'Continue';
+    cancel.style.display = showCancel ? 'block' : 'none';
+    el('modal-actions').classList.toggle('single', !showCancel);
+    modalDismissOnBackdrop = options.dismissOnBackdrop !== false;
+
+    backdrop.classList.add('open');
+    haptic(type === 'danger' || type === 'error' ? [35,30,35] : 25);
+
+    return new Promise(resolve => {
+      modalResolver = resolve;
+      setTimeout(() => confirm.focus(), 220);
+    });
+  }
+
+  function resolveModal(result) {
+    const backdrop = el('app-modal');
+    backdrop.classList.remove('open');
+    const resolver = modalResolver;
+    modalResolver = null;
+    setTimeout(() => { if (resolver) resolver(!!result); }, 180);
+  }
+
+  function modalBackdropClick(event) {
+    if (event.target === el('app-modal') && modalDismissOnBackdrop) {
+      resolveModal(false);
+    }
+  }
+
+  async function showFailureModal(title, message, retryAction) {
+    const retry = await openModal({
+      type:'error',
+      title:title || 'Something went wrong',
+      message:message || 'The action could not be completed.',
+      confirmText:retryAction ? 'Retry' : 'Dismiss',
+      cancelText:retryAction ? 'Dismiss' : '',
+      showCancel:!!retryAction
+    });
+    if (retry && retryAction) retryAction();
+  }
+
+  async function showCameraPermissionModal(retryAction) {
+    const retry = await openModal({
+      type:'error',
+      title:'Camera access needed',
+      message:'Open this page directly in Chrome or Safari, not inside another app’s browser. Then start the camera again and tap Allow when your phone asks for permission.',
+      confirmText:'Try again',
+      cancelText:'Dismiss'
+    });
+    if (retry) retryAction();
+  }
+
+  function emptyState(icon, title, copy) {
+    return '<div class="empty-state">' +
+      '<div class="empty-state-icon">' + escapeHtml(icon || '•') + '</div>' +
+      '<div class="empty-state-title">' + escapeHtml(title || 'Nothing here yet') + '</div>' +
+      '<div class="empty-state-copy">' + escapeHtml(copy || '') + '</div>' +
+    '</div>';
+  }
+
+  function renderSkeleton(id, count) {
+    const node = el(id);
+    if (!node) return;
+    node.className = '';
+    node.innerHTML = '<div class="skeleton-stack">' +
+      Array.from({ length:count || 3 }).map(() =>
+        '<div class="skeleton-row"><div class="skeleton-dot"></div>' +
+        '<div class="skeleton-copy"><div class="skeleton-line"></div>' +
+        '<div class="skeleton-line short"></div></div></div>'
+      ).join('') + '</div>';
+  }
+
+  function setActionState(buttonId, reasonId, enabled, reason) {
+    const button = el(buttonId);
+    const reasonNode = el(reasonId);
+    if (button) {
+      button.disabled = !enabled;
+      button.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      button.title = enabled ? '' : (reason || 'Complete the required fields');
+    }
+    if (reasonNode) reasonNode.textContent = enabled ? '' : (reason || 'Complete the required fields');
+  }
+
   function syncChip(state, text) {
     const node = el('sync-chip');
     node.className = 'sync-chip ' + state;
@@ -1255,10 +1661,7 @@
      NAVIGATION
      -------------------------------------------------------------------------- */
   function go(name) {
-    document.querySelectorAll('.page').forEach(page => {
-      page.classList.remove('active');
-    });
-
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     el('pg-' + name).classList.add('active');
 
     ['reception','sales','orders','map'].forEach(key => {
@@ -1267,9 +1670,9 @@
     });
 
     if (name === 'orders') loadOrders(false);
+    if (name === 'map') { renderMappingBatch(); renderRecentMappings(); }
     if (name !== 'sales' && scanning) stopScanner();
     if (name !== 'map' && mapScanning) stopMapScanner();
-
     closePartyResults();
     window.scrollTo({ top:0, behavior:'auto' });
   }
@@ -1320,6 +1723,10 @@
         el('s-sales').value = savedSalesperson;
       }
     } catch (error) {}
+
+    if (!lastSalesperson && el('s-sales').value && el('s-sales').value !== '__add__') {
+      lastSalesperson = el('s-sales').value;
+    }
   }
 
   function onMasterSelect(select, kind) {
@@ -1332,20 +1739,38 @@
     } else {
       el(config.addRowId).classList.remove('open');
     }
+    updateAllActionStates();
   }
 
-  function onSalespersonChange(select) {
+  async function onSalespersonChange(select) {
     onMasterSelect(select, 'salesperson');
+    const nextSalesperson = select.value;
+    if (!nextSalesperson || nextSalesperson === '__add__') return;
 
-    if (select.value && select.value !== '__add__') {
-      try {
-        localStorage.setItem('cmai_salesperson', select.value);
-      } catch (error) {}
+    if (orderDirty && lastSalesperson && nextSalesperson !== lastSalesperson) {
+      const discard = await openModal({
+        type:'danger',
+        title:'Change salesperson?',
+        message:'Changing from ' + lastSalesperson + ' to ' + nextSalesperson + ' will discard the unsaved changes on this phone.',
+        confirmText:'Discard and change',
+        cancelText:'Keep ' + lastSalesperson,
+        dismissOnBackdrop:false
+      });
+      if (!discard) {
+        select.value = lastSalesperson;
+        updateSalesActionStates();
+        return;
+      }
+      orderDirty = false;
+      deletedLineIds = [];
+      pendingSavePayload = null;
+      hidePendingSaveState();
     }
 
-    if (selectedParty) {
-      loadPartyOrder(selectedParty.id);
-    }
+    lastSalesperson = nextSalesperson;
+    try { localStorage.setItem('cmai_salesperson', nextSalesperson); } catch (error) {}
+    if (selectedParty) loadPartyOrder(selectedParty.id);
+    updateSalesActionStates();
   }
 
   function saveMaster(kind) {
@@ -1362,7 +1787,6 @@
     google.script.run
       .withSuccessHandler(result => {
         masterSaving = false;
-
         const list = masters[config.listKey];
         if (!list.some(item => item.toLowerCase() === result.name.toLowerCase())) {
           list.push(result.name);
@@ -1375,78 +1799,78 @@
         el(config.inputId).value = '';
 
         if (kind === 'salesperson') {
-          try {
-            localStorage.setItem('cmai_salesperson', result.name);
-          } catch (error) {}
+          lastSalesperson = result.name;
+          try { localStorage.setItem('cmai_salesperson', result.name); } catch (error) {}
+        }
+        if (['category','fabric','style'].includes(kind) && mappingBatch.length) {
+          renderMappingBatch();
         }
 
-        toast(
-          result.existed
-            ? result.name + ' already existed and was selected'
-            : '✓ ' + result.name + ' added',
-          'success'
-        );
+        updateAllActionStates();
+        toast(result.existed ? result.name + ' selected' : '✓ ' + result.name + ' added', 'success');
       })
       .withFailureHandler(error => {
         masterSaving = false;
-        toast('Could not add: ' + error.message, 'error');
+        showFailureModal('Could not add value', error.message);
       })[config.fn](name);
   }
 
   /* --------------------------------------------------------------------------
      RECEPTION
      -------------------------------------------------------------------------- */
-  function saveParty() {
+  async function saveParty() {
     if (partySaving) return;
 
-    const name = value('p-name');
-    const contact = value('p-contact');
-    const phone = value('p-phone');
-    const city = value('p-city');
-    const agent = el('p-agent').value;
+    const payload = {
+      name:value('p-name'),
+      contact:value('p-contact'),
+      phone:'91' + value('p-phone'),
+      agent:el('p-agent').value || '',
+      city:value('p-city'),
+      state:value('p-state'),
+      gstin:value('p-gstin').toUpperCase(),
+      notes:value('p-notes')
+    };
 
-    if (!name) return toast('Company / Firm name is required', 'warning');
-    if (!contact) return toast('Contact person is required', 'warning');
-    if (!/^\d{10}$/.test(phone)) return toast('Enter a valid 10-digit mobile number', 'warning');
-    if (!city) return toast('City is required', 'warning');
-    if (agent === '__add__') return toast('Finish adding the agent first', 'warning');
+    const phone = value('p-phone');
+    if (!payload.name || !payload.contact || !/^\d{10}$/.test(phone) || !payload.city) {
+      updateRegisterActionState();
+      return toast('Complete the required party details', 'warning');
+    }
+    if (payload.agent === '__add__') return toast('Finish adding the agent first', 'warning');
+
+    const confirmed = await openModal({
+      type:'info',
+      title:'Register this party?',
+      message:'Add “' + payload.name + '” to the shared party list for all counters?',
+      confirmText:'Register party',
+      cancelText:'Cancel',
+      dismissOnBackdrop:false
+    });
+    if (!confirmed) return;
 
     partySaving = true;
-    const button = el('p-save');
-    button.disabled = true;
-    button.textContent = 'Saving…';
+    updateRegisterActionState();
+    el('p-save').textContent = 'Saving…';
 
     google.script.run
       .withSuccessHandler(result => {
         partySaving = false;
-        button.disabled = false;
-        button.textContent = 'Register Party';
-
-        ['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(id => {
-          el(id).value = '';
-        });
+        el('p-save').textContent = 'Register Party';
+        ['p-name','p-contact','p-phone','p-city','p-gstin','p-notes'].forEach(id => { el(id).value = ''; });
         el('p-agent').value = '';
         el('p-state').value = '';
-
+        updateRegisterActionState();
         toast('✓ ' + result.name + ' registered', 'success');
         lightSync();
       })
       .withFailureHandler(error => {
         partySaving = false;
-        button.disabled = false;
-        button.textContent = 'Register Party';
-        toast('Could not register: ' + error.message, 'error');
+        el('p-save').textContent = 'Register Party';
+        updateRegisterActionState();
+        showFailureModal('Party was not registered', error.message + '\nYour form is still filled in.');
       })
-      .addParty({
-        name,
-        contact,
-        phone:'91' + phone,
-        agent:agent || '',
-        city,
-        state:value('p-state'),
-        gstin:value('p-gstin').toUpperCase(),
-        notes:value('p-notes')
-      });
+      .addParty(payload);
   }
 
   function renderRecentParties() {
@@ -1457,8 +1881,8 @@
     count.textContent = parties.length;
 
     if (!parties.length) {
-      list.className = 'empty';
-      list.textContent = 'No parties registered yet';
+      list.className = '';
+      list.innerHTML = emptyState('⌂', 'No parties registered', 'Register the first visitor from the form above.');
       return;
     }
 
@@ -1560,12 +1984,22 @@
     box.classList.add('open');
   }
 
-  function pickParty(partyId) {
+  async function pickParty(partyId) {
     const party = parties.find(item => item.id === partyId);
-    if (!party) return toast('Party not found. Sync and try again.', 'error');
+    if (!party) {
+      return showFailureModal('Party not found', 'Sync the app and search again.');
+    }
 
     if (orderDirty && selectedParty && selectedParty.id !== partyId) {
-      if (!confirm('This form has unsaved changes. Change party and discard them?')) return;
+      const discard = await openModal({
+        type:'danger',
+        title:'Discard unsaved changes?',
+        message:'Switching to “' + party.name + '” will discard the unsaved changes on this phone.',
+        confirmText:'Discard and switch',
+        cancelText:'Stay here',
+        dismissOnBackdrop:false
+      });
+      if (!discard) return;
     }
 
     selectedParty = party;
@@ -1575,6 +2009,7 @@
     deletedLineIds = [];
     orderDirty = false;
     pendingSavePayload = null;
+    hidePendingSaveState();
 
     el('party-chip-text').textContent = party.name;
     el('party-picked').style.display = 'block';
@@ -1640,13 +2075,23 @@
       })
       .withFailureHandler(error => {
         note.style.display = 'none';
-        toast('Could not load order: ' + error.message, 'error');
+        showFailureModal('Order could not load', error.message, () => loadPartyOrder(partyId));
       })
       .getOpenOrder(partyId);
   }
 
-  function clearParty() {
-    if (orderDirty && !confirm('Discard unsaved changes and leave this party?')) return;
+  async function clearParty() {
+    if (orderDirty) {
+      const discard = await openModal({
+        type:'danger',
+        title:'Leave this party?',
+        message:'Discard the unsaved changes for “' + (selectedParty ? selectedParty.name : 'this party') + '”?',
+        confirmText:'Discard changes',
+        cancelText:'Keep editing',
+        dismissOnBackdrop:false
+      });
+      if (!discard) return;
+    }
     resetSalesForm(false);
   }
 
@@ -1658,6 +2103,7 @@
     deletedLineIds = [];
     orderDirty = false;
     pendingSavePayload = null;
+    hidePendingSaveState();
 
     el('party-picked').style.display = 'none';
     el('party-search').style.display = 'block';
@@ -1668,10 +2114,8 @@
 
     closePartyResults();
     renderOrderLines();
-
-    if (afterSave) {
-      setTimeout(() => el('party-search').focus(), 100);
-    }
+    updateAllActionStates();
+    if (afterSave) setTimeout(() => el('party-search').focus(), 100);
   }
 
   /* --------------------------------------------------------------------------
@@ -1684,7 +2128,8 @@
 
   function canModifyPendingOrder() {
     if (!pendingSavePayload) return true;
-    toast('A save is pending. Tap Save Order to retry before changing this form.', 'warning');
+    showPendingSaveState();
+    toast('Resolve the pending save with Retry or Discard changes', 'warning');
     return false;
   }
 
@@ -1692,56 +2137,80 @@
     if (!canModifyPendingOrder()) return;
     const barcode = value('s-barcode');
     const qty = Math.max(1, parseInt(el('s-qty').value, 10) || 1);
-
     if (!barcode) return toast('Enter or scan a barcode', 'warning');
 
     addToOrder(barcode, qty);
     el('s-barcode').value = '';
     el('s-qty').value = '1';
+    updateSalesActionStates();
   }
 
-  function addToOrder(barcode, qty) {
+  async function addToOrder(barcode, qty) {
     if (!canModifyPendingOrder()) return;
     if (!selectedParty) return toast('Select a party first', 'warning');
 
     const salesperson = currentSalesperson();
     if (!salesperson) return toast('Select a salesperson first', 'warning');
 
-    beep();
-
     const normalized = String(barcode).trim();
-    const existing = orderLines.find(line => (
-      !line.deleted &&
-      line.barcode === normalized &&
+    const ownLine = orderLines.find(line =>
+      !line.deleted && line.barcode === normalized &&
       line.sales.toLowerCase() === salesperson.toLowerCase()
-    ));
+    );
 
-    if (existing) {
-      existing.qty += qty;
-      existing.touched = true;
-      toast((existing.design || normalized) + ' · ' + existing.qty + ' pcs', 'success');
-    } else {
-      const product = productMap[normalized] || {};
-      orderLines.push({
-        lineId:newClientLineId(),
-        barcode:normalized,
-        design:product.design || '',
-        qty,
-        unit:'pcs',
-        sales:salesperson,
-        category:product.category || '',
-        fabric:product.fabric || '',
-        style:product.style || '',
-        notes:product.notes || '',
-        isNew:true,
-        touched:true
-      });
-
-      toast('✓ ' + (product.design || normalized), 'success');
+    if (ownLine) {
+      ownLine.qty += qty;
+      ownLine.touched = true;
+      orderDirty = true;
+      beep();
+      flashScan('success');
+      renderOrderLines();
+      toast('Already in order — quantity increased to ' + ownLine.qty, 'success');
+      return;
     }
 
+    const otherOwners = Array.from(new Set(orderLines
+      .filter(line => !line.deleted && line.barcode === normalized &&
+        line.sales.toLowerCase() !== salesperson.toLowerCase())
+      .map(line => line.sales)
+      .filter(Boolean)));
+
+    if (otherOwners.length) {
+      if (scanDecisionPending) return;
+      scanDecisionPending = true;
+      const addAnyway = await openModal({
+        type:'warning',
+        title:'Design already belongs to another salesperson',
+        message:(productMap[normalized] && productMap[normalized].design ? productMap[normalized].design : normalized) +
+          ' is already in this order under ' + otherOwners.join(', ') + '.\nAdd a separate line under ' + salesperson + '?',
+        confirmText:'Add for ' + salesperson,
+        cancelText:'Cancel'
+      });
+      scanDecisionPending = false;
+      if (!addAnyway) return;
+    }
+
+    const product = productMap[normalized] || {};
+    orderLines.push({
+      lineId:newClientLineId(),
+      barcode:normalized,
+      design:product.design || '',
+      qty,
+      unit:'pcs',
+      sales:salesperson,
+      category:product.category || '',
+      fabric:product.fabric || '',
+      style:product.style || '',
+      notes:product.notes || '',
+      isNew:true,
+      touched:true
+    });
+
     orderDirty = true;
+    beep();
+    flashScan('success');
     renderOrderLines();
+    toast('✓ ' + (product.design || normalized) + ' added', 'success');
   }
 
   function changeQty(index, delta) {
@@ -1766,15 +2235,23 @@
     renderOrderLines();
   }
 
-  function removeLine(index) {
+  async function removeLine(index) {
     if (!canModifyPendingOrder()) return;
     const line = orderLines[index];
     if (!line || !canEditLine(line)) return;
 
-    if (!line.isNew && line.lineId) {
-      deletedLineIds.push(line.lineId);
-    }
+    const target = (line.design || line.barcode) + ' · ' + line.qty + ' pcs · ' + line.sales;
+    const confirmed = await openModal({
+      type:'danger',
+      title:line.isNew ? 'Remove pending design?' : 'Delete saved order line?',
+      message:'Delete ' + target + '?',
+      confirmText:'Delete line',
+      cancelText:'Cancel',
+      dismissOnBackdrop:false
+    });
+    if (!confirmed) return;
 
+    if (!line.isNew && line.lineId) deletedLineIds.push(line.lineId);
     orderLines.splice(index, 1);
     orderDirty = true;
     renderOrderLines();
@@ -1785,54 +2262,35 @@
     const salesperson = currentSalesperson();
 
     if (!orderLines.length) {
-      container.innerHTML = '';
-      el('cart-empty').style.display = 'block';
+      container.innerHTML = emptyState('▣', selectedParty ? 'No designs in this order' : 'Select a party',
+        selectedParty ? 'Scan or type the first design for this party.' : 'Choose a salesperson and party to begin.');
+      el('cart-empty').style.display = 'none';
     } else {
       el('cart-empty').style.display = 'none';
-
       const locked = orderLines.filter(line => !canEditLine(line));
       const editable = orderLines.filter(line => canEditLine(line));
-
       let html = '';
 
       if (locked.length) {
         html += '<div class="section-label">Previously added by other salespersons</div>';
-        html += locked.map(line => {
-          const index = orderLines.indexOf(line);
-          return renderLineHtml(line, index, false);
-        }).join('');
+        html += locked.map(line => renderLineHtml(line, orderLines.indexOf(line), false)).join('');
       }
-
       if (editable.length) {
         html += '<div class="section-label">Items linked to ' + escapeHtml(salesperson) + '</div>';
-        html += editable.map(line => {
-          const index = orderLines.indexOf(line);
-          return renderLineHtml(line, index, true);
-        }).join('');
+        html += editable.map(line => renderLineHtml(line, orderLines.indexOf(line), true)).join('');
       }
-
       container.innerHTML = html;
     }
 
     const activeTotalPcs = orderLines.reduce((sum, line) => sum + (Number(line.qty) || 0), 0);
     const label = orderLines.length + ' designs · ' + activeTotalPcs + ' pcs';
-
     el('cart-count').textContent = label;
 
     const strip = el('total-strip');
     strip.classList.toggle('show', !!selectedParty);
     el('strip-party').textContent = selectedParty ? selectedParty.name : '';
     el('strip-count').textContent = label;
-
-    el('s-save').disabled = !(
-      selectedParty &&
-      currentSalesperson() &&
-      orderDirty &&
-      (
-        orderLines.some(line => canEditLine(line) && (line.isNew || line.touched)) ||
-        deletedLineIds.length
-      )
-    );
+    updateSalesActionStates();
   }
 
   function renderLineHtml(line, index, editable) {
@@ -1878,7 +2336,6 @@
       code => {
         const now = Date.now();
         if (code === lastScan.code && now - lastScan.time < 1500) return;
-
         lastScan = { code, time:now };
         addToOrder(code, 1);
       }
@@ -1886,15 +2343,15 @@
     .then(() => {
       scanning = true;
       el('scan-toggle').textContent = '⏹ Stop Camera';
-
       if ('wakeLock' in navigator) {
-        navigator.wakeLock.request('screen')
-          .then(lock => { wakeLock = lock; })
-          .catch(() => {});
+        navigator.wakeLock.request('screen').then(lock => { wakeLock = lock; }).catch(() => {});
       }
     })
     .catch(() => {
-      toast('Camera error. Open this page directly in Chrome or Safari.', 'error');
+      scanner = null;
+      scanning = false;
+      el('scan-toggle').textContent = '📷 Start Camera Scan';
+      showCameraPermissionModal(startScanner);
     });
   }
 
@@ -1925,33 +2382,17 @@
     mapScanner.start(
       { facingMode:'environment' },
       { fps:12, qrbox:{ width:220, height:220 } },
-      code => {
-        const now = Date.now();
-        if (code === mapLastScan.code && now - mapLastScan.time < 1800) return;
-
-        mapLastScan = { code, time:now };
-        beep();
-        el('m-code').value = code;
-
-        const product = productMap[code];
-        if (product) {
-          el('m-design').value = product.design || '';
-          el('m-category').value = product.category || '';
-          el('m-fabric').value = product.fabric || '';
-          el('m-style').value = product.style || '';
-          el('m-notes').value = product.notes || '';
-          toast('Existing mapping loaded. Saving will update it.', 'warning');
-        }
-
-        el('m-design').focus();
-      }
+      code => handleMapScan(code)
     )
     .then(() => {
       mapScanning = true;
       el('map-scan-toggle').textContent = '⏹ Stop Camera';
     })
     .catch(() => {
-      toast('Camera error. Open this page directly in Chrome or Safari.', 'error');
+      mapScanner = null;
+      mapScanning = false;
+      el('map-scan-toggle').textContent = '📷 Start Camera Scan';
+      showCameraPermissionModal(startMapScanner);
     });
   }
 
@@ -2001,19 +2442,19 @@
 
   function saveOrder() {
     if (orderSaving) return;
-    if (!selectedParty) return toast('Select a party first', 'warning');
-    if (!currentSalesperson()) return toast('Select a salesperson first', 'warning');
-    if (!orderDirty) return toast('No changes to save', 'warning');
+    if (pendingSavePayload) return retryPendingSave();
+    if (!selectedParty || !currentSalesperson() || !orderDirty) {
+      updateSalesActionStates();
+      return toast('Complete the order details before saving', 'warning');
+    }
 
-    const payload = pendingSavePayload || buildSavePayload(newRequestId());
-    pendingSavePayload = payload;
-
+    pendingSavePayload = buildSavePayload(newRequestId());
     orderSaving = true;
-    el('s-save').disabled = true;
+    hidePendingSaveState();
+    updateSalesActionStates();
     showBusy('Saving Order…', 'Checking the latest order version and merging safely if another counter saved first.');
     syncChip('busy', '● saving…');
-
-    attemptOrderSave(payload, 0);
+    attemptOrderSave(pendingSavePayload, 0);
   }
 
   function attemptOrderSave(payload, attempt) {
@@ -2022,19 +2463,15 @@
         orderSaving = false;
         hideBusy();
         syncChip('ok', '✓ synced');
-
-        // Reset only after confirmed server success.
         pendingSavePayload = null;
+        hidePendingSaveState();
         resetSalesForm(true);
         lightSync();
 
-        if (result.merged) {
-          toast('Order updated by another counter — changes merged safely.', 'warning');
-        } else if (result.duplicateRequest) {
-          toast('Order was already saved. No duplicate was created.', 'success');
-        } else {
-          toast('✓ Order saved successfully', 'success');
-        }
+        toast(result.merged
+          ? 'Order updated by another counter — changes merged safely.'
+          : (result.duplicateRequest ? 'Order was already saved. No duplicate was created.' : '✓ Order saved successfully'),
+          result.merged ? 'warning' : 'success');
       })
       .withFailureHandler(error => {
         if (attempt < 3) {
@@ -2045,11 +2482,11 @@
         orderSaving = false;
         hideBusy();
         syncChip('err', '⚠ save pending');
-        renderOrderLines();
-
-        // The cart and the same RequestID remain available for a safe manual retry.
         pendingSavePayload = payload;
-        toast('Save failed after retries. Your items are still on this phone. Tap Save Order to retry.', 'error');
+        showPendingSaveState();
+        updateSalesActionStates();
+        showFailureModal('Order was not saved',
+          (error.message || 'The connection failed.') + '\nYour changes are still on this phone. Use Retry or Discard changes below.');
       })
       .saveOrderProgress(payload);
   }
@@ -2058,13 +2495,72 @@
      PRODUCT MAPPING
      -------------------------------------------------------------------------- */
   function saveMapping() {
-    if (mappingSaving) return;
+    // Compatibility alias for older markup/bookmarks.
+    return addMappingToBatch();
+  }
 
-    const barcode = value('m-code');
+
+  function normalizeBarcode(input) {
+    return String(input == null ? '' : input).trim();
+  }
+
+  function mappingConflict(barcode, ignoreBatchIndex) {
+    const normalized = normalizeBarcode(barcode);
+    if (!normalized) return null;
+    const key = normalized.toLowerCase();
+
+    const batchIndex = mappingBatch.findIndex((item, index) =>
+      index !== ignoreBatchIndex && item.barcode.toLowerCase() === key
+    );
+    if (batchIndex >= 0) {
+      return { source:'batch', design:mappingBatch[batchIndex].design || 'a pending design' };
+    }
+
+    const existing = Object.keys(productMap).find(code => code.toLowerCase() === key);
+    if (existing) return { source:'master', design:productMap[existing].design || 'another design' };
+    return null;
+  }
+
+  async function showMappingConflict(barcode, conflict) {
+    flashScan('error');
+    await openModal({
+      type:'error',
+      title:'Duplicate barcode',
+      message:barcode + ' is already mapped to ' + conflict.design +
+        (conflict.source === 'batch' ? ' in the current batch.' : ' in the product master.'),
+      confirmText:'Dismiss',
+      showCancel:false
+    });
+  }
+
+  async function handleMapScan(code) {
+    const now = Date.now();
+    if (code === mapLastScan.code && now - mapLastScan.time < 1800) return;
+    mapLastScan = { code, time:now };
+
+    const normalized = normalizeBarcode(code);
+    const conflict = mappingConflict(normalized, -1);
+    if (conflict) {
+      el('m-code').value = '';
+      updateMapActionStates();
+      return showMappingConflict(normalized, conflict);
+    }
+
+    el('m-code').value = normalized;
+    flashScan('success');
+    updateMapActionStates();
+    el('m-design').focus();
+  }
+
+  async function addMappingToBatch() {
+    if (mappingSaving) return;
+    const barcode = normalizeBarcode(value('m-code'));
     const design = value('m-design');
 
-    if (!barcode) return toast('Barcode is required', 'warning');
-    if (!design) return toast('Design number is required', 'warning');
+    if (!barcode || !design) {
+      updateMapActionStates();
+      return toast('Scan a barcode and enter its design number', 'warning');
+    }
 
     for (const kind of ['category','fabric','style']) {
       if (el(MASTER_CONFIG[kind].selectId).value === '__add__') {
@@ -2072,68 +2568,203 @@
       }
     }
 
+    const conflict = mappingConflict(barcode, -1);
+    if (conflict) return showMappingConflict(barcode, conflict);
+
+    mappingBatch.push({
+      barcode,
+      design,
+      category:el('m-category').value || '',
+      fabric:el('m-fabric').value || '',
+      style:el('m-style').value || '',
+      notes:value('m-notes')
+    });
+
+    clearMappingEntryForm();
+    renderMappingBatch();
+    flashScan('success');
+    toast('✓ Added to batch', 'success');
+  }
+
+  function clearMappingEntryForm() {
+    ['m-code','m-design','m-notes'].forEach(id => { el(id).value = ''; });
+    ['m-category','m-fabric','m-style'].forEach(id => { el(id).value = ''; });
+    updateMapActionStates();
+  }
+
+  function batchSelectOptions(kind, selected) {
+    const config = MASTER_CONFIG[kind];
+    const list = masters[config.listKey] || [];
+    let options = '<option value="">Select ' + escapeHtml(kind) + '</option>';
+    options += list.map(item => '<option value="' + escapeHtml(item) + '"' +
+      (item === selected ? ' selected' : '') + '>' + escapeHtml(item) + '</option>').join('');
+    return options;
+  }
+
+  function renderMappingBatch() {
+    const container = el('mapping-batch');
+    el('map-count').textContent = mappingBatch.length + ' pending';
+    el('batch-count').textContent = mappingBatch.length + (mappingBatch.length === 1 ? ' item' : ' items');
+    el('m-save-all').textContent = 'Save all (' + mappingBatch.length + ')';
+
+    if (!mappingBatch.length) {
+      container.innerHTML = emptyState('＋', 'Batch is empty', 'Scan products and add them here before saving.');
+      updateMapActionStates();
+      return;
+    }
+
+    container.innerHTML = mappingBatch.map((item, index) =>
+      '<div class="batch-row">' +
+        '<div class="batch-row-head"><div class="batch-row-title">Pending mapping ' + (index + 1) + '</div>' +
+        '<button class="icon-delete" onclick="removeBatchMapping(' + index + ')">✕</button></div>' +
+        '<div class="batch-grid">' +
+          '<div><label>Barcode</label><input value="' + escapeHtml(item.barcode) + '" onchange="updateBatchBarcode(' + index + ',this.value)"></div>' +
+          '<div><label>Design</label><input value="' + escapeHtml(item.design) + '" oninput="updateBatchField(' + index + ',\'design\',this.value)"></div>' +
+          '<div><label>Category</label><select onchange="updateBatchField(' + index + ',\'category\',this.value)">' + batchSelectOptions('category', item.category) + '</select></div>' +
+          '<div><label>Fabric</label><select onchange="updateBatchField(' + index + ',\'fabric\',this.value)">' + batchSelectOptions('fabric', item.fabric) + '</select></div>' +
+          '<div class="full"><label>Style</label><select onchange="updateBatchField(' + index + ',\'style\',this.value)">' + batchSelectOptions('style', item.style) + '</select></div>' +
+          '<div class="full"><label>Notes</label><textarea oninput="updateBatchField(' + index + ',\'notes\',this.value)">' + escapeHtml(item.notes) + '</textarea></div>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+    updateMapActionStates();
+  }
+
+  function updateBatchField(index, field, newValue) {
+    if (!mappingBatch[index]) return;
+    mappingBatch[index][field] = String(newValue == null ? '' : newValue).trim();
+    updateMapActionStates();
+  }
+
+  async function updateBatchBarcode(index, newValue) {
+    const item = mappingBatch[index];
+    if (!item) return;
+    const normalized = normalizeBarcode(newValue);
+    if (!normalized) {
+      renderMappingBatch();
+      return toast('Barcode cannot be empty', 'warning');
+    }
+    const conflict = mappingConflict(normalized, index);
+    if (conflict) {
+      renderMappingBatch();
+      return showMappingConflict(normalized, conflict);
+    }
+    item.barcode = normalized;
+    renderMappingBatch();
+  }
+
+  async function removeBatchMapping(index) {
+    const item = mappingBatch[index];
+    if (!item) return;
+    const confirmed = await openModal({
+      type:'danger',
+      title:'Remove pending mapping?',
+      message:'Remove ' + item.barcode + ' → ' + item.design + ' from this batch?',
+      confirmText:'Remove',
+      cancelText:'Cancel',
+      dismissOnBackdrop:false
+    });
+    if (!confirmed) return;
+    mappingBatch.splice(index, 1);
+    renderMappingBatch();
+  }
+
+  function saveAllMappings() {
+    if (mappingSaving || !mappingBatch.length) return;
+    if (mappingBatch.some(item => !item.barcode || !item.design)) {
+      return toast('Every pending row needs a barcode and design number', 'warning');
+    }
+
+    const snapshot = mappingBatch.map(item => Object.assign({}, item));
     mappingSaving = true;
-    const button = el('m-save');
-    button.disabled = true;
-    button.textContent = 'Saving…';
+    updateMapActionStates();
+    showBusy('Saving Mapping Batch…', 'Writing ' + snapshot.length + ' mappings in one server round-trip.');
 
     google.script.run
       .withSuccessHandler(result => {
         mappingSaving = false;
-        button.disabled = false;
-        button.textContent = 'Save Mapping';
-
-        const product = {
-          design,
-          category:el('m-category').value || '',
-          fabric:el('m-fabric').value || '',
-          style:el('m-style').value || '',
-          notes:value('m-notes')
-        };
-
-        productMap[barcode] = product;
+        hideBusy();
+        const now = new Date().toISOString();
+        (result.items || snapshot).forEach(item => {
+          productMap[item.barcode] = {
+            design:item.design || '', category:item.category || '', fabric:item.fabric || '',
+            style:item.style || '', notes:item.notes || '', updatedAt:now
+          };
+          productRows.push(Object.assign({}, item, { updatedAt:now }));
+        });
+        mappingBatch = [];
         saveProductCache();
-
-        mapCount += 1;
-        el('map-count').textContent = mapCount + ' this session';
-
-        const log = el('map-log');
-        const entry =
-          '<div class="map-log-row">' +
-            '<b>' + escapeHtml(barcode) + '</b> → ' + escapeHtml(design) +
-            '<br><span class="sr-meta">' +
-              escapeHtml([product.category, product.fabric, product.style].filter(Boolean).join(' · ')) +
-            '</span>' +
-          '</div>';
-
-        log.className = '';
-        log.innerHTML = entry + (log.innerHTML.startsWith('<div') ? log.innerHTML : '');
-
-        ['m-code','m-design','m-notes'].forEach(id => el(id).value = '');
-        ['m-category','m-fabric','m-style'].forEach(id => el(id).value = '');
-
-        toast(result.updated ? '✓ Mapping updated' : '✓ Mapping saved', 'success');
+        renderMappingBatch();
+        renderRecentMappings();
+        flashScan('success');
+        toast('✓ ' + (result.saved || snapshot.length) + ' mappings saved', 'success');
       })
       .withFailureHandler(error => {
         mappingSaving = false;
-        button.disabled = false;
-        button.textContent = 'Save Mapping';
-        toast('Could not save mapping: ' + error.message, 'error');
+        hideBusy();
+        updateMapActionStates();
+        showFailureModal('Batch was not saved',
+          (error.message || 'The server rejected the batch.') + '\nAll pending rows remain on this screen.',
+          saveAllMappings);
       })
-      .addProductMapping({
-        barcode,
-        design,
-        category:el('m-category').value || '',
-        fabric:el('m-fabric').value || '',
-        style:el('m-style').value || '',
-        notes:value('m-notes')
-      });
+      .addProductMappingsBatch(snapshot);
+  }
+
+  function renderRecentMappings() {
+    const container = el('map-log');
+    const recent = productRows.slice()
+      .sort((a,b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime())
+      .slice(0, 15);
+
+    if (!recent.length) {
+      container.innerHTML = emptyState('⌁', 'No mappings yet', 'Saved mappings will appear here with a delete option.');
+      return;
+    }
+
+    container.innerHTML = recent.map(item =>
+      '<div class="recent-map-row">' +
+        '<div class="recent-map-main"><div class="recent-map-code">' + escapeHtml(item.barcode) + ' → ' + escapeHtml(item.design) + '</div>' +
+        '<div class="recent-map-meta">' + escapeHtml([item.category,item.fabric,item.style,item.notes].filter(Boolean).join(' · ')) + '</div></div>' +
+        '<button class="icon-delete" onclick="deleteRecentMapping(' + jsString(item.barcode) + ')">✕</button>' +
+      '</div>'
+    ).join('');
+  }
+
+  async function deleteRecentMapping(barcode) {
+    const product = productMap[barcode];
+    if (!product) return;
+    const confirmed = await openModal({
+      type:'danger',
+      title:'Delete product mapping?',
+      message:'Delete mapping ' + barcode + ' → ' + (product.design || 'unknown design') + '?\nIt will disappear from scanning but remain soft-deleted in the Products sheet.',
+      confirmText:'Delete mapping',
+      cancelText:'Cancel',
+      dismissOnBackdrop:false
+    });
+    if (!confirmed) return;
+
+    showBusy('Deleting Mapping…', barcode + ' → ' + (product.design || ''));
+    google.script.run
+      .withSuccessHandler(() => {
+        hideBusy();
+        delete productMap[barcode];
+        productRows = productRows.filter(item => item.barcode !== barcode);
+        saveProductCache();
+        renderRecentMappings();
+        toast('Mapping deleted', 'success');
+      })
+      .withFailureHandler(error => {
+        hideBusy();
+        showFailureModal('Mapping was not deleted', error.message, () => deleteRecentMapping(barcode));
+      })
+      .deleteProductMapping(barcode);
   }
 
   /* --------------------------------------------------------------------------
      ORDERS TAB
      -------------------------------------------------------------------------- */
   function loadOrders(showToast) {
+    renderSkeleton('orders-list', 4);
     google.script.run
       .withSuccessHandler(list => {
         orders = list || [];
@@ -2141,7 +2772,8 @@
         if (showToast) toast('Orders refreshed', 'success');
       })
       .withFailureHandler(error => {
-        toast('Could not load orders: ' + error.message, 'error');
+        el('orders-list').innerHTML = emptyState('!', 'Orders could not load', 'Tap Refresh Orders to try again.');
+        if (showToast) showFailureModal('Could not load orders', error.message, () => loadOrders(true));
       })
       .getOrders();
   }
@@ -2149,39 +2781,30 @@
   function renderOrders() {
     const container = el('orders-list');
     const badge = el('orders-badge');
-
     badge.style.display = orders.length ? 'inline-flex' : 'none';
     badge.textContent = orders.length;
 
     if (!orders.length) {
-      container.className = 'empty';
-      container.textContent = 'No orders yet';
+      container.className = '';
+      container.innerHTML = emptyState('▤', 'No orders yet', 'Saved party orders will appear here live.');
       return;
     }
 
     container.className = '';
-    container.innerHTML = orders.map(order => (
+    container.innerHTML = orders.map(order =>
       '<div class="order-card">' +
         '<div class="order-title">' + escapeHtml(order.partyName) + '</div>' +
         '<span class="pill order-status">' + escapeHtml(order.totalPcs) + ' pcs</span>' +
-        '<div class="order-meta">' +
-          escapeHtml(order.id) + ' · v' + escapeHtml(order.version) +
-          (order.lastUpdated ? ' · ' + escapeHtml(order.lastUpdated) : '') +
-        '</div>' +
+        '<div class="order-meta">' + escapeHtml(order.id) + ' · v' + escapeHtml(order.version) +
+          (order.lastUpdated ? ' · ' + escapeHtml(order.lastUpdated) : '') + '</div>' +
         '<table class="order-items-mini"><tbody>' +
-          order.items.map(item => (
-            '<tr>' +
-              '<td>' +
-                '<div class="item-code">' + escapeHtml(item.design || item.barcode) + '</div>' +
-                '<div class="item-name">' + escapeHtml(item.barcode) + ' · ' + escapeHtml(item.sales || '') + '</div>' +
-              '</td>' +
-              '<td style="text-align:right"><b>' + escapeHtml(item.qty) + ' pcs</b></td>' +
-            '</tr>'
-          )).join('') +
+          order.items.map(item => '<tr><td><div class="item-code">' + escapeHtml(item.design || item.barcode) + '</div>' +
+            '<div class="item-name">' + escapeHtml(item.sales || '') + '</div></td>' +
+            '<td style="text-align:right"><b>' + escapeHtml(item.qty) + ' pcs</b></td></tr>').join('') +
         '</tbody></table>' +
         '<button class="link-btn" onclick="resumeOrder(' + jsString(order.partyId) + ')">Open party order ➜</button>' +
       '</div>'
-    )).join('');
+    ).join('');
   }
 
   function resumeOrder(partyId) {
@@ -2194,18 +2817,23 @@
      -------------------------------------------------------------------------- */
   function buildProductMap(rows) {
     productMap = {};
+    productRows = [];
 
     (rows || []).forEach(row => {
       if (!row[0]) return;
-
-      productMap[String(row[0])] = {
+      const item = {
+        barcode:String(row[0]),
         design:String(row[1] || ''),
         category:String(row[2] || ''),
         fabric:String(row[3] || ''),
         style:String(row[4] || ''),
-        notes:String(row[5] || '')
+        notes:String(row[5] || ''),
+        updatedAt:row[6] || ''
       };
+      productRows.push(item);
+      productMap[item.barcode] = Object.assign({}, item);
     });
+    renderRecentMappings();
   }
 
   function loadProductCache() {
@@ -2217,39 +2845,37 @@
 
   function saveProductCache() {
     try {
-      const rows = Object.keys(productMap).map(barcode => {
-        const product = productMap[barcode];
-        return [
-          barcode,
-          product.design || '',
-          product.category || '',
-          product.fabric || '',
-          product.style || '',
-          product.notes || '',
-          ''
-        ];
-      });
-
+      const rows = productRows.map(product => [
+        product.barcode,
+        product.design || '',
+        product.category || '',
+        product.fabric || '',
+        product.style || '',
+        product.notes || '',
+        product.updatedAt || ''
+      ]);
       localStorage.setItem('cmai_products', JSON.stringify(rows));
     } catch (error) {}
   }
 
   function loadProducts(showToast) {
     loadProductCache();
+    renderSkeleton('map-log', 3);
 
     google.script.run
       .withSuccessHandler(rows => {
+        productsReady = true;
         buildProductMap(rows);
-        try {
-          localStorage.setItem('cmai_products', JSON.stringify(rows));
-        } catch (error) {}
-
-        if (showToast) {
-          toast('Product master loaded: ' + rows.length + ' mappings', 'success');
-        }
+        try { localStorage.setItem('cmai_products', JSON.stringify(rows)); } catch (error) {}
+        updateMapActionStates();
+        if (showToast) toast('Product master loaded: ' + rows.length + ' mappings', 'success');
       })
-      .withFailureHandler(() => {
-        if (showToast) toast('Using cached product master', 'warning');
+      .withFailureHandler(error => {
+        productsReady = Object.keys(productMap).length > 0;
+        renderRecentMappings();
+        updateMapActionStates();
+        if (showToast) showFailureModal('Product master could not refresh',
+          'The app is using its last cached copy. ' + (error.message || ''));
       })
       .getProducts();
   }
@@ -2263,24 +2889,29 @@
 
   function fullSync(showToast) {
     syncChip('busy', '● syncing…');
+    renderSkeleton('party-list', 4);
+    renderSkeleton('orders-list', 4);
 
     google.script.run
       .withSuccessHandler(data => {
         parties = data.parties || [];
         orders = data.orders || [];
         masters = Object.assign(masters, data.masters || {});
-
         normalizeMasters();
         renderMasters();
         renderRecentParties();
         renderOrders();
-
+        renderMappingBatch();
         syncChip('ok', '✓ synced');
+        updateAllActionStates();
         if (showToast) toast('Everything synced', 'success');
       })
-      .withFailureHandler(() => {
+      .withFailureHandler(error => {
         syncChip('err', '⚠ offline');
-        if (showToast) toast('Could not sync. Check the connection.', 'error');
+        renderRecentParties();
+        renderOrders();
+        if (showToast) showFailureModal('Sync failed',
+          'Check the internet connection and try again. ' + (error.message || ''), () => fullSync(true));
       })
       .getBootData();
 
@@ -2292,16 +2923,91 @@
       .withSuccessHandler(data => {
         parties = data.parties || [];
         masters = Object.assign(masters, data.masters || {});
-
         normalizeMasters();
         renderMasters();
         renderRecentParties();
         syncChip('ok', '✓ synced');
+        updateAllActionStates();
       })
-      .withFailureHandler(() => {
-        syncChip('err', '⚠ offline');
-      })
+      .withFailureHandler(() => syncChip('err', '⚠ offline'))
       .getLightSync();
+  }
+
+
+  function updateRegisterActionState() {
+    const valid = !!value('p-name') && !!value('p-contact') && /^\d{10}$/.test(value('p-phone')) && !!value('p-city') && !partySaving;
+    let reason = 'Enter company, contact person, 10-digit phone and city';
+    if (partySaving) reason = 'Party is being saved';
+    setActionState('p-save', 'p-save-reason', valid, reason);
+  }
+
+  function updateSalesActionStates() {
+    const salesperson = currentSalesperson();
+    const canAdd = !!salesperson && !!selectedParty && !!value('s-barcode') && !pendingSavePayload;
+    let addReason = !salesperson ? 'Select a salesperson first' : (!selectedParty ? 'Select a party first' : (!value('s-barcode') ? 'Scan or enter a barcode' : 'A save is pending'));
+    setActionState('s-add-manual', 's-add-reason', canAdd, addReason);
+
+    const hasChanges = orderLines.some(line => canEditLine(line) && (line.isNew || line.touched)) || deletedLineIds.length;
+    const canSave = !!salesperson && !!selectedParty && orderDirty && hasChanges && !orderSaving && !pendingSavePayload;
+    let saveReason = !salesperson ? 'Select a salesperson first' : (!selectedParty ? 'Select a party first' :
+      (pendingSavePayload ? 'Use Retry or Discard changes below' : (!hasChanges ? 'Add, edit or delete a design first' : (orderSaving ? 'Order is being saved' : ''))));
+    setActionState('s-save', 's-save-reason', canSave, saveReason);
+  }
+
+  function updateMapActionStates() {
+    const masterAdding = ['category','fabric','style'].some(kind => el(MASTER_CONFIG[kind].selectId).value === '__add__');
+    const canAdd = !!value('m-code') && !!value('m-design') && !masterAdding && !mappingSaving;
+    setActionState('m-add', 'm-add-reason', canAdd,
+      !value('m-code') ? 'Scan or enter a barcode' : (!value('m-design') ? 'Enter a design number' : (masterAdding ? 'Finish adding the new master value' : 'Batch is being saved')));
+
+    const validBatch = mappingBatch.length > 0 && mappingBatch.every(item => item.barcode && item.design);
+    setActionState('m-save-all', 'm-save-all-reason', validBatch && !mappingSaving,
+      !mappingBatch.length ? 'Add at least one mapping to the batch' : (!validBatch ? 'Complete every pending barcode and design' : 'Batch is being saved'));
+  }
+
+  function updateAllActionStates() {
+    updateRegisterActionState();
+    updateSalesActionStates();
+    updateMapActionStates();
+  }
+
+  function showPendingSaveState() {
+    el('pending-save-panel').classList.add('open');
+  }
+
+  function hidePendingSaveState() {
+    el('pending-save-panel').classList.remove('open');
+  }
+
+  function retryPendingSave() {
+    if (!pendingSavePayload || orderSaving) return;
+    orderSaving = true;
+    hidePendingSaveState();
+    updateSalesActionStates();
+    showBusy('Retrying Save…', 'Using the same RequestID so no duplicate order lines can be created.');
+    syncChip('busy', '● saving…');
+    attemptOrderSave(pendingSavePayload, 0);
+  }
+
+  async function discardPendingSave() {
+    if (!pendingSavePayload) return;
+    const confirmed = await openModal({
+      type:'danger',
+      title:'Discard unsaved changes?',
+      message:'Discard only the changes that failed to save on this phone? The latest server order will be reloaded.',
+      confirmText:'Discard changes',
+      cancelText:'Keep changes',
+      dismissOnBackdrop:false
+    });
+    if (!confirmed) return;
+
+    pendingSavePayload = null;
+    orderDirty = false;
+    deletedLineIds = [];
+    hidePendingSaveState();
+    if (selectedParty) loadPartyOrder(selectedParty.id);
+    else resetSalesForm(false);
+    updateSalesActionStates();
   }
 
   /* --------------------------------------------------------------------------
@@ -2321,7 +3027,7 @@
   });
 
   window.addEventListener('beforeunload', event => {
-    if (!orderDirty || orderSaving) return;
+    if ((!orderDirty && !mappingBatch.length) || orderSaving || mappingSaving) return;
     event.preventDefault();
     event.returnValue = '';
   });
@@ -2334,29 +3040,26 @@
 
   (function init() {
     const partySearchInput = el('party-search');
+    ['input','keyup','change','search'].forEach(eventName => partySearchInput.addEventListener(eventName, searchParty));
+    partySearchInput.addEventListener('focus', () => normalizeSearchText(partySearchInput.value) ? searchParty() : showRecentParties());
+    partySearchInput.addEventListener('click', () => normalizeSearchText(partySearchInput.value) ? searchParty() : showRecentParties());
 
-    ['input', 'keyup', 'change', 'search'].forEach(eventName => {
-      partySearchInput.addEventListener(eventName, searchParty);
+    ['p-name','p-contact','p-phone','p-city','p-agent'].forEach(id => {
+      el(id).addEventListener(id === 'p-agent' ? 'change' : 'input', updateRegisterActionState);
     });
-
-    partySearchInput.addEventListener('focus', () => {
-      if (normalizeSearchText(partySearchInput.value)) searchParty();
-      else showRecentParties();
-    });
-
-    partySearchInput.addEventListener('click', () => {
-      if (normalizeSearchText(partySearchInput.value)) searchParty();
-      else showRecentParties();
-    });
+    ['s-barcode','s-qty'].forEach(id => el(id).addEventListener('input', updateSalesActionStates));
+    el('s-sales').addEventListener('change', updateSalesActionStates);
+    ['m-code','m-design','m-notes'].forEach(id => el(id).addEventListener('input', updateMapActionStates));
+    ['m-category','m-fabric','m-style'].forEach(id => el(id).addEventListener('change', updateMapActionStates));
 
     const state = el('p-state');
-    state.innerHTML =
-      '<option value="">Select state</option>' +
+    state.innerHTML = '<option value="">Select state</option>' +
       STATES.map(name => '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + '</option>').join('');
-
-    // State deliberately remains blank.
     state.value = '';
 
+    renderMappingBatch();
+    renderRecentMappings();
+    updateAllActionStates();
     fullSync(false);
     setInterval(lightSync, 45000);
   })();
