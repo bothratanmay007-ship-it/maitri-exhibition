@@ -1144,7 +1144,17 @@
       const box = el('agent-results');
 
       if (!results.length) {
-        box.innerHTML = '<div class="agent-option agent-option-empty">No matching agent</div>';
+        const typed = value('c-agent');
+        box.innerHTML =
+          '<div class="agent-option agent-option-empty">No matching agent</div>' +
+          (typed.length >= 2
+            ? '<button type="button" class="agent-option" id="agent-add-new">' +
+                '<span>＋ Add “' + escapeHtml(typed) + '” as a new agent</span>' +
+                '<span aria-hidden="true">›</span>' +
+              '</button>'
+            : '');
+        const addBtn = el('agent-add-new');
+        if (addBtn) addBtn.addEventListener('click', () => addNewAgentFromRegister(typed));
       } else {
         box.innerHTML = results.map(name =>
           '<button type="button" class="agent-option" role="option" data-agent="' +
@@ -1165,6 +1175,30 @@
 
       box.classList.add('open');
       el('c-agent').setAttribute('aria-expanded', 'true');
+    }
+
+    let addingAgent = false;
+    function addNewAgentFromRegister(name) {
+      const clean = (name || '').trim();
+      if (clean.length < 2 || addingAgent) return;
+      addingAgent = true;
+      const box = el('agent-results');
+      box.innerHTML = '<div class="agent-option agent-option-loading">Adding agent…</div>';
+      // Public backend function (no staff PIN) that appends a de-duplicated agent.
+      api('addQueueAgent', [clean])
+        .then(result => {
+          addingAgent = false;
+          const finalName = (result && result.name) ? result.name : clean;
+          selectedAgent = finalName;
+          el('c-agent').value = finalName;
+          setAgentSelection('Selected agent: ' + finalName, true);
+          closeAgentResults();
+        })
+        .catch(() => {
+          addingAgent = false;
+          closeAgentResults();
+          setAgentSelection('Could not add the agent. Please try again.', false);
+        });
     }
 
     function searchAgents() {
