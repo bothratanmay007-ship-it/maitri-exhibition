@@ -360,6 +360,180 @@
       font-weight:700;
     }
 
+    /* ---- Segmented mode switcher (Reception New/Queue, reusable) ---- */
+    .mode-switch {
+      display:flex;
+      gap:4px;
+      margin-bottom:14px;
+      padding:4px;
+      background:var(--foam);
+      border-radius:14px;
+    }
+    .mode-switch button {
+      flex:1;
+      min-height:40px;
+      border:none;
+      border-radius:11px;
+      background:transparent;
+      color:var(--teal-deep);
+      font-size:13px;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      transition:background .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+    .mode-switch button.active {
+      background:var(--white);
+      box-shadow:0 2px 8px rgba(34,94,99,.14);
+    }
+    .mode-switch button .switch-badge {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:18px;
+      height:18px;
+      margin-left:6px;
+      padding:0 5px;
+      border-radius:9px;
+      background:var(--orange);
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+    }
+
+    /* ---- Collapsed selection summary (Sales party/salesperson) ---- */
+    .selection-summary {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:var(--foam);
+    }
+    .selection-summary .sel-main { min-width:0; }
+    .selection-summary .sel-party {
+      font-size:14px;
+      font-weight:700;
+      color:var(--charcoal);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .selection-summary .sel-sub {
+      margin-top:2px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .selection-summary .sel-change {
+      flex:0 0 auto;
+      min-height:36px;
+      padding:0 14px;
+      border:1px solid var(--teal-deep);
+      border-radius:10px;
+      background:#fff;
+      color:var(--teal-deep);
+      font-size:12px;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+    }
+
+    /* ---- Compact summary rows (Orders list) ---- */
+    .summary-row {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      width:100%;
+      padding:14px;
+      margin-bottom:10px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:var(--white);
+      text-align:left;
+      font-family:inherit;
+      cursor:pointer;
+      transition:box-shadow .18s ease, transform .06s ease;
+    }
+    .summary-row:active { transform:scale(.99); }
+    .summary-row:hover { box-shadow:0 6px 18px rgba(34,94,99,.10); }
+    .summary-row .sr-main { flex:1; min-width:0; }
+    .summary-row .sr-title {
+      font-size:15px;
+      font-weight:700;
+      color:var(--charcoal);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .summary-row .sr-meta {
+      margin-top:3px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .summary-row .sr-right {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:0 0 auto;
+    }
+    .summary-row .sr-pcs {
+      font-size:13px;
+      font-weight:700;
+      color:var(--teal-deep);
+    }
+    .summary-row .sr-chevron {
+      color:var(--muted);
+      font-size:18px;
+      line-height:1;
+    }
+    .list-search {
+      margin-bottom:12px;
+    }
+
+    /* ---- Bottom drill sheet (Orders detail, Queue review) ---- */
+    .drill-mask {
+      position:fixed;
+      inset:0;
+      z-index:70;
+      display:none;
+      background:rgba(51,39,27,.45);
+    }
+    .drill-mask.open { display:block; }
+    .drill-sheet {
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:71;
+      max-height:88vh;
+      overflow:auto;
+      padding:18px 16px calc(20px + env(safe-area-inset-bottom));
+      background:var(--white);
+      border-radius:20px 20px 0 0;
+      box-shadow:0 -12px 40px rgba(34,94,99,.22);
+      transform:translateY(100%);
+      transition:transform .26s cubic-bezier(.2,.8,.25,1);
+    }
+    .drill-mask.open .drill-sheet { transform:translateY(0); }
+    .drill-sheet-head {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .drill-sheet-head h3 {
+      font-size:17px;
+      font-weight:700;
+    }
+    .drill-sheet-head .ds-sub {
+      margin-top:3px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
     .search-results {
       display:none;
       max-height:315px;
@@ -1379,15 +1553,9 @@
       color:#991B1B;
     }
 
+    /* Review card now lives inside the drill sheet; the mask controls visibility. */
     .queue-review-card {
-      display:none;
       border-color:#A9CFCC;
-      box-shadow:0 12px 28px rgba(34,94,99,.10);
-    }
-
-    .queue-review-card.open {
-      display:block;
-      animation:page-enter .24s ease both;
     }
 
     .queue-review-top {
@@ -3377,24 +3545,82 @@
 
   <!-- RECEPTION -->
   <main class="page active" id="pg-reception">
-    <section class="card">
-      <div class="queue-head">
-        <div>
-          <h2 style="margin-bottom:0">Reception Queue <span class="badge" id="queue-count" style="display:none"></span></h2>
-          <div class="queue-subtitle">A clear live list for the floor team. Open any registration to review it; parties may be accepted out of sequence.</div>
-        </div>
-        <button class="btn small secondary" onclick="loadReceptionQueue(true)">Refresh</button>
-      </div>
-      <div id="queue-list" class="queue-list"></div>
-      <div class="queue-section-label">Recently handled</div>
-      <div id="queue-recent"></div>
-    </section>
+    <!-- Mode switch: one tap between registering a new party and working the queue -->
+    <div class="mode-switch" id="reception-mode-switch">
+      <button id="reception-mode-new" class="active" onclick="setReceptionMode('new')">New Registration</button>
+      <button id="reception-mode-queue" onclick="setReceptionMode('queue')">Queue<span class="switch-badge" id="queue-switch-badge" style="display:none"></span></button>
+    </div>
 
-    <section class="card queue-review-card" id="queue-review-card">
-      <div class="queue-review-top">
+    <!-- NEW REGISTRATION VIEW: compact form + recent parties visible together -->
+    <div id="reception-view-new">
+      <section class="card">
+        <h2>Reception Registration <span class="optional">(adds to queue)</span></h2>
+
+        <label>Company / Firm name <span class="req">*</span></label>
+        <input id="p-name" autocomplete="off">
+
+        <label>Contact person <span class="req">*</span></label>
+        <input id="p-contact" autocomplete="off">
+
+        <label>Contact number <span class="req">*</span></label>
+        <div class="phone-wrap">
+          <span class="phone-prefix">+91</span>
+          <input id="p-phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="off">
+        </div>
+
+        <label>Agent <span class="optional">(optional)</span></label>
+        <select id="p-agent" onchange="onMasterSelect(this,'agent')"></select>
+        <div class="addnew-row" id="agent-addnew">
+          <input id="agent-new-name" placeholder="New agent name">
+          <button class="btn small" onclick="saveMaster('agent')">Add</button>
+        </div>
+
+        <label>City <span class="req">*</span></label>
+        <input id="p-city" autocomplete="off">
+
+        <label>State <span class="optional">(optional)</span></label>
+        <select id="p-state"></select>
+
+        <label>GSTIN <span class="optional">(optional)</span></label>
+        <input id="p-gstin" maxlength="15" autocomplete="off" style="text-transform:uppercase">
+
+        <label>Notes <span class="optional">(optional)</span></label>
+        <textarea id="p-notes"></textarea>
+
+        <button class="btn" id="p-save" onclick="saveParty()" disabled>Add to Queue</button>
+        <div class="button-reason" id="p-save-reason">Enter the required party details</div>
+      </section>
+
+      <section class="card">
+        <h2>Recent Parties <span class="badge" id="party-count" style="display:none"></span></h2>
+        <div id="party-list" class="empty">Loading…</div>
+      </section>
+    </div>
+
+    <!-- QUEUE VIEW: clean live list; review opens on demand as a sheet -->
+    <div id="reception-view-queue" style="display:none">
+      <section class="card">
+        <div class="queue-head">
+          <div>
+            <h2 style="margin-bottom:0">Reception Queue <span class="badge" id="queue-count" style="display:none"></span></h2>
+            <div class="queue-subtitle">Tap any registration to review it. Parties may be accepted out of sequence.</div>
+          </div>
+          <button class="btn small secondary" onclick="loadReceptionQueue(true)">Refresh</button>
+        </div>
+        <div id="queue-list" class="queue-list"></div>
+        <div class="queue-section-label">Recently handled</div>
+        <div id="queue-recent"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- QUEUE REVIEW: on-demand bottom sheet (was an always-visible card) -->
+  <div class="drill-mask" id="queue-review-mask" onclick="if(event.target===this)closeQueueReview()">
+    <div class="drill-sheet" id="queue-review-card" role="dialog" aria-modal="true">
+      <div class="drill-sheet-head">
         <div>
-          <h2 id="queue-review-title" style="margin-bottom:2px">Review registration</h2>
-          <div class="queue-subtitle">Edit the submitted details, save the review, then accept or reject the entry. The remaining queue stays visible above.</div>
+          <h3 id="queue-review-title">Review registration</h3>
+          <div class="ds-sub">Edit the details, then accept or reject the entry.</div>
         </div>
         <button class="icon-delete" onclick="closeQueueReview()" aria-label="Close">×</button>
       </div>
@@ -3460,51 +3686,8 @@
         <button class="btn danger-outline" id="queue-disposition-button" onclick="handleQueueDisposition()">Remove from Queue</button>
         <button class="btn secondary full" onclick="closeQueueReview()">Close without changes</button>
       </div>
-    </section>
-
-    <section class="card">
-      <h2>Reception Registration <span class="optional">(adds to queue)</span></h2>
-
-      <label>Company / Firm name <span class="req">*</span></label>
-      <input id="p-name" autocomplete="off">
-
-      <label>Contact person <span class="req">*</span></label>
-      <input id="p-contact" autocomplete="off">
-
-      <label>Contact number <span class="req">*</span></label>
-      <div class="phone-wrap">
-        <span class="phone-prefix">+91</span>
-        <input id="p-phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="off">
-      </div>
-
-      <label>Agent <span class="optional">(optional)</span></label>
-      <select id="p-agent" onchange="onMasterSelect(this,'agent')"></select>
-      <div class="addnew-row" id="agent-addnew">
-        <input id="agent-new-name" placeholder="New agent name">
-        <button class="btn small" onclick="saveMaster('agent')">Add</button>
-      </div>
-
-      <label>City <span class="req">*</span></label>
-      <input id="p-city" autocomplete="off">
-
-      <label>State <span class="optional">(optional)</span></label>
-      <select id="p-state"></select>
-
-      <label>GSTIN <span class="optional">(optional)</span></label>
-      <input id="p-gstin" maxlength="15" autocomplete="off" style="text-transform:uppercase">
-
-      <label>Notes <span class="optional">(optional)</span></label>
-      <textarea id="p-notes"></textarea>
-
-      <button class="btn" id="p-save" onclick="saveParty()" disabled>Add to Queue</button>
-      <div class="button-reason" id="p-save-reason">Enter the required party details</div>
-    </section>
-
-    <section class="card">
-      <h2>Recent Parties <span class="badge" id="party-count" style="display:none"></span></h2>
-      <div id="party-list" class="empty">Loading…</div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <!-- SALES -->
   <main class="page" id="pg-sales">
@@ -3874,9 +4057,28 @@
 
   <!-- ORDERS -->
   <main class="page" id="pg-orders">
+    <div class="list-search">
+      <input id="orders-search" placeholder="Find party or order…" autocomplete="off"
+        autocapitalize="none" spellcheck="false" oninput="renderOrders()">
+    </div>
     <button class="btn secondary" onclick="loadOrders(true)" style="margin-top:0">↻ Refresh Orders</button>
     <div id="orders-list" class="empty" style="margin-top:14px">Loading…</div>
   </main>
+
+  <!-- ORDER DETAIL: read-only drill sheet -->
+  <div class="drill-mask" id="order-detail-mask" onclick="if(event.target===this)closeOrderDetail()">
+    <div class="drill-sheet" id="order-detail-sheet" role="dialog" aria-modal="true">
+      <div class="drill-sheet-head">
+        <div>
+          <h3 id="order-detail-title">Order</h3>
+          <div class="ds-sub" id="order-detail-sub"></div>
+        </div>
+        <button class="icon-delete" onclick="closeOrderDetail()" aria-label="Close">×</button>
+      </div>
+      <div id="order-detail-body"></div>
+      <button class="btn" id="order-detail-edit" style="margin-top:14px">Open in Sales to edit ➜</button>
+    </div>
+  </div>
 
   <!-- MAP -->
   <main class="page" id="pg-map">
@@ -4091,6 +4293,7 @@
      -------------------------------------------------------------------------- */
   let parties = [];
   let orders = [];
+  let ordersShown = [];
   let masters = {
     agents:[],
     salespersons:[],
@@ -4590,6 +4793,7 @@
       if (node) node.classList.toggle('active', key === name);
     });
 
+    if (name === 'reception') setReceptionMode('new');
     if (name === 'dashboard') enterDashboard();
     if (name === 'orders') loadOrders(false);
     if (name === 'map') {
@@ -5104,6 +5308,19 @@
       .join(' · ');
   }
 
+  // Reception has two jobs; the mode switch shows one at a time.
+  let receptionMode = 'new';
+  function setReceptionMode(mode) {
+    receptionMode = mode;
+    const isNew = mode === 'new';
+    el('reception-view-new').style.display = isNew ? '' : 'none';
+    el('reception-view-queue').style.display = isNew ? 'none' : '';
+    el('reception-mode-new').classList.toggle('active', isNew);
+    el('reception-mode-queue').classList.toggle('active', !isNew);
+    if (!isNew) loadReceptionQueue(false);
+    window.scrollTo(0, 0);
+  }
+
   function loadReceptionQueue(showToast) {
     if (!staffStarted && !getStoredStaffPin()) return;
 
@@ -5150,6 +5367,13 @@
 
     badge.style.display = pending.length ? 'inline-flex' : 'none';
     badge.textContent = pending.length;
+
+    // Mirror the waiting count onto the New/Queue mode switch
+    const switchBadge = el('queue-switch-badge');
+    if (switchBadge) {
+      switchBadge.style.display = pending.length ? 'inline-flex' : 'none';
+      switchBadge.textContent = pending.length;
+    }
 
     if (!pending.length) {
       list.innerHTML = emptyState(
@@ -5258,18 +5482,14 @@
 
     el('queue-match-box').classList.remove('open');
     el('queue-match-box').innerHTML = '';
-    el('queue-review-card').classList.add('open');
-
-    setTimeout(() => el('queue-review-card').scrollIntoView({
-      behavior:'smooth',
-      block:'start'
-    }), 50);
+    // Open the review as a bottom sheet (mask drives the slide-up animation)
+    el('queue-review-mask').classList.add('open');
   }
 
   function closeQueueReview() {
     selectedQueueEntry = null;
     selectedQueueMatches = [];
-    el('queue-review-card').classList.remove('open');
+    el('queue-review-mask').classList.remove('open');
     el('queue-match-box').classList.remove('open');
     el('queue-match-box').innerHTML = '';
   }
@@ -6611,21 +6831,67 @@
       return;
     }
 
+    // Filter by the search box (party name or order id)
+    const q = (el('orders-search') ? el('orders-search').value : '').trim().toLowerCase();
+    const shown = q
+      ? orders.filter(o =>
+          (o.partyName || '').toLowerCase().includes(q) ||
+          (o.id || '').toLowerCase().includes(q))
+      : orders;
+
     container.className = '';
-    container.innerHTML = orders.map(order =>
-      '<div class="order-card">' +
-        '<div class="order-title">' + escapeHtml(order.partyName) + '</div>' +
-        '<span class="pill order-status">' + escapeHtml(order.totalPcs) + ' pcs</span>' +
-        '<div class="order-meta">' + escapeHtml(order.id) + ' · v' + escapeHtml(order.version) +
-          (order.lastUpdated ? ' · ' + escapeHtml(order.lastUpdated) : '') + '</div>' +
-        '<table class="order-items-mini"><tbody>' +
-          order.items.map(item => '<tr><td><div class="item-code">' + escapeHtml(item.design || item.barcode) + '</div>' +
-            '<div class="item-name">' + escapeHtml(item.sales || '') + '</div></td>' +
-            '<td style="text-align:right"><b>' + escapeHtml(item.qty) + ' pcs</b></td></tr>').join('') +
-        '</tbody></table>' +
-        '<button class="link-btn" onclick="resumeOrder(' + jsString(order.partyId) + ')">Open party order ➜</button>' +
-      '</div>'
+
+    if (!shown.length) {
+      container.innerHTML = emptyState('⌕', 'No matching orders', 'Try a different party name or order number.');
+      return;
+    }
+
+    // Compact, clickable summary rows — details live in the drill sheet
+    container.innerHTML = shown.map((order, i) =>
+      '<button class="summary-row" onclick="openOrderDetail(' + i + ')">' +
+        '<div class="sr-main">' +
+          '<div class="sr-title">' + escapeHtml(order.partyName) + '</div>' +
+          '<div class="sr-meta">' + escapeHtml(order.id) +
+            ' · ' + escapeHtml(order.items.length) + ' designs' +
+            (order.lastUpdated ? ' · ' + escapeHtml(order.lastUpdated) : '') + '</div>' +
+        '</div>' +
+        '<div class="sr-right">' +
+          '<span class="sr-pcs">' + escapeHtml(order.totalPcs) + ' pcs</span>' +
+          '<span class="sr-chevron">›</span>' +
+        '</div>' +
+      '</button>'
     ).join('');
+
+    // Remember the currently shown subset so the sheet can index into it
+    ordersShown = shown;
+  }
+
+  function openOrderDetail(index) {
+    const order = ordersShown[index];
+    if (!order) return;
+
+    el('order-detail-title').textContent = order.partyName;
+    el('order-detail-sub').textContent = order.id + ' · v' + order.version +
+      (order.lastUpdated ? ' · ' + order.lastUpdated : '') + ' · ' + order.totalPcs + ' pcs';
+
+    el('order-detail-body').innerHTML =
+      '<table class="order-items-mini"><tbody>' +
+        order.items.map(item =>
+          '<tr><td><div class="item-code">' + escapeHtml(item.design || item.barcode) + '</div>' +
+          '<div class="item-name">' + escapeHtml(item.sales || '') + '</div></td>' +
+          '<td style="text-align:right"><b>' + escapeHtml(item.qty) + ' pcs</b></td></tr>').join('') +
+      '</tbody></table>';
+
+    el('order-detail-edit').onclick = function () {
+      closeOrderDetail();
+      resumeOrder(order.partyId);
+    };
+
+    el('order-detail-mask').classList.add('open');
+  }
+
+  function closeOrderDetail() {
+    el('order-detail-mask').classList.remove('open');
   }
 
   function resumeOrder(partyId) {
