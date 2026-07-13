@@ -1020,7 +1020,8 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbylfA7EoANdu_99zFWr2NsrX-EjvLmpKk5_Ws5qXhJ6KK-KAiu_1BZbPLe5x95u-gkR/exec';
+    const API_URL = 'https://mytvzemohivewbfoenld.supabase.co/functions/v1/cmai-api';
+    const API_TIMEOUT_MS = 45000;
     const SESSION_KEY = 'cmai_customer_queue_session';
     const STATES = [
       'Andaman & Nicobar','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar',
@@ -1036,6 +1037,7 @@
     let agentTimer = null;
     let agentSearchToken = 0;
     let statusTimer = null;
+    let statusRefreshInFlight = false;
     let modalResolver = null;
     let modalDismissible = true;
 
@@ -1057,15 +1059,42 @@
     }
 
     function api(fn, args) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+
       return fetch(API_URL, {
         method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        cache:'no-store',
+        signal:controller.signal,
         body:JSON.stringify({ fn, args:args || [] })
       })
-      .then(response => response.json())
-      .then(json => {
-        if (!json.ok) throw new Error(json.error || 'Server error');
+      .then(async response => {
+        const raw = await response.text();
+        let json;
+
+        try {
+          json = JSON.parse(raw);
+        } catch (error) {
+          throw new Error(
+            'Supabase returned an invalid response (HTTP ' +
+            response.status + ').'
+          );
+        }
+
+        if (!response.ok || !json.ok) {
+          throw new Error(json.error || ('Supabase HTTP ' + response.status));
+        }
+
         return json.data;
-      });
+      })
+      .catch(error => {
+        if (error && error.name === 'AbortError') {
+          throw new Error('Request timed out. Check the internet connection and try again.');
+        }
+        throw error;
+      })
+      .finally(() => clearTimeout(timeout));
     }
 
     function showLoading(title, copy) {
@@ -1373,11 +1402,14 @@
 
       if (statusTimer) clearInterval(statusTimer);
       if (status.status === 'Pending') {
-        statusTimer = setInterval(() => refreshMyStatus(false), 15000);
+        statusTimer = setInterval(() => {
+          if (document.visibilityState === 'visible') refreshMyStatus(false);
+        }, 30000);
       }
     }
 
     function refreshMyStatus(showOverlay) {
+      if (statusRefreshInFlight) return;
       const session = loadQueueSession();
       if (!session || !session.queueId || !session.accessToken) {
         showRegistration();
@@ -1387,6 +1419,8 @@
       if (showOverlay) {
         showLoading('Refreshing Position…', 'Checking the live reception queue.');
       }
+
+      statusRefreshInFlight = true;
 
       api('getMyQueueStatus', [session])
         .then(status => {
@@ -1407,6 +1441,9 @@
 
           showRegistration();
           el('find-card').open = true;
+        })
+        .finally(() => {
+          statusRefreshInFlight = false;
         });
     }
 
@@ -1503,6 +1540,15 @@
 
     document.addEventListener('click', event => {
       if (!event.target.closest('.agent-wrap')) closeAgentResults();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (
+        document.visibilityState === 'visible' &&
+        el('status-screen').classList.contains('open')
+      ) {
+        refreshMyStatus(false);
+      }
     });
 
     (function init() {

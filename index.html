@@ -4266,7 +4266,8 @@
   /* --------------------------------------------------------------------------
      CONFIGURATION
      -------------------------------------------------------------------------- */
-  const API_URL = 'https://script.google.com/macros/s/AKfycbylfA7EoANdu_99zFWr2NsrX-EjvLmpKk5_Ws5qXhJ6KK-KAiu_1BZbPLe5x95u-gkR/exec';
+  const API_URL = 'https://mytvzemohivewbfoenld.supabase.co/functions/v1/cmai-api';
+  const API_TIMEOUT_MS = 45000;
 
   function makeRunner() {
     let onOk = function(){};
@@ -4288,27 +4289,52 @@
         if (prop in obj) return obj[prop];
 
         return function(...args) {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+
           fetch(API_URL, {
             method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            cache:'no-store',
+            signal:controller.signal,
             body:JSON.stringify({
               fn:String(prop),
               args,
               staffPin:getStoredStaffPin()
             })
           })
-          .then(response => response.json())
-          .then(json => {
-            if (json.ok) {
-              onOk(json.data);
-            } else {
-              const message = json.error || 'Server error';
-              if (String(message).indexOf('STAFF_AUTH_') >= 0) {
-                showStaffLogin(message);
-              }
-              onFail(new Error(message));
+          .then(async response => {
+            const raw = await response.text();
+            let json;
+
+            try {
+              json = JSON.parse(raw);
+            } catch (error) {
+              throw new Error(
+                'Supabase returned an invalid response (HTTP ' +
+                response.status + ').'
+              );
             }
+
+            if (!response.ok || !json.ok) {
+              throw new Error(json.error || ('Supabase HTTP ' + response.status));
+            }
+
+            return json.data;
           })
-          .catch(onFail);
+          .then(onOk)
+          .catch(error => {
+            const resolved = error && error.name === 'AbortError'
+              ? new Error('Request timed out. Check the internet connection and try again.')
+              : error;
+
+            const message = String(resolved && resolved.message ? resolved.message : resolved);
+            if (message.indexOf('STAFF_AUTH_') >= 0) {
+              showStaffLogin(message);
+            }
+            onFail(resolved);
+          })
+          .finally(() => clearTimeout(timeout));
         };
       }
     });
@@ -4479,7 +4505,7 @@
     el('staff-auth-gate').classList.add('open');
     el('staff-auth-error').textContent =
       message && String(message).indexOf('NOT_CONFIGURED') >= 0
-        ? 'Staff PIN is not configured. Run setStaffPin(...) in Apps Script.'
+        ? 'Staff PIN is not configured in Supabase.'
         : (message && String(message).indexOf('REQUIRED') >= 0
           ? 'Incorrect or expired staff PIN.'
           : '');
@@ -4559,8 +4585,12 @@
     if (lightSyncTimer) clearInterval(lightSyncTimer);
     if (queueRefreshTimer) clearInterval(queueRefreshTimer);
 
-    lightSyncTimer = setInterval(lightSync, 45000);
-    queueRefreshTimer = setInterval(() => loadReceptionQueue(false), 10000);
+    lightSyncTimer = setInterval(() => {
+      if (document.visibilityState === 'visible') lightSync();
+    }, 60000);
+    queueRefreshTimer = setInterval(() => {
+      if (document.visibilityState === 'visible') loadReceptionQueue(false);
+    }, 15000);
   }
 
   function lockStaffApp() {
