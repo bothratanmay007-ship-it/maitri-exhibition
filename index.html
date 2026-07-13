@@ -4559,19 +4559,25 @@
       return;
     }
 
+    // Optimistic boot: trust the stored PIN and open the app immediately, so a
+    // screen-off, reload, or flaky network never forces a re-login. Verify in
+    // the background and only fall back to the login gate if the server
+    // EXPLICITLY rejects the PIN — never on a network/transient failure.
+    el('staff-auth-gate').classList.remove('open');
+    startStaffApp();
+
     google.script.run
       .withSuccessHandler(result => {
-        if (result && result.valid) {
-          el('staff-auth-gate').classList.remove('open');
-          startStaffApp();
-        } else {
+        if (result && (!result.configured || !result.valid)) {
           clearStoredStaffPin();
-          showStaffLogin(result && !result.configured
+          showStaffLogin(!result.configured
             ? 'STAFF_AUTH_NOT_CONFIGURED'
             : 'STAFF_AUTH_REQUIRED');
         }
       })
-      .withFailureHandler(() => showStaffLogin('STAFF_AUTH_REQUIRED'))
+      .withFailureHandler(() => {
+        // Network/transient error — keep the app open, do NOT log out.
+      })
       .verifyStaffPin(savedPin);
   }
 
