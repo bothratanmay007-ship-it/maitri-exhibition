@@ -3234,6 +3234,42 @@
       transform:scale(.97);
     }
 
+    .queue-entry-actions {
+      display:flex;
+      gap:8px;
+      margin-top:10px;
+    }
+    .queue-entry-actions .qa-btn {
+      flex:1;
+      min-height:42px;
+      border-radius:11px;
+      font-size:13px;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      border:1px solid var(--teal-deep);
+    }
+    .qa-btn.qa-review {
+      background:#fff;
+      color:var(--teal-deep);
+    }
+    .qa-btn.qa-accept {
+      background:var(--teal-deep);
+      color:#fff;
+    }
+    .qa-btn:active { opacity:.85; }
+    .queue-reviewed-tag {
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:2px 8px;
+      border-radius:9px;
+      background:var(--foam);
+      color:var(--teal-deep);
+      font-size:10px;
+      font-weight:700;
+    }
+
     .queue-section-label {
       margin-top:18px;
       padding-top:4px;
@@ -5387,11 +5423,13 @@
           ? 'Reception registration'
           : 'Customer self-registration';
         const waitingMinutes = Math.max(0, Number(entry.waitingMinutes) || 0);
-        const waitText = (entry.reviewedAt ? 'Reviewed · ' : '') +
-          waitingMinutes + ' min waiting';
+        const waitText = waitingMinutes + ' min waiting';
         const details = [entry.contact, queueLocation(entry)]
           .filter(Boolean)
           .join(' · ');
+        const reviewedTag = entry.reviewedAt
+          ? '<span class="queue-reviewed-tag">✓ Reviewed</span>'
+          : '';
 
         return '<article class="queue-entry-card">' +
           '<div class="queue-entry-index" aria-label="Queue position ' +
@@ -5401,6 +5439,7 @@
               '<span>' + escapeHtml(entry.queueNumber) + '</span>' +
               '<span aria-hidden="true">·</span>' +
               '<span>' + escapeHtml(source) + '</span>' +
+              reviewedTag +
             '</div>' +
             '<div class="queue-entry-mainline">' +
               '<div class="queue-entry-copy">' +
@@ -5409,9 +5448,13 @@
               '</div>' +
               '<span class="queue-signal waiting">' + escapeHtml(waitText) + '</span>' +
             '</div>' +
+            '<div class="queue-entry-actions">' +
+              '<button class="qa-btn qa-review" onclick="openQueueReview(' +
+                jsString(entry.queueId) + ')">Review</button>' +
+              '<button class="qa-btn qa-accept" onclick="quickAcceptQueue(' +
+                jsString(entry.queueId) + ')">Accept</button>' +
+            '</div>' +
           '</div>' +
-          '<button class="queue-primary-action" onclick="openQueueReview(' +
-            jsString(entry.queueId) + ')">Review</button>' +
         '</article>';
       }).join('');
     }
@@ -5716,6 +5759,12 @@
     openQueueReview(queueId);
     if (!selectedQueueEntry) return;
     return removeSelectedQueue();
+  }
+
+  async function quickAcceptQueue(queueId) {
+    openQueueReview(queueId);
+    if (!selectedQueueEntry) return;
+    return reviewAndAcceptQueue();
   }
 
   function updateQueueDispositionAction() {
